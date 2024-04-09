@@ -7,6 +7,7 @@ import { Provider } from 'app/provider'
 import { AuthProviderProps } from 'app/provider/auth'
 import { api } from 'app/utils/api'
 import { NextPage } from 'next'
+import { Urbanist } from 'next/font/google'
 import Head from 'next/head'
 import 'raf/polyfill'
 import { ReactElement, ReactNode } from 'react'
@@ -15,6 +16,11 @@ import type { SolitoAppProps } from 'solito'
 if (process.env.NODE_ENV === 'production') {
   require('../public/tamagui.css')
 }
+
+const font = Urbanist({
+  variable: '--my-font',
+  subsets: ['latin'],
+})
 
 export type NextPageWithLayout<P = object, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => ReactNode
@@ -31,20 +37,26 @@ function MyApp({
 
   return (
     <>
-      <Head>
-        <title>Tamagui Universal App</title>
-        <meta name="description" content="Tamagui Universal Starter" />
-        <link rel="icon" href="/favicon.svg" />
-      </Head>
-      <NextThemeProvider
-        onChangeTheme={(next) => {
-          setTheme(next as ColorScheme)
-        }}
-      >
-        <Provider initialSession={pageProps.initialSession}>
-          {getLayout(<Component {...pageProps} />)}
-        </Provider>
-      </NextThemeProvider>
+      <div className={font.variable}>
+        <Head>
+          <title>Tamagui Universal App</title>
+          <meta name="description" content="Tamagui Universal Starter" />
+          <link rel="icon" href="/favicon.svg" />
+          <style>
+            @import
+            url('https://fonts.googleapis.com/css2?family=Urbanist:ital,wght@0,100..900;1,100..900&display=swap')
+          </style>
+        </Head>
+        <NextThemeProvider
+          onChangeTheme={(next) => {
+            setTheme(next as ColorScheme)
+          }}
+        >
+          <Provider initialSession={pageProps.initialSession}>
+            {getLayout(<Component {...pageProps} />)}
+          </Provider>
+        </NextThemeProvider>
+      </div>
     </>
   )
 }

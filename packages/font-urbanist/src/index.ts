@@ -1,11 +1,5 @@
-import {
-  FillInFont,
-  GenericFont,
-  createFont,
-  getVariableValue,
-  isWeb,
-} from '@tamagui/core'
-      
+import { FillInFont, GenericFont, createFont, getVariableValue, isWeb } from '@tamagui/core'
+
 const LINE_HEIGHT = 1.2
 export const createUrbanistFont = <A extends GenericFont>(
   font: Partial<A> = {},
@@ -26,7 +20,7 @@ export const createUrbanistFont = <A extends GenericFont>(
   )
   return createFont({
     family: isWeb
-      ? 'Urbanist, -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif'
+      ? 'var(--my-font), -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif'
       : 'Urbanist',
     lineHeight: Object.fromEntries(
       Object.entries(size).map(([k, v]) => [k, sizeLineHeight(getVariableValue(v) * LINE_HEIGHT)])
