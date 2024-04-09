@@ -12,8 +12,24 @@ LogBox.ignoreLogs(['Cannot update a component', 'You are setting the style'])
 
 export default function HomeLayout() {
   const [fontLoaded] = useFonts({
-    Inter: require('@tamagui/font-inter/otf/Inter-Medium.otf'),
-    InterBold: require('@tamagui/font-inter/otf/Inter-Bold.otf'),
+    UrbanistThin: require('@tamagui-google-fonts/urbanist/fonts/static/Urbanist-Thin.ttf'),
+    UrbanistExtraLight: require('@tamagui-google-fonts/urbanist/fonts/static/Urbanist-ExtraLight.ttf'),
+    UrbanistLight: require('@tamagui-google-fonts/urbanist/fonts/static/Urbanist-Light.ttf'),
+    Urbanist: require('@tamagui-google-fonts/urbanist/fonts/static/Urbanist-Regular.ttf'),
+    UrbanistMedium: require('@tamagui-google-fonts/urbanist/fonts/static/Urbanist-Medium.ttf'),
+    UrbanistSemiBold: require('@tamagui-google-fonts/urbanist/fonts/static/Urbanist-SemiBold.ttf'),
+    UrbanistBold: require('@tamagui-google-fonts/urbanist/fonts/static/Urbanist-Bold.ttf'),
+    UrbanistExtraBold: require('@tamagui-google-fonts/urbanist/fonts/static/Urbanist-ExtraBold.ttf'),
+    UrbanistBlack: require('@tamagui-google-fonts/urbanist/fonts/static/Urbanist-Black.ttf'),
+    UrbanistThinItalic: require('@tamagui-google-fonts/urbanist/fonts/static/Urbanist-ThinItalic.ttf'),
+    UrbanistExtraLightItalic: require('@tamagui-google-fonts/urbanist/fonts/static/Urbanist-ExtraLightItalic.ttf'),
+    UrbanistLightItalic: require('@tamagui-google-fonts/urbanist/fonts/static/Urbanist-LightItalic.ttf'),
+    UrbanistItalic: require('@tamagui-google-fonts/urbanist/fonts/static/Urbanist-Italic.ttf'),
+    UrbanistMediumItalic: require('@tamagui-google-fonts/urbanist/fonts/static/Urbanist-MediumItalic.ttf'),
+    UrbanistSemiBoldItalic: require('@tamagui-google-fonts/urbanist/fonts/static/Urbanist-SemiBoldItalic.ttf'),
+    UrbanistBoldItalic: require('@tamagui-google-fonts/urbanist/fonts/static/Urbanist-BoldItalic.ttf'),
+    UrbanistExtraBoldItalic: require('@tamagui-google-fonts/urbanist/fonts/static/Urbanist-ExtraBoldItalic.ttf'),
+    UrbanistBlackItalic: require('@tamagui-google-fonts/urbanist/fonts/static/Urbanist-BlackItalic.ttf'),
   })
 
   const [themeLoaded, setThemeLoaded] = useState(false)
