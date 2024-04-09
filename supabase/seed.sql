@@ -1,0 +1,2 @@
+INSERT INTO "storage"."buckets" ("id", "name", "owner", "created_at", "updated_at", "public", "avif_autodetection", "file_size_limit", "allowed_mime_types") VALUES
+	('avatars', 'avatars', NULL, NOW(), NOW(), true, false, NULL, NULL);
