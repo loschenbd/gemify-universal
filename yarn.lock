@@ -7067,7 +7067,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tamagui-google-fonts/urbanist@workspace:packages/font-urbanist":
+"@tamagui-google-fonts/urbanist@npm:*, @tamagui-google-fonts/urbanist@workspace:packages/font-urbanist":
   version: 0.0.0-use.local
   resolution: "@tamagui-google-fonts/urbanist@workspace:packages/font-urbanist"
   dependencies:
@@ -10605,6 +10605,7 @@ __metadata:
     "@supabase/auth-helpers-nextjs": "npm:^0.9.0"
     "@supabase/auth-helpers-react": "npm:^0.4.2"
     "@supabase/supabase-js": "npm:^2.39.3"
+    "@tamagui-google-fonts/urbanist": "npm:*"
     "@tamagui/animations-react-native": "npm:^1.91.4"
     "@tamagui/colors": "npm:^1.91.4"
     "@tamagui/font-inter": "npm:^1.91.4"
