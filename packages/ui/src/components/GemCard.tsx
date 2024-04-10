@@ -1,8 +1,9 @@
 import { Gem } from '@tamagui/lucide-icons'
 import { Card, Circle, H2, H3, H4, Text, View, XStack, YStack } from 'tamagui'
+import { Link } from './Link'
 export type GemCardProps = object
 
-export const GemCard: React.FC<GemCardProps> = (props) => {
+export const GemCard: React.FC<GemCardProps> = ({ title, author, duration, date }) => {
   return (
     <Card p="$2" unstyled={false}>
       <XStack>
@@ -12,16 +13,16 @@ export const GemCard: React.FC<GemCardProps> = (props) => {
           </Circle>
         </View>
         <YStack pl="$1.5">
-          <H3>Title</H3>
+          <H3>{title}</H3>
           <XStack>
-            <Text color="$gray10">Author</Text>
+            <Text color="$gray10">{author}</Text>
             <Text color="$gray10" paddingLeft="$2">
-              00:00
+              {duration}
             </Text>
           </XStack>
         </YStack>
         <Text marginLeft="auto" color="$gray10" justify-conent="end">
-          04/08/2024
+          {date}
         </Text>
       </XStack>
     </Card>

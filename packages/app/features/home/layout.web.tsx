@@ -3,6 +3,7 @@ import {
   Avatar,
   Button,
   ButtonProps,
+  Circle,
   Popover,
   Separator,
   SizableText,
@@ -14,7 +15,7 @@ import {
   useThemeName,
   validToken,
 } from '@my/ui'
-import { Menu, Plus } from '@tamagui/lucide-icons'
+import { UploadCloud, Menu } from '@tamagui/lucide-icons'
 import { useUser } from 'app/utils/useUser'
 import { useRouter as useNextRouter } from 'next/router'
 import { useEffect, useState } from 'react'
@@ -171,11 +172,11 @@ const CtaButton = (props: ButtonProps) => (
       size="$3"
       space="$1.5"
       my="$-1"
-      icon={Plus}
+      icon={UploadCloud}
       br="$10"
       {...props}
     >
-      Create
+      Upload
     </Button>
   </Theme>
 )

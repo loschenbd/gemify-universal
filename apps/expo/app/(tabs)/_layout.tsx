@@ -1,7 +1,7 @@
 import { Avatar, Circle, ColorTokens, Theme, YStack, validToken } from '@my/ui'
 import { BottomTabNavigationOptions } from '@react-navigation/bottom-tabs'
 import { LinearGradient } from '@tamagui/linear-gradient'
-import { Home, Plus } from '@tamagui/lucide-icons'
+import { Home, Circle as CircleIcon } from '@tamagui/lucide-icons'
 import { useUser } from 'app/utils/useUser'
 import { Stack, Tabs } from 'expo-router'
 import { SolitoImage } from 'solito/image'
@@ -32,8 +32,8 @@ export default function Layout() {
             },
           })}
           options={{
-            title: 'New',
-            tabBarIcon: PlusButton,
+            title: 'Record',
+            tabBarIcon: RecordButton,
           }}
         />
         <Tabs.Screen
@@ -61,7 +61,7 @@ const ProfileTabIcon = ({ color, size }: TabBarIconProps) => {
   )
 }
 
-const PlusButton = ({ size }: TabBarIconProps) => {
+const RecordButton = ({ size }: TabBarIconProps) => {
   const router = useRouter()
 
   return (
@@ -102,7 +102,7 @@ const PlusButton = ({ size }: TabBarIconProps) => {
         pe="none"
         h={size + 34}
       >
-        <Plus col="$color" size={size + 20} />
+        <CircleIcon col="$color" size={size + 20} />
       </YStack>
     </Theme>
   )
