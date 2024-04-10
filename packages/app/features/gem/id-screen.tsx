@@ -27,7 +27,7 @@ export const IdScreen = () => {
         <H4>{author}</H4>
         <H6>Tags</H6>
       </YStack>
-      <YStack p="$6">
+      <YStack p="$2" justify-content="center">
         <View>
           <H3>Main Points</H3>
           {main_points.map((point, index) => (

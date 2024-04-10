@@ -1,4 +1,5 @@
 import {
+  XStack,
   AnimatePresence,
   FontSizeTokens,
   SizableText,
@@ -8,9 +9,12 @@ import {
   Tabs,
   TabsProps,
   TabsTabProps,
+  H1,
 } from '@my/ui'
+import { X } from '@tamagui/lucide-icons'
 import { useRouter as useNextRouter } from 'next/router'
 import { useState } from 'react'
+import { Link } from 'solito/link'
 import { useRouter } from 'solito/router'
 
 /**
@@ -39,67 +43,75 @@ export const NavTabs = (props: TabsProps) => {
   }
 
   return (
-    <Tabs
-      $gtSm={{ mb: '$-0.75' }} // for the active TabsRovingIndicator to look good
-      value={currentTab}
-      onValueChange={setCurrentTab}
-      activationMode="manual"
-      {...props}
-    >
-      <AnimatePresence>
-        {intentAt && (
-          <TabsRovingIndicator
-            key="intent-indicator"
-            br="$4"
-            w={intentAt.width}
-            h={intentAt.height - 8}
-            x={intentAt.x}
-            y={intentAt.y + 4}
-            $sm={{ dsp: 'none' }}
-          />
-        )}
-      </AnimatePresence>
-      <AnimatePresence>
-        {activeAt && (
-          <TabsRovingIndicator
-            zi={1}
-            key="active-indicator"
-            theme="active"
-            active
-            {...(props.orientation === 'vertical'
-              ? {
-                  y: activeAt.y,
-                  right: '$-1',
-                  height: activeAt.height,
-                  width: 3,
-                }
-              : {
-                  x: activeAt.x,
-                  bottom: '$-1',
-                  height: 3,
+    <>
+      <XStack>
+        <Link href="/">
+          <H1>Gemify</H1>
+        </Link>
+        {/* <Tabs
+          $gtSm={{ mb: '$-0.75' }} // for the active TabsRovingIndicator to look good
+          value={currentTab}
+          onValueChange={setCurrentTab}
+          activationMode="manual"
+          {...props}
+        >
+          <AnimatePresence>
+            {intentAt && (
+              <TabsRovingIndicator
+                key="intent-indicator"
+                br="$4"
+                w={intentAt.width}
+                h={intentAt.height - 8}
+                x={intentAt.x}
+                y={intentAt.y + 4}
+                $sm={{ dsp: 'none' }}
+              />
+            )}
+          </AnimatePresence>
+          <AnimatePresence>
+            {activeAt && (
+              <TabsRovingIndicator
+                zi={1}
+                key="active-indicator"
+                theme="active"
+                active
+                {...(props.orientation === 'vertical'
+                  ? {
+                      y: activeAt.y,
+                      right: '$-1',
+                      height: activeAt.height,
+                      width: 3,
+                    }
+                  : {
+                      x: activeAt.x,
+                      bottom: '$-1',
+                      height: 3,
 
-                  width: activeAt.width,
-                })}
-          />
-        )}
-      </AnimatePresence>
-      <Tabs.List
-        unstyled
-        aria-label="Navigate through the pages"
-        disablePassBorderRadius
-        loop={false}
-        w="100%"
-        f={1}
-        flexDirection={props.orientation === 'horizontal' ? 'row' : 'column'} // temp fix: would be fixed after https://github.com/tamagui/tamagui/pull/1313
-      >
-        <Tab value="/" onInteraction={handleOnInteraction}>
-          Gems
-        </Tab>
-        <Tab value="/settings" onInteraction={handleOnInteraction}>
-          Settings
-        </Tab>
-      </Tabs.List>
-    </Tabs>
+                      width: activeAt.width,
+                    })}
+              />
+            )}
+          </AnimatePresence>
+
+          <Tabs.List
+            unstyled
+            aria-label="Navigate through the pages"
+            disablePassBorderRadius
+            loop={false}
+            w="100%"
+            f={1}
+            flexDirection={props.orientation === 'horizontal' ? 'row' : 'column'} // temp fix: would be fixed after https://github.com/tamagui/tamagui/pull/1313
+          >
+            <Tab value="/" onInteraction={handleOnInteraction}>
+              Gems
+            </Tab>
+            <Tab value="/settings" onInteraction={handleOnInteraction}>
+              Settings
+            </Tab>
+          </Tabs.List>
+        </Tabs> */}
+      </XStack>
+    </>
   )
 }
 

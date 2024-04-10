@@ -46,14 +46,14 @@ export function HomeScreen() {
       <ScrollView f={3} fb={0}>
         <YStack gap="$3" pt="$5" pb="$8">
           {/* <Greetings /> */}
-          <XStack justifyContent="end">
+          {/* <XStack justifyContent="end">
             <Label paddingRight="$2" size="$2">
               Fulfilled
             </Label>
             <Switch size="$2">
               <Switch.Thumb animation="quicker" />
             </Switch>
-          </XStack>
+          </XStack> */}
           <GemCards />
           {/* <YStack gap="$6">
             <AchievementsSection />
@@ -163,8 +163,6 @@ export const linkMockup = [
 const GemCards = () => {
   return (
     <YStack p="$2" gap="$2">
-      <XStack justifyContent="flex-end" />
-
       {linkMockup.map((link) => (
         <Link key={link.id} href={`/gem/${link.id}`}>
           <GemCard
