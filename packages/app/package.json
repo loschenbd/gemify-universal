@@ -14,7 +14,7 @@
     "check:type:watch": "yarn check:type -w"
   },
   "dependencies": {
-    "@tamagui-google-fonts/urbanist": "^1.91.4",
+    "@tamagui-google-fonts/urbanist": "0.0.1",
     "@my/api": "*",
     "@my/supabase": "*",
     "@my/ui": "*",
