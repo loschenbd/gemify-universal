@@ -1,6 +1,6 @@
 import { Gem } from '@tamagui/lucide-icons'
 import { Card, Circle, H2, H3, H4, Text, View, XStack, YStack } from 'tamagui'
-export type GemCardProps = {}
+export type GemCardProps = object
 
 export const GemCard: React.FC<GemCardProps> = (props) => {
   return (
