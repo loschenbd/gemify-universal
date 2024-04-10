@@ -25,12 +25,12 @@
   "dependencies": {
     "@babel/runtime": "^7.18.9",
     "@hookform/resolvers": "^3.1.0",
+    "@tamagui-google-fonts/urbanist": "*",
     "@tamagui/animations-moti": "^1.91.4",
     "@tamagui/animations-react-native": "^1.91.4",
     "@tamagui/cli": "^1.91.4",
     "@tamagui/create-theme": "^1.91.4",
     "@tamagui/font-inter": "^1.91.4",
-    "@tamagui-google-fonts/urbanist": "*",
     "@tamagui/helpers-icon": "^1.91.4",
     "@tamagui/react-native-media-driver": "^1.91.4",
     "@tamagui/shorthands": "^1.91.4",
