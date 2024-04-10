@@ -46,6 +46,14 @@ export function HomeScreen() {
       <ScrollView f={3} fb={0}>
         <YStack gap="$3" pt="$5" pb="$8">
           {/* <Greetings /> */}
+          <XStack justifyContent="end">
+            <Label paddingRight="$2" size="$2">
+              Fulfilled
+            </Label>
+            <Switch size="$2">
+              <Switch.Thumb animation="quicker" />
+            </Switch>
+          </XStack>
           <GemCards />
           {/* <YStack gap="$6">
             <AchievementsSection />
@@ -62,14 +70,21 @@ export function HomeScreen() {
   )
 }
 
-const linkMockup = [
+export const linkMockup = [
   {
     id: 1,
-    title: 'Title 1',
-    summary: 'Summary 1',
+    title: 'Title',
+    author: 'Author 1',
     duration: '00:00',
-    author: 'Author1',
     date: '04/08/2024',
+    main_points: ['Point 1', 'Point 2', 'Point 3'],
+    summary: 'This is a summary of the main points.',
+    summary_1: 'This is an additional summary.',
+    stories_examples_citations: ['Story 1', 'Example 1', 'Citation 1'],
+    follow_up_questions: ['Question 1', 'Question 2', 'Question 3'],
+    supporting_scriptures: ['Scripture 1', 'Scripture 2', 'Scripture 3'],
+    related_topics: ['Topic 1', 'Topic 2', 'Topic 3'],
+    transcript: 'This is a transcript of the main points.',
   },
   {
     id: 2,
