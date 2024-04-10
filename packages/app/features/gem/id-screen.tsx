@@ -14,6 +14,7 @@ export const IdScreen = () => {
     supporting_scriptures,
     related_topics,
     transcript,
+    audio_url,
   } = linkMockup[0]
   return (
     <>

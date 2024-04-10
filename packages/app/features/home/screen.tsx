@@ -85,6 +85,8 @@ export const linkMockup = [
     supporting_scriptures: ['Scripture 1', 'Scripture 2', 'Scripture 3'],
     related_topics: ['Topic 1', 'Topic 2', 'Topic 3'],
     transcript: 'This is a transcript of the main points.',
+    audio_url:
+      'http://localhost:54321/storage/v1/object/public/gem-audio/Richard%20Gordon%20(needs%20edit).m4a',
   },
   {
     id: 2,
