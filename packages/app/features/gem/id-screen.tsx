@@ -4,6 +4,19 @@ import { Audio } from 'expo-av'
 import { useEffect, useState } from 'react'
 
 import { linkMockup } from '../home/screen'
+import { set } from 'zod'
+
+type AudioPlayerViewProps = {
+  active: boolean // is player active
+  playable: boolean // whether we can play the specific audio or not.
+  loading: boolean // is audio loading inside create async
+  isPlaying: boolean // is current audio playing
+  playAudio: () => void // callback function to play the audio.
+  pauseAudio: () => void // callback function to pause the audio
+  totalDuration: number // total time duration of the playable audio.
+  seekAudio: (value: number) => void // value to jump on value for the audio (in milliseconds)
+  duration: number // current playing duration value of audio player.
+}
 
 export const IdScreen = () => {
   const {
@@ -20,42 +33,8 @@ export const IdScreen = () => {
     transcript,
   } = linkMockup[0]
 
-  const [sound, setSound] = useState<Audio.Sound | null>(null)
-  const [isPlaying, setIsPlaying] = useState(false)
-  const [error, setError] = useState<string | null>(null)
-
-  async function playSound() {
-    console.log('Loading Sound')
-    const { sound } = await Audio.Sound.createAsync({
-      uri: 'https://lzeujpdftfnvelzhknqe.supabase.co/storage/v1/object/sign/gem-audio/testfile.m4a?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJnZW0tYXVkaW8vdGVzdGZpbGUubTRhIiwiaWF0IjoxNzEyODY4OTM2LCJleHAiOjE3MTM0NzM3MzZ9.aNR2JY_NjSmR3qB9tvqrdHIRkoWO57CgYKElXbfLm6M&t=2024-04-11T20%3A55%3A36.201Z',
-    })
-
-    setSound(sound)
-
-    console.log('Playing Sound')
-    await sound.playAsync().catch((error) => {
-      console.error(error)
-    })
-  }
-
-  useEffect(() => {
-    return sound
-      ? () => {
-          console.log('Unloading Sound')
-          sound.unloadAsync()
-        }
-      : undefined
-  }, [sound])
-
   return (
     <>
-      <View>
-        {error ? (
-          <Text>{error}</Text>
-        ) : (
-          <Button onPress={isPlaying ? stopSound : playSound}>{isPlaying ? 'Stop' : 'Play'}</Button>
-        )}
-      </View>
       <YStack alignItems="center">
         <View justify-content="center" alignItems="center" borderRadius="$20" padding="$2">
           <Circle backgroundColor="$gray4" size="$5">
@@ -65,6 +44,7 @@ export const IdScreen = () => {
         <H1>{title}</H1>
         <H4>{author}</H4>
         <H6>Tags</H6>
+        <AudioPLayer />
         <XStack alignItems="center" space="$2">
           <Play size="$2" />
           <Spinner color="$gray12" />
@@ -117,6 +97,42 @@ export const IdScreen = () => {
           <Text>{transcript}</Text>
         </View>
       </YStack>
+    </>
+  )
+}
+
+export const AudioPLayer = () => {
+  const [sound, setSound] = useState<Audio.Sound | null>(null)
+  const [isPlaying, setIsPlaying] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+  async function playSound() {
+    console.log('Loading Sound')
+    const { sound } = await Audio.Sound.createAsync({
+      uri: 'https://lzeujpdftfnvelzhknqe.supabase.co/storage/v1/object/sign/gem-audio/testfile.m4a?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJnZW0tYXVkaW8vdGVzdGZpbGUubTRhIiwiaWF0IjoxNzEyODY4OTM2LCJleHAiOjE3MTM0NzM3MzZ9.aNR2JY_NjSmR3qB9tvqrdHIRkoWO57CgYKElXbfLm6M&t=2024-04-11T20%3A55%3A36.201Z',
+    })
+
+    setSound(sound)
+    setIsPlaying(true)
+    await sound.playAsync().catch((error) => {
+      console.error(error)
+    })
+  }
+
+  async function pauseSound(AudioPlayerViewProps) {
+    setIsPlaying(false)
+    await sound?.pauseAsync()
+  }
+  return (
+    <>
+      <View>
+        {error ? (
+          <Text>{error}</Text>
+        ) : (
+          <Button onPress={isPlaying ? pauseSound : playSound}>
+            {isPlaying ? 'Stop' : 'Play'}
+          </Button>
+        )}
+      </View>
     </>
   )
 }
