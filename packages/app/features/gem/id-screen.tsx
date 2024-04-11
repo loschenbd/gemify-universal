@@ -83,12 +83,13 @@ export const AudioPLayer = () => {
   const [sound, setSound] = useState<Audio.Sound | null>(null)
   const [isPlaying, setIsPlaying] = useState(false)
   const [error, setError] = useState<string | null>(null)
+
   async function playSound() {
     console.log('Loading Sound')
-    const { sound } = await Audio.Sound.createAsync({
+    const { sound, status } = await Audio.Sound.createAsync({
       uri: 'https://lzeujpdftfnvelzhknqe.supabase.co/storage/v1/object/sign/gem-audio/testfile.m4a?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJnZW0tYXVkaW8vdGVzdGZpbGUubTRhIiwiaWF0IjoxNzEyODY4OTM2LCJleHAiOjE3MTM0NzM3MzZ9.aNR2JY_NjSmR3qB9tvqrdHIRkoWO57CgYKElXbfLm6M&t=2024-04-11T20%3A55%3A36.201Z',
     })
-
+    console.log(status)
     setSound(sound)
     setIsPlaying(true)
     await sound.playAsync().catch((error) => {
@@ -97,7 +98,7 @@ export const AudioPLayer = () => {
   }
 
   // TODO: Add Loading Spinner
-  async function pauseSound(AudioPlayerViewProps) {
+  async function pauseSound() {
     setIsPlaying(false)
     await sound?.pauseAsync()
   }
