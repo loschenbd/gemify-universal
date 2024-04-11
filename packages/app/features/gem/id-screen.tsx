@@ -1,4 +1,4 @@
-import { YStack, H1, H3, Text, View, Circle, H4, H6 } from '@my/ui'
+import { YStack, H1, H3, Text, Button, View, Circle, H4, H6 } from '@my/ui'
 import { Gem } from '@tamagui/lucide-icons'
 import { linkMockup } from '../home/screen'
 import { useEffect, useState } from 'react'
@@ -17,11 +17,13 @@ export const IdScreen = () => {
     supporting_scriptures,
     related_topics,
     transcript,
-    audio_url,
   } = linkMockup[0]
 
+  const audio_url =
+    'http://localhost:54321/storage/v1/object/public/gem-audio/Richard%20Gordon%20(needs%20edit).m4a'
   const [sound, setSound] = useState(null)
   const [isPlaying, setIsPlaying] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState(null)
 
   const loadSound = async () => {
@@ -32,9 +34,47 @@ export const IdScreen = () => {
       setError(err)
     }
   }
+  const playSound = async () => {
+    try {
+      if (sound) {
+        await sound.playAsync()
+        setIsPlaying(true)
+      } else {
+        console.warn('Sound object is not loaded yet')
+      }
+    } catch (err) {
+      setError(err)
+    }
+  }
+
+  const stopSound = async () => {
+    try {
+      await sound.stopAsync()
+      setIsPlaying(false)
+    } catch (err) {
+      setError(err)
+    }
+  }
+
+  useEffect(() => {
+    loadSound()
+
+    return () => {
+      if (sound) {
+        sound.unloadAsync()
+      }
+    }
+  }, [])
 
   return (
     <>
+      <View>
+        {error ? (
+          <Text>{error.message}</Text>
+        ) : (
+          <Button onPress={isPlaying ? stopSound : playSound}>{isPlaying ? 'Stop' : 'Play'}</Button>
+        )}
+      </View>
       <YStack alignItems="center">
         <View justify-content="center" alignItems="center" borderRadius="$20" padding="$2">
           <Circle backgroundColor="$gray4" size="$5">
