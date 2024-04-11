@@ -78,30 +78,70 @@ export const IdScreen = () => {
     </>
   )
 }
+const audioUrl =
+  'https://lzeujpdftfnvelzhknqe.supabase.co/storage/v1/object/sign/gem-audio/testfile.m4a?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJnZW0tYXVkaW8vdGVzdGZpbGUubTRhIiwiaWF0IjoxNzEyODY4OTM2LCJleHAiOjE3MTM0NzM3MzZ9.aNR2JY_NjSmR3qB9tvqrdHIRkoWO57CgYKElXbfLm6M&t=2024-04-11T20%3A55%3A36.201Z'
 
 export const AudioPLayer = () => {
   const [sound, setSound] = useState<Audio.Sound | null>(null)
-  const [isPlaying, setIsPlaying] = useState(false)
+  const [playing, setPlaying] = useState(false)
+  const [progress, setProgress] = useState(0)
+  const [duration, setDuration] = useState(0)
+
   const [error, setError] = useState<string | null>(null)
 
-  async function playSound() {
-    console.log('Loading Sound')
-    const { sound, status } = await Audio.Sound.createAsync({
-      uri: 'https://lzeujpdftfnvelzhknqe.supabase.co/storage/v1/object/sign/gem-audio/testfile.m4a?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJnZW0tYXVkaW8vdGVzdGZpbGUubTRhIiwiaWF0IjoxNzEyODY4OTM2LCJleHAiOjE3MTM0NzM3MzZ9.aNR2JY_NjSmR3qB9tvqrdHIRkoWO57CgYKElXbfLm6M&t=2024-04-11T20%3A55%3A36.201Z',
-    })
-    console.log(status)
-    setSound(sound)
-    setIsPlaying(true)
-    await sound.playAsync().catch((error) => {
-      console.error(error)
-    })
+  useEffect(() => {
+    const loadSound = async () => {
+      const { sound } = await Audio.Sound.createAsync({ uri: audioUrl })
+      setSound(sound)
+
+      sound.setOnPlaybackStatusUpdate((status) => {
+        setPlaying(status.isPlaying)
+        setProgress(status.positionMillis / status.durationMillis)
+        setDuration(status.durationMillis)
+      })
+    }
+
+    loadSound()
+
+    return () => {
+      if (sound) {
+        sound.unloadAsync()
+      }
+    }
+  }, [])
+
+  const handlePlayPause = async () => {
+    if (sound) {
+      if (playing) {
+        await sound.pauseAsync()
+      } else {
+        await sound.playAsync()
+      }
+    }
   }
 
-  // TODO: Add Loading Spinner
-  async function pauseSound() {
-    setIsPlaying(false)
-    await sound?.pauseAsync()
+  const handleSliderValueChange = async (value) => {
+    if (sound && sound.durationMillis && !isNaN(sound.durationMillis)) {
+      try {
+        await sound.setPositionAsync(value * sound.durationMillis)
+      } catch (error) {
+        console.error('Error setting position:', error)
+        // Handle the error appropriately (e.g., show an error message to the user)
+      }
+    }
   }
+
+  const formatDuration = (durationMillis) => {
+    if (!durationMillis || durationMillis === 0) {
+      return '00:00' // Return a default value for 0 or undefined duration
+    }
+
+    const totalSeconds = Math.floor(durationMillis / 1000)
+    const minutes = Math.floor(totalSeconds / 60)
+    const seconds = totalSeconds % 60
+    return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`
+  }
+
   return (
     <>
       <XStack alignItems="center" space="$2">
@@ -110,24 +150,33 @@ export const AudioPLayer = () => {
             <Text>{error}</Text>
           ) : (
             <View>
-              {isPlaying ? (
-                <Pressable onPress={pauseSound}>
+              {playing ? (
+                <Pressable onPress={handlePlayPause}>
                   <Pause />
                 </Pressable>
               ) : (
-                <Pressable onPress={playSound}>
+                <Pressable onPress={handlePlayPause}>
                   <Play />
                 </Pressable>
               )}
             </View>
           )}
         </View>
-        <Slider size="$1" width={200} defaultValue={[0]} max={100} step={1}>
+        <Slider
+          size="$1"
+          width={200}
+          defaultValue={[0]}
+          max={1}
+          step={0.00001}
+          value={[progress]} // Use the progress state as the value
+          onValueChange={handleSliderValueChange}
+        >
           <Slider.Track>
             <Slider.TrackActive />
           </Slider.Track>
           <Slider.Thumb index={0} circular elevate />
         </Slider>
+        <Text>{formatDuration(duration)}</Text>
       </XStack>
     </>
   )
