@@ -1,8 +1,10 @@
-import { YStack, H1, H3, Text, Button, View, Circle, H4, H6 } from '@my/ui'
-import { Gem } from '@tamagui/lucide-icons'
-import { linkMockup } from '../home/screen'
-import { useEffect, useState } from 'react'
+import { YStack, H1, H3, Text, Button, View, Circle, H4, H6, XStack, Slider, Spinner } from '@my/ui'
+import { Gem, Pause, PauseCircle, Play, PlayCircle } from '@tamagui/lucide-icons'
 import { Audio } from 'expo-av'
+import { useEffect, useState } from 'react'
+
+import { linkMockup } from '../home/screen'
+import { useSupabase } from 'app/utils/supabase/useSupabase'
 
 export const IdScreen = () => {
   const {
@@ -19,58 +21,38 @@ export const IdScreen = () => {
     transcript,
   } = linkMockup[0]
 
-  const audio_url =
-    'http://localhost:54321/storage/v1/object/public/gem-audio/Richard%20Gordon%20(needs%20edit).m4a'
-  const [sound, setSound] = useState(null)
+  const [sound, setSound] = useState<Audio.Sound | null>(null)
   const [isPlaying, setIsPlaying] = useState(false)
-  const [isLoading, setIsLoading] = useState(false)
-  const [error, setError] = useState(null)
+  const [error, setError] = useState<string | null>(null)
 
-  const loadSound = async () => {
-    try {
-      const { sound } = await Audio.Sound.createAsync({ uri: audio_url })
-      setSound(sound)
-    } catch (err) {
-      setError(err)
-    }
-  }
-  const playSound = async () => {
-    try {
-      if (sound) {
-        await sound.playAsync()
-        setIsPlaying(true)
-      } else {
-        console.warn('Sound object is not loaded yet')
-      }
-    } catch (err) {
-      setError(err)
-    }
-  }
+  async function playSound() {
+    console.log('Loading Sound')
+    const { sound } = await Audio.Sound.createAsync({
+      uri: 'https://lzeujpdftfnvelzhknqe.supabase.co/storage/v1/object/sign/gem-audio/testfile.m4a?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJnZW0tYXVkaW8vdGVzdGZpbGUubTRhIiwiaWF0IjoxNzEyODY4OTM2LCJleHAiOjE3MTM0NzM3MzZ9.aNR2JY_NjSmR3qB9tvqrdHIRkoWO57CgYKElXbfLm6M&t=2024-04-11T20%3A55%3A36.201Z',
+    })
 
-  const stopSound = async () => {
-    try {
-      await sound.stopAsync()
-      setIsPlaying(false)
-    } catch (err) {
-      setError(err)
-    }
+    setSound(sound)
+
+    console.log('Playing Sound')
+    await sound.playAsync().catch((error) => {
+      console.error(error)
+    })
   }
 
   useEffect(() => {
-    loadSound()
-
-    return () => {
-      if (sound) {
-        sound.unloadAsync()
-      }
-    }
-  }, [])
+    return sound
+      ? () => {
+          console.log('Unloading Sound')
+          sound.unloadAsync()
+        }
+      : undefined
+  }, [sound])
 
   return (
     <>
       <View>
         {error ? (
-          <Text>{error.message}</Text>
+          <Text>{error}</Text>
         ) : (
           <Button onPress={isPlaying ? stopSound : playSound}>{isPlaying ? 'Stop' : 'Play'}</Button>
         )}
@@ -84,6 +66,17 @@ export const IdScreen = () => {
         <H1>{title}</H1>
         <H4>{author}</H4>
         <H6>Tags</H6>
+        <XStack alignItems="center" space="$2">
+          <Play size="$2" />
+          <Spinner color="$gray12" />
+          <Pause size="$2" />
+          <Slider size="$1" width={200} defaultValue={[0]} max={100} step={1}>
+            <Slider.Track>
+              <Slider.TrackActive />
+            </Slider.Track>
+            <Slider.Thumb index={0} circular elevate />
+          </Slider>
+        </XStack>
       </YStack>
       <YStack p="$2" justify-content="center">
         <View>
