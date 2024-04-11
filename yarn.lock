@@ -10435,6 +10435,7 @@ __metadata:
     base64-arraybuffer: "npm:^1.0.2"
     burnt: "npm:^0.12.1"
     eslint-config-custom: "npm:*"
+    expo-av: "npm:^13.10.5"
     expo-constants: "npm:~15.4.5"
     expo-device: "npm:~5.9.3"
     expo-image-picker: "npm:~14.7.1"
@@ -14612,6 +14613,7 @@ __metadata:
     eslint-plugin-import: "npm:^2.28.0"
     expo: "npm:~50.0.5"
     expo-apple-authentication: "npm:~6.3.0"
+    expo-av: "npm:^13.10.5"
     expo-build-properties: "npm:~0.11.1"
     expo-constants: "npm:~15.4.5"
     expo-crypto: "npm:~12.8.0"
@@ -14676,6 +14678,15 @@ __metadata:
     invariant: "npm:^2.2.4"
     md5-file: "npm:^3.2.3"
   checksum: 10/56476e567f5577a8d9dd1a277fa8d6ec5666f9c547308b558ab67d5065c5c26a5fc3ee8b6c30dcc01c6a8f5d00b9aca2a9deacf55db72925e2a65b78bd55c784
+  languageName: node
+  linkType: hard
+
+"expo-av@npm:^13.10.5":
+  version: 13.10.5
+  resolution: "expo-av@npm:13.10.5"
+  peerDependencies:
+    expo: "*"
+  checksum: 10/50513f4a9fcf85224c3991d046cf71b7b2503801c3bef978b3eeec3463953cf38a84e2c5ef5b43f260ebba9ad9fda7e691d3d3ac14cc7eff49f963b3246b24b9
   languageName: node
   linkType: hard
 
@@ -15929,6 +15940,7 @@ __metadata:
     dotenv: "npm:^16.0.3"
     dotenv-cli: "npm:^6.0.0"
     eslint: "npm:^8.46.0"
+    expo-av: "npm:^13.10.5"
     node-gyp: "npm:^9.3.1"
     prettier: "npm:^2.7.1"
     turbo: "npm:^1.10.14"
@@ -19659,6 +19671,7 @@ __metadata:
   dependencies:
     "@next/bundle-analyzer": "npm:^13.5.6"
     "@next/eslint-plugin-next": "npm:^14.0.4"
+    "@react-native/assets-registry": "npm:0.73.1"
     "@supabase/auth-helpers-nextjs": "npm:^0.9.0"
     "@supabase/auth-helpers-react": "npm:^0.4.2"
     "@supabase/supabase-js": "npm:^2.39.3"

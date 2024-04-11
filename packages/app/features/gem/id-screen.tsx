@@ -1,6 +1,9 @@
 import { YStack, H1, H3, Text, View, Circle, H4, H6 } from '@my/ui'
 import { Gem } from '@tamagui/lucide-icons'
 import { linkMockup } from '../home/screen'
+import { useEffect, useState } from 'react'
+import { Audio } from 'expo-av'
+
 export const IdScreen = () => {
   const {
     title,
@@ -16,6 +19,20 @@ export const IdScreen = () => {
     transcript,
     audio_url,
   } = linkMockup[0]
+
+  const [sound, setSound] = useState(null)
+  const [isPlaying, setIsPlaying] = useState(false)
+  const [error, setError] = useState(null)
+
+  const loadSound = async () => {
+    try {
+      const { sound } = await Audio.Sound.createAsync({ uri: audio_url })
+      setSound(sound)
+    } catch (err) {
+      setError(err)
+    }
+  }
+
   return (
     <>
       <YStack alignItems="center">

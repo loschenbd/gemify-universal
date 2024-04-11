@@ -85,6 +85,7 @@ module.exports = () => {
     },
 
     transpilePackages: [
+      '@react-native/assets',
       'solito',
       'react-native-web',
       'expo-linking',
@@ -93,6 +94,8 @@ module.exports = () => {
       'expo-image-picker',
       'expo-web-browser',
       'react-native-gesture-handler',
+      'expo-asset',
+      'expo-av',
     ],
     /*
        A few notes before enabling app directory:
