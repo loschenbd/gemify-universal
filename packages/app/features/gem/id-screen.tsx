@@ -4,7 +4,6 @@ import { Audio } from 'expo-av'
 import { useEffect, useState } from 'react'
 
 import { linkMockup } from '../home/screen'
-import { useSupabase } from 'app/utils/supabase/useSupabase'
 
 export const IdScreen = () => {
   const {
