@@ -5,18 +5,7 @@ import { useEffect, useState } from 'react'
 
 import { linkMockup } from '../home/screen'
 import { set } from 'zod'
-
-type AudioPlayerViewProps = {
-  active: boolean // is player active
-  playable: boolean // whether we can play the specific audio or not.
-  loading: boolean // is audio loading inside create async
-  isPlaying: boolean // is current audio playing
-  playAudio: () => void // callback function to play the audio.
-  pauseAudio: () => void // callback function to pause the audio
-  totalDuration: number // total time duration of the playable audio.
-  seekAudio: (value: number) => void // value to jump on value for the audio (in milliseconds)
-  duration: number // current playing duration value of audio player.
-}
+import { Pressable } from 'react-native'
 
 export const IdScreen = () => {
   const {
@@ -45,17 +34,6 @@ export const IdScreen = () => {
         <H4>{author}</H4>
         <H6>Tags</H6>
         <AudioPLayer />
-        <XStack alignItems="center" space="$2">
-          <Play size="$2" />
-          <Spinner color="$gray12" />
-          <Pause size="$2" />
-          <Slider size="$1" width={200} defaultValue={[0]} max={100} step={1}>
-            <Slider.Track>
-              <Slider.TrackActive />
-            </Slider.Track>
-            <Slider.Thumb index={0} circular elevate />
-          </Slider>
-        </XStack>
       </YStack>
       <YStack p="$2" justify-content="center">
         <View>
@@ -118,21 +96,38 @@ export const AudioPLayer = () => {
     })
   }
 
+  // TODO: Add Loading Spinner
   async function pauseSound(AudioPlayerViewProps) {
     setIsPlaying(false)
     await sound?.pauseAsync()
   }
   return (
     <>
-      <View>
-        {error ? (
-          <Text>{error}</Text>
-        ) : (
-          <Button onPress={isPlaying ? pauseSound : playSound}>
-            {isPlaying ? 'Stop' : 'Play'}
-          </Button>
-        )}
-      </View>
+      <XStack alignItems="center" space="$2">
+        <View>
+          {error ? (
+            <Text>{error}</Text>
+          ) : (
+            <View>
+              {isPlaying ? (
+                <Pressable onPress={pauseSound}>
+                  <Pause />
+                </Pressable>
+              ) : (
+                <Pressable onPress={playSound}>
+                  <Play />
+                </Pressable>
+              )}
+            </View>
+          )}
+        </View>
+        <Slider size="$1" width={200} defaultValue={[0]} max={100} step={1}>
+          <Slider.Track>
+            <Slider.TrackActive />
+          </Slider.Track>
+          <Slider.Thumb index={0} circular elevate />
+        </Slider>
+      </XStack>
     </>
   )
 }
