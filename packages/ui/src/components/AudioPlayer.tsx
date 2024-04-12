@@ -1,4 +1,4 @@
-import { Text, View, XStack, Slider, Spinner } from '@my/ui'
+import { Text, View, XStack, Slider, Spinner } from 'tamagui'
 import { Pause, Play } from '@tamagui/lucide-icons'
 import { Audio } from 'expo-av'
 import { useEffect, useState } from 'react'
