@@ -1,12 +1,10 @@
-import { Text, Button, View, Circle, H4, H6, XStack, Slider, Spinner } from '@my/ui'
+import { Text, View, XStack, Slider, Spinner } from '@my/ui'
 import { Pause, Play } from '@tamagui/lucide-icons'
 import { Audio } from 'expo-av'
 import { useEffect, useState } from 'react'
-import { linkMockup } from '../home/screen'
-import { set } from 'zod'
 import { Pressable } from 'react-native'
 
-export type AudioPlayerProps = {}
+export type AudioPlayerProps = object
 
 const audioUrl =
   'https://lzeujpdftfnvelzhknqe.supabase.co/storage/v1/object/sign/gem-audio/testfile.m4a?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJnZW0tYXVkaW8vdGVzdGZpbGUubTRhIiwiaWF0IjoxNzEyODY4OTM2LCJleHAiOjE3MTM0NzM3MzZ9.aNR2JY_NjSmR3qB9tvqrdHIRkoWO57CgYKElXbfLm6M&t=2024-04-11T20%3A55%3A36.201Z'
@@ -60,10 +58,12 @@ export const AudioPlayer: React.FC<AudioPlayerProps> = (props) => {
 
   const handleSliderValueChange = async (value: number[]) => {
     if (sound) {
-      const positionMillis = value[0] * duration
-      await sound.setPositionAsync(positionMillis)
-      setProgress(value[0])
-      setRemainingTime(duration - positionMillis)
+      if (duration > 0) {
+        const positionMillis = value[0] * duration
+        await sound.setPositionAsync(positionMillis)
+        setProgress(value[0])
+        setRemainingTime(duration - positionMillis)
+      }
     }
   }
 
@@ -99,6 +99,7 @@ export const AudioPlayer: React.FC<AudioPlayerProps> = (props) => {
           )}
         </View>
         <Slider
+          p="$1"
           size="$1"
           width={200}
           defaultValue={[0]}
@@ -106,13 +107,14 @@ export const AudioPlayer: React.FC<AudioPlayerProps> = (props) => {
           step={0.00001}
           value={[progress]}
           onValueChange={handleSliderValueChange}
+          disabled={duration === 0}
         >
           <Slider.Track>
             <Slider.TrackActive />
           </Slider.Track>
           <Slider.Thumb index={0} circular elevate />
         </Slider>
-        <Text>{formatDuration(remainingTime)}</Text>
+        <Text p="$1">{formatDuration(remainingTime)}</Text>
       </XStack>
     </>
   )
