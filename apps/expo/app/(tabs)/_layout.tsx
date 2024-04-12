@@ -1,7 +1,19 @@
-import { Avatar, Button, Circle, ColorTokens, Sheet, Text, Theme, YStack, validToken } from '@my/ui'
+import {
+  Avatar,
+  View,
+  H2,
+  Button,
+  Circle,
+  ColorTokens,
+  Sheet,
+  Text,
+  Theme,
+  YStack,
+  validToken,
+} from '@my/ui'
 import { BottomTabNavigationOptions } from '@react-navigation/bottom-tabs'
 import { LinearGradient } from '@tamagui/linear-gradient'
-import { Home, Circle as CircleIcon } from '@tamagui/lucide-icons'
+import { Home, X, Circle as CircleIcon, StopCircle } from '@tamagui/lucide-icons'
 import { useUser } from 'app/utils/useUser'
 import { Stack, Tabs } from 'expo-router'
 import { SolitoImage } from 'solito/image'
@@ -106,13 +118,17 @@ const RecordButton = ({ size }: TabBarIconProps) => {
           <CircleIcon col="$color" size={size + 20} />
         </YStack>
       </Theme>
-      <Sheet modal open={open} snapPoints={[80]} dismissOnOverlayPress={false}>
+      <Sheet modal open={open} snapPoints={[35]} dismissOnOverlayPress={false}>
         <Sheet.Overlay />
         <Sheet.Frame>
           <Sheet.ScrollView>
-            <YStack space="$4" padding="$4">
-              <Text>This is the modal content.</Text>
-              <Button onPress={() => setOpen(false)}>Close</Button>
+            <YStack ai="center" jc="center" f={1} space="$4" padding="$4">
+              <X jc="end" onPress={() => setOpen(false)} />
+              <H2>Title</H2>
+              <Text>Author</Text>
+              <Text>00:00:00</Text>
+
+              <StopCircle />
             </YStack>
           </Sheet.ScrollView>
         </Sheet.Frame>
