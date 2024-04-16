@@ -1,8 +1,6 @@
 import {
   Avatar,
-  View,
   H2,
-  Button,
   Circle,
   ColorTokens,
   Sheet,
@@ -10,15 +8,18 @@ import {
   Theme,
   YStack,
   validToken,
+  View,
+  Button,
 } from '@my/ui'
 import { BottomTabNavigationOptions } from '@react-navigation/bottom-tabs'
 import { LinearGradient } from '@tamagui/linear-gradient'
 import { Home, X, Circle as CircleIcon, StopCircle } from '@tamagui/lucide-icons'
 import { useUser } from 'app/utils/useUser'
+import { Audio } from 'expo-av'
+import { Recording } from 'expo-av/build/Audio'
 import { Stack, Tabs } from 'expo-router'
-import { SolitoImage } from 'solito/image'
-import { useRouter } from 'solito/router'
 import { useState } from 'react'
+import { SolitoImage } from 'solito/image'
 
 export default function Layout() {
   return (
@@ -75,6 +76,62 @@ const ProfileTabIcon = ({ color, size }: TabBarIconProps) => {
 
 const RecordButton = ({ size }: TabBarIconProps) => {
   const [open, setOpen] = useState(false)
+  const [recording, setRecording] = useState<Recording>()
+  const [permissionResponse, requestPermission] = Audio.usePermissions()
+  const [duration, setDuration] = useState(0)
+
+  async function startRecording() {
+    if (!permissionResponse) {
+      return
+    }
+    try {
+      if (permissionResponse.status !== 'granted') {
+        console.log('Requesting permission..')
+        await requestPermission()
+      }
+      await Audio.setAudioModeAsync({
+        allowsRecordingIOS: true,
+        playsInSilentModeIOS: true,
+      })
+
+      console.log('Starting recording..')
+      const recording = new Audio.Recording()
+      await recording.prepareToRecordAsync(Audio.RecordingOptionsPresets.HIGH_QUALITY)
+      recording.setOnRecordingStatusUpdate((status) => {
+        setDuration(status.durationMillis)
+      })
+      await recording.startAsync()
+      setRecording(recording)
+      console.log('Recording started')
+    } catch (err) {
+      console.error('Failed to start recording', err)
+    }
+  }
+
+  async function stopRecording() {
+    if (!recording) {
+      return
+    }
+    console.log('Stopping recording..')
+    setRecording(undefined)
+    await recording.stopAndUnloadAsync()
+    await Audio.setAudioModeAsync({
+      allowsRecordingIOS: false,
+    })
+    const uri = recording.getURI()
+    console.log('Recording stopped and stored at', uri)
+  }
+
+  const formatDuration = (durationMillis: number) => {
+    if (!durationMillis || durationMillis === 0) {
+      return '00:00'
+    }
+
+    const totalSeconds = Math.floor(durationMillis / 1000)
+    const minutes = Math.floor(totalSeconds / 60)
+    const seconds = totalSeconds % 60
+    return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`
+  }
 
   return (
     <>
@@ -93,7 +150,11 @@ const RecordButton = ({ size }: TabBarIconProps) => {
           h={size + 34}
         />
         <LinearGradient
-          onPress={() => setOpen(true)}
+          onPress={() => {
+            setOpen(true)
+            startRecording()
+            setDuration(duration)
+          }}
           colors={['$gray6', '$gray7']}
           start={[1, 1]}
           end={[0.8, 0]}
@@ -122,13 +183,12 @@ const RecordButton = ({ size }: TabBarIconProps) => {
         <Sheet.Overlay />
         <Sheet.Frame>
           <Sheet.ScrollView>
-            <YStack ai="center" jc="center" f={1} space="$4" padding="$4">
-              <X jc="end" onPress={() => setOpen(false)} />
+            <YStack ai="center" jc="center" f={1} space="$4" p="$4">
+              <X jc="flex-end" onPress={() => setOpen(false)} />
               <H2>Title</H2>
               <Text>Author</Text>
-              <Text>00:00:00</Text>
-
-              <StopCircle />
+              <Text>{formatDuration(duration)}</Text>
+              <StopCircle onPress={stopRecording} />
             </YStack>
           </Sheet.ScrollView>
         </Sheet.Frame>
