@@ -38,6 +38,10 @@ export const headingFont = createFont({
   lineHeight: Object.fromEntries(
     Object.entries(headingSize).map(([k, v]) => [k, getVariableValue(v) + 4])
   ),
+  face: {
+    300: { normal: 'Urbanist', italic: 'UrbanistItalic' },
+    600: { normal: 'UrbanistBold' },
+  },
 })
 
 const bodySize = {
@@ -73,4 +77,8 @@ export const bodyFont = createFont({
   lineHeight: Object.fromEntries(
     Object.entries(headingSize).map(([k, v]) => [k, getVariableValue(v) + 5])
   ),
+  face: {
+    300: { normal: 'InterLight', italic: 'InterItalic' },
+    600: { normal: 'InterBold' },
+  },
 })

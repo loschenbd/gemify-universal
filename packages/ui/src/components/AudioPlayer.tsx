@@ -7,7 +7,7 @@ import { Pressable } from 'react-native'
 export type AudioPlayerProps = object
 
 const audioUrl =
-  'https://lzeujpdftfnvelzhknqe.supabase.co/storage/v1/object/sign/gem-audio/testfile.m4a?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJnZW0tYXVkaW8vdGVzdGZpbGUubTRhIiwiaWF0IjoxNzEyODY4OTM2LCJleHAiOjE3MTM0NzM3MzZ9.aNR2JY_NjSmR3qB9tvqrdHIRkoWO57CgYKElXbfLm6M&t=2024-04-11T20%3A55%3A36.201Z'
+  'https://lzeujpdftfnvelzhknqe.supabase.co/storage/v1/object/sign/gem-audio/testfile.m4a?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJnZW0tYXVkaW8vdGVzdGZpbGUubTRhIiwiaWF0IjoxNzEzNDY1OTE3LCJleHAiOjE3NDUwMDE5MTd9.hwuOFFgZZ_T5lfxn8DdUZ6ItrzEIPjdXq0VDKHYVNXU&t=2024-04-18T18%3A45%3A17.881Z'
 
 export const AudioPlayer: React.FC<AudioPlayerProps> = (props) => {
   const [sound, setSound] = useState<Audio.Sound | null>(null)

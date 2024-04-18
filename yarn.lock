@@ -14608,6 +14608,7 @@ __metadata:
     babel-plugin-module-resolver: "npm:^4.1.0"
     babel-plugin-transform-inline-environment-variables: "npm:^0.4.4"
     babel-preset-expo: "npm:^10.0.1"
+    base64-arraybuffer: "npm:^1.0.2"
     burnt: "npm:^0.12.1"
     cross-env: "npm:^7.0.3"
     eslint-plugin-import: "npm:^2.28.0"
