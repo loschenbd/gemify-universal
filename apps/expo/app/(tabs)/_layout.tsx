@@ -22,6 +22,7 @@ import { Audio } from 'expo-av'
 import { Recording } from 'expo-av/build/Audio'
 import { Stack, Tabs } from 'expo-router'
 import { useState } from 'react'
+import { red } from 'react-native-reanimated/lib/typescript/reanimated2/Colors'
 import { SolitoImage } from 'solito/image'
 
 export default function Layout() {
@@ -79,6 +80,7 @@ const ProfileTabIcon = ({ color, size }: TabBarIconProps) => {
 
 const RecordButton = ({ size }: TabBarIconProps) => {
   const [open, setOpen] = useState(false)
+  const [isRecording, setIsRecording] = useState(false)
   const [recording, setRecording] = useState<Recording>()
   const [permissionResponse, requestPermission] = Audio.usePermissions()
   const [duration, setDuration] = useState(0)
@@ -112,6 +114,7 @@ const RecordButton = ({ size }: TabBarIconProps) => {
       })
       await recording.startAsync()
       setRecording(recording)
+      setIsRecording(true)
       console.log('Recording started')
     } catch (err) {
       console.error('Failed to start recording', err)
@@ -123,7 +126,6 @@ const RecordButton = ({ size }: TabBarIconProps) => {
       return
     }
     console.log('Stopping recording..')
-    setRecording(undefined)
     try {
       const status = await recording.getStatusAsync()
       const durationMillis = status.durationMillis
@@ -135,8 +137,10 @@ const RecordButton = ({ size }: TabBarIconProps) => {
       await Audio.setAudioModeAsync({
         allowsRecordingIOS: false,
       })
-
-      console.log('Recording stopped and stored at')
+      const uri = recording.getURI()
+      setRecordingUri(uri)
+      setIsRecording(false)
+      console.log('Recording stopped and stored at', uri)
     } catch (error) {
       console.error('Failed to get recording status:', error)
     }
@@ -153,7 +157,7 @@ const RecordButton = ({ size }: TabBarIconProps) => {
     return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`
   }
 
-  async function saveRecording(uri, durationMillis: number, title: string, author: string) {
+  async function saveRecording(durationMillis: number, title: string, author: string) {
     if (!user) {
       console.error('User not authenticated')
       return
@@ -164,7 +168,7 @@ const RecordButton = ({ size }: TabBarIconProps) => {
     const folderName = profileId
 
     try {
-      const response = await fetch(uri)
+      const response = await fetch(recordingUri)
       const fileData = await response.blob()
 
       const reader = new FileReader()
@@ -194,13 +198,12 @@ const RecordButton = ({ size }: TabBarIconProps) => {
         }
 
         const fileUrl = signedUrl.signedUrl
-
+        console.log(fileUrl)
+        console.log(durationMillis)
         // Insert a new row into the 'gems' table with the file URL and other metadata
         const { data: gemData, error: insertError } = await supabase.from('gems').insert({
-          title,
-          author,
-          duration: durationMillis,
           audio_url: fileUrl,
+          duration: recordingDuration,
           // Include other relevant metadata fields
         })
 
@@ -268,7 +271,7 @@ const RecordButton = ({ size }: TabBarIconProps) => {
         <Sheet.Overlay />
         <Sheet.Frame>
           <Sheet.ScrollView>
-            {recording ? (
+            {isRecording ? (
               <YStack ai="center" jc="center" f={1} space="$4" p="$4">
                 <H2>Title</H2>
                 <Text>Author</Text>
