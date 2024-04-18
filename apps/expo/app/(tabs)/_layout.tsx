@@ -1,3 +1,4 @@
+import { useSupabase } from '@my/app/utils/supabase/useSupabase'
 import {
   Avatar,
   H2,
@@ -7,13 +8,15 @@ import {
   Text,
   Theme,
   YStack,
+  XStack,
   validToken,
   View,
   Button,
+  Input,
 } from '@my/ui'
 import { BottomTabNavigationOptions } from '@react-navigation/bottom-tabs'
 import { LinearGradient } from '@tamagui/linear-gradient'
-import { Home, X, Circle as CircleIcon, StopCircle } from '@tamagui/lucide-icons'
+import { Home, X, Circle as CircleIcon, StopCircle, CheckCircle } from '@tamagui/lucide-icons'
 import { useUser } from 'app/utils/useUser'
 import { Audio } from 'expo-av'
 import { Recording } from 'expo-av/build/Audio'
@@ -79,7 +82,11 @@ const RecordButton = ({ size }: TabBarIconProps) => {
   const [recording, setRecording] = useState<Recording>()
   const [permissionResponse, requestPermission] = Audio.usePermissions()
   const [duration, setDuration] = useState(0)
+  const [recordingDuration, setRecordingDuration] = useState(0)
+  const [recordingUri, setRecordingUri] = useState<string | undefined>(undefined)
 
+  const supabase = useSupabase()
+  const user = useUser()
   async function startRecording() {
     if (!permissionResponse) {
       return
@@ -99,6 +106,9 @@ const RecordButton = ({ size }: TabBarIconProps) => {
       await recording.prepareToRecordAsync(Audio.RecordingOptionsPresets.HIGH_QUALITY)
       recording.setOnRecordingStatusUpdate((status) => {
         setDuration(status.durationMillis)
+        if (!status.isRecording) {
+          setRecordingDuration(status.durationMillis)
+        }
       })
       await recording.startAsync()
       setRecording(recording)
@@ -114,12 +124,22 @@ const RecordButton = ({ size }: TabBarIconProps) => {
     }
     console.log('Stopping recording..')
     setRecording(undefined)
-    await recording.stopAndUnloadAsync()
-    await Audio.setAudioModeAsync({
-      allowsRecordingIOS: false,
-    })
-    const uri = recording.getURI()
-    console.log('Recording stopped and stored at', uri)
+    try {
+      const status = await recording.getStatusAsync()
+      const durationMillis = status.durationMillis
+      setRecordingDuration(durationMillis)
+      setDuration(durationMillis)
+      console.log('Recording duration:', durationMillis)
+
+      await recording.stopAndUnloadAsync()
+      await Audio.setAudioModeAsync({
+        allowsRecordingIOS: false,
+      })
+
+      console.log('Recording stopped and stored at')
+    } catch (error) {
+      console.error('Failed to get recording status:', error)
+    }
   }
 
   const formatDuration = (durationMillis: number) => {
@@ -131,6 +151,71 @@ const RecordButton = ({ size }: TabBarIconProps) => {
     const minutes = Math.floor(totalSeconds / 60)
     const seconds = totalSeconds % 60
     return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`
+  }
+
+  async function saveRecording(uri, durationMillis: number, title: string, author: string) {
+    if (!user) {
+      console.error('User not authenticated')
+      return
+    }
+
+    const profileId = user.profile?.id
+    const fileName = `${profileId}_${Date.now()}.mp3`
+    const folderName = profileId
+
+    try {
+      const response = await fetch(uri)
+      const fileData = await response.blob()
+
+      const reader = new FileReader()
+      reader.onloadend = async () => {
+        const arrayBuffer = reader.result as ArrayBuffer
+
+        const { data, error: uploadError } = await supabase.storage
+          .from('gem-audio')
+          .upload(`${folderName}/${fileName}`, arrayBuffer, {
+            contentType: 'audio/mpeg',
+          })
+
+        if (uploadError) {
+          console.error('Error uploading audio:', uploadError)
+          return
+        }
+
+        console.log('Audio uploaded successfully:', data)
+
+        const { data: signedUrl, error: publicUrlError } = await supabase.storage
+          .from('gem-audio')
+          .createSignedUrl(`${folderName}/${fileName}`, 600)
+
+        if (publicUrlError) {
+          console.error('Error getting public URL:', publicUrlError)
+          return
+        }
+
+        const fileUrl = signedUrl.signedUrl
+
+        // Insert a new row into the 'gems' table with the file URL and other metadata
+        const { data: gemData, error: insertError } = await supabase.from('gems').insert({
+          title,
+          author,
+          duration: durationMillis,
+          audio_url: fileUrl,
+          // Include other relevant metadata fields
+        })
+
+        if (insertError) {
+          console.error('Error inserting gem record:', insertError)
+          return
+        }
+
+        console.log('Gem record inserted successfully:', gemData)
+      }
+
+      reader.readAsArrayBuffer(fileData)
+    } catch (error) {
+      console.error('Error reading or uploading audio:', error)
+    }
   }
 
   return (
@@ -183,13 +268,35 @@ const RecordButton = ({ size }: TabBarIconProps) => {
         <Sheet.Overlay />
         <Sheet.Frame>
           <Sheet.ScrollView>
-            <YStack ai="center" jc="center" f={1} space="$4" p="$4">
-              <X jc="flex-end" onPress={() => setOpen(false)} />
-              <H2>Title</H2>
-              <Text>Author</Text>
-              <Text>{formatDuration(duration)}</Text>
-              <StopCircle onPress={stopRecording} />
-            </YStack>
+            {recording ? (
+              <YStack ai="center" jc="center" f={1} space="$4" p="$4">
+                <H2>Title</H2>
+                <Text>Author</Text>
+                <Text>{formatDuration(duration)}</Text>
+                <StopCircle size="$4" onPress={stopRecording} />
+              </YStack>
+            ) : (
+              <YStack ai="center" jc="center" f={1} space="$4" p="$4">
+                <Input w={250} placeholder="Title" />
+                <Input w={250} placeholder="Author" />
+                <Text>{formatDuration(recordingDuration)}</Text>
+                <XStack gap={20}>
+                  <CheckCircle
+                    size="$4"
+                    onPress={async () => {
+                      setOpen(false)
+                      saveRecording(recordingUri, recordingDuration)
+                    }}
+                  />
+                  <X
+                    size="$4"
+                    onPress={() => {
+                      setOpen(false)
+                    }}
+                  />
+                </XStack>
+              </YStack>
+            )}
           </Sheet.ScrollView>
         </Sheet.Frame>
       </Sheet>
