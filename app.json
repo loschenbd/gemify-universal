@@ -1,0 +1,12 @@
+{
+  "expo": {
+    "extra": {
+      "eas": {
+        "projectId": "95619924-2190-4175-9c54-2ef71210bd9d"
+      }
+    },
+    "ios": {
+      "bundleIdentifier": "com.smartlemon.gemify"
+    }
+  }
+}

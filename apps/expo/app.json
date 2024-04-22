@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "myapp",
-    "slug": "myapp",
+    "name": "gemify-universal",
+    "slug": "gemify-universal",
     "jsEngine": "hermes",
     "scheme": "myapp",
     "version": "1.0.0",
@@ -17,10 +17,13 @@
       "fallbackToCacheTimeout": 0,
       "url": "https://u.expo.dev/your-project-id"
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.acme.myapp"
+      "bundleIdentifier": "com.smartlemon.gemify",
+      "buildNumber": "6"
     },
     "android": {
       "softwareKeyboardLayoutMode": "pan",
@@ -29,7 +32,10 @@
         "backgroundColor": "#FFFFFF"
       },
       "package": "com.acme.myapp",
-      "permissions": ["android.permission.RECORD_AUDIO"]
+      "permissions": [
+        "android.permission.RECORD_AUDIO",
+        "android.permission.MODIFY_AUDIO_SETTINGS"
+      ]
     },
     "web": {
       "favicon": "./assets/favicon.png",
@@ -64,12 +70,12 @@
         "origin": false
       },
       "eas": {
-        "projectId": ""
+        "projectId": "8da37ade-cec9-4b62-8e7b-5f61c31b043e"
       }
     },
     "runtimeVersion": {
       "policy": "appVersion"
     },
-    "owner": "tamagui-team"
+    "owner": "loschenbd"
   }
 }

@@ -30,7 +30,7 @@
       }
     },
     "staging": {
-      "distribution": "store",
+      "distribution": "internal",
       "channel": "staging",
       "env": {
         "APP_ENV": "staging"
