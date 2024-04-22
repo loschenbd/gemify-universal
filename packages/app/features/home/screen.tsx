@@ -1,44 +1,11 @@
-import {
-  AchievementCard,
-  Banner,
-  Button,
-  EventCard,
-  FeedCard,
-  GemCard,
-  H2,
-  H4,
-  Switch,
-  Label,
-  OverviewCard,
-  Paragraph,
-  ScrollView,
-  Separator,
-  Theme,
-  TodoCard,
-  XStack,
-  YStack,
-  isWeb,
-  useMedia,
-  validToken,
-} from '@my/ui'
-import { ArrowRight, DollarSign, Pencil, User, Users } from '@tamagui/lucide-icons'
+import { ScrollView, XStack, YStack, GemCard, Text } from '@my/ui'
 import { api } from 'app/utils/api'
+import { useQuery } from '@tanstack/react-query'
+import { useSupabase } from 'app/utils/supabase/useSupabase'
+import { useUser } from 'app/utils/useUser'
 import React from 'react'
 import { Platform } from 'react-native'
 import { useLink, Link } from 'solito/link'
-
-const defaultAuthors = [
-  {
-    id: 1,
-    name: 'John Doe',
-    avatar: 'https://i.pravatar.cc/150?img=67/32/32?ca=1',
-  },
-  {
-    id: 2,
-    name: 'Jane Doe',
-    avatar: 'https://i.pravatar.cc/150?img=30/32/32?ca=1',
-  },
-]
 
 export function HomeScreen() {
   return (
@@ -162,17 +129,44 @@ export const linkMockup = [
   },
 ]
 
+function useUserGems() {
+  const { user } = useUser()
+  const supabase = useSupabase()
+
+  const { data, isLoading, error } = useQuery(['userGems', user?.id], {
+    queryFn: async () => {
+      if (!user?.id) return []
+
+      const { data, error } = await supabase
+        .from('gems')
+        .select('*')
+        .eq('profile_id', user.id)
+        .order('created_at', { ascending: false })
+
+      if (error) {
+        throw new Error(error.message)
+      }
+
+      return data
+    },
+  })
+
+  return { data, isLoading, error }
+}
 const GemCards = () => {
+  const { data: userGems, isLoading, error } = useUserGems()
+  if (isLoading) {
+    return <Text>Loading...</Text>
+  }
+
+  if (error) {
+    return <Text>Error: {error.message}</Text>
+  }
   return (
     <YStack p="$2" gap="$2">
-      {linkMockup.map((link) => (
-        <Link key={link.id} href={`/gem/${link.id}`}>
-          <GemCard
-            title={link.title}
-            author={link.author}
-            duration={link.duration}
-            date={link.date}
-          />
+      {userGems.map((gem) => (
+        <Link key={gem.id} href={`/gem/${gem.id}`}>
+          <GemCard title={gem.title} author={gem.author} duration={gem.duration} date={gem.date} />
         </Link>
       ))}
     </YStack>
