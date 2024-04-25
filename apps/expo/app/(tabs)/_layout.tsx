@@ -204,6 +204,7 @@ const RecordButton = ({ size }: TabBarIconProps) => {
         const { data: gemData, error: insertError } = await supabase.from('gems').insert({
           audio_url: fileUrl,
           duration: recordingDuration,
+          profile_id: user.profile?.id,
           // Include other relevant metadata fields
         })
 

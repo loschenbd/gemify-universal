@@ -84,7 +84,7 @@ export function GoogleSignIn() {
       space="$1.5"
       bg="transparent"
       pressStyle={{ bg: 'transparent', o: 0.6, bw: '$0' }}
-      animation="200ms"
+      // animation="200ms"
       chromeless
     >
       Sign in with Google

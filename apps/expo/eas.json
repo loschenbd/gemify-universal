@@ -29,6 +29,18 @@
         "image": "latest"
       }
     },
+    "staging:simulator": {
+      "distribution": "internal",
+      "channel": "staging",
+      "env": {
+        "APP_ENV": "staging"
+      },
+      "ios": {
+        "simulator": true,
+        "image": "latest"
+      },
+      "autoIncrement": true
+    },
     "staging": {
       "distribution": "internal",
       "channel": "staging",

@@ -3,7 +3,7 @@ import { Card, Circle, H2, H3, H4, Text, View, XStack, YStack } from 'tamagui'
 import { Link } from './Link'
 export type GemCardProps = object
 
-export const GemCard: React.FC<GemCardProps> = ({ title, author, duration, date }) => {
+export const GemCard: React.FC<GemCardProps> = ({ title, duration, author, date }) => {
   return (
     <Card p="$2" unstyled={false}>
       <XStack alignItems="center">
