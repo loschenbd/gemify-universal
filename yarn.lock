@@ -14623,6 +14623,7 @@ __metadata:
     expo-font: "npm:~11.10.2"
     expo-image: "npm:~1.10.5"
     expo-image-picker: "npm:~14.7.1"
+    expo-keep-awake: "npm:^12.8.2"
     expo-linear-gradient: "npm:~12.7.1"
     expo-linking: "npm:~6.2.2"
     expo-notifications: "npm:~0.27.6"
@@ -14852,7 +14853,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"expo-keep-awake@npm:~12.8.2":
+"expo-keep-awake@npm:^12.8.2, expo-keep-awake@npm:~12.8.2":
   version: 12.8.2
   resolution: "expo-keep-awake@npm:12.8.2"
   peerDependencies:

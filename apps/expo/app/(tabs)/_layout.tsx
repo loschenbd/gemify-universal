@@ -19,6 +19,7 @@ import { LinearGradient } from '@tamagui/linear-gradient'
 import { Home, X, Circle as CircleIcon, StopCircle, CheckCircle } from '@tamagui/lucide-icons'
 import { useUser } from 'app/utils/useUser'
 import { Audio } from 'expo-av'
+import { activateKeepAwakeAsync, deactivateKeepAwake } from 'expo-keep-awake'
 import { Recording } from 'expo-av/build/Audio'
 import { Stack, Tabs } from 'expo-router'
 import { useState } from 'react'
@@ -90,6 +91,7 @@ const RecordButton = ({ size }: TabBarIconProps) => {
   const supabase = useSupabase()
   const user = useUser()
   async function startRecording() {
+    activateKeepAwakeAsync()
     if (!permissionResponse) {
       return
     }
@@ -140,6 +142,7 @@ const RecordButton = ({ size }: TabBarIconProps) => {
       const uri = recording.getURI()
       setRecordingUri(uri)
       setIsRecording(false)
+      deactivateKeepAwake()
       console.log('Recording stopped and stored at', uri)
     } catch (error) {
       console.error('Failed to get recording status:', error)
