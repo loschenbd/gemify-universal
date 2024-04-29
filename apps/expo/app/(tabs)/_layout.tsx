@@ -188,16 +188,16 @@ const RecordButton = ({ size }: TabBarIconProps) => {
 
         console.log('Audio uploaded successfully:', data)
 
-        const { data: signedUrl, error: publicUrlError } = await supabase.storage
+        const { data: signedUrl, error: signedUrlError } = await supabase.storage
           .from('gem-audio')
           .createSignedUrl(`${folderName}/${fileName}`, 600)
 
-        if (publicUrlError) {
-          console.error('Error getting public URL:', publicUrlError)
+        if (signedUrlError) {
+          console.error('Error getting public URL:', signedUrlError)
           return
         }
 
-        const fileUrl = signedUrl.signedUrl
+        const fileUrl = `${folderName}/${fileName}`
         console.log(fileUrl)
         console.log(durationMillis)
         // Insert a new row into the 'gems' table with the file URL and other metadata

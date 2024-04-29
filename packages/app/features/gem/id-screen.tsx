@@ -1,4 +1,4 @@
-import { YStack, H3, Text, View, Circle, ScrollView, AudioPlayer } from '@my/ui'
+import { YStack, H3, Text, View, Circle, ScrollView, AudioPlayer, Spinner } from '@my/ui'
 import { Gem, ArrowLeftCircle } from '@tamagui/lucide-icons'
 import { useGem } from 'app/utils/useGem'
 import { Pressable } from 'react-native'

@@ -1,39 +1,55 @@
 import { Text, View, XStack, Slider, Spinner } from 'tamagui'
 import { Pause, Play } from '@tamagui/lucide-icons'
+import { useSupabase } from 'app/utils/supabase/useSupabase'
 import { Audio } from 'expo-av'
 import { useEffect, useState } from 'react'
 import { Pressable } from 'react-native'
 
-export type AudioPlayerProps = object
+export type AudioPlayerProps = {
+  url: string
+}
 
-const audioUrl =
-  'https://lzeujpdftfnvelzhknqe.supabase.co/storage/v1/object/sign/gem-audio/testfile.m4a?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJnZW0tYXVkaW8vdGVzdGZpbGUubTRhIiwiaWF0IjoxNzEzNDY1OTE3LCJleHAiOjE3NDUwMDE5MTd9.hwuOFFgZZ_T5lfxn8DdUZ6ItrzEIPjdXq0VDKHYVNXU&t=2024-04-18T18%3A45%3A17.881Z'
-
-export const AudioPlayer: React.FC<AudioPlayerProps> = (props) => {
+export const AudioPlayer: React.FC<AudioPlayerProps> = ({ url }) => {
   const [sound, setSound] = useState<Audio.Sound | null>(null)
+  const [isLoading, setIsLoading] = useState(true)
   const [playing, setPlaying] = useState(false)
   const [progress, setProgress] = useState(0)
   const [duration, setDuration] = useState(0)
   const [remainingTime, setRemainingTime] = useState(0)
   const [error, setError] = useState<string | null>(null)
 
+  const supabase = useSupabase()
+
   useEffect(() => {
     const loadSound = async () => {
+      setIsLoading(true)
       try {
-        const { sound } = await Audio.Sound.createAsync({ uri: audioUrl })
+        const { data: signedUrl, error: signedUrlError } = await supabase.storage
+          .from('gem-audio')
+          .createSignedUrl(url, 600)
+
+        if (signedUrlError) {
+          console.error('Error getting public URL:', signedUrlError)
+          setError('Failed to load audio')
+          setIsLoading(false)
+          return
+        }
+
+        const { sound } = await Audio.Sound.createAsync({ uri: signedUrl.signedUrl })
         setSound(sound)
 
         sound.setOnPlaybackStatusUpdate((status) => {
           setPlaying(status.isPlaying)
-          setProgress(status.positionMillis / status.durationMillis)
+          setProgress(status.positionMillis / (status.durationMillis || 1))
           setDuration(status.durationMillis)
-
-          const remainingMillis = status.durationMillis - status.positionMillis
-          setRemainingTime(remainingMillis)
+          setRemainingTime(status.durationMillis - status.positionMillis)
         })
+
+        setIsLoading(false)
       } catch (error) {
         setError('Failed to load audio')
         console.error('Failed to load audio', error)
+        setIsLoading(false)
       }
     }
 
@@ -44,7 +60,7 @@ export const AudioPlayer: React.FC<AudioPlayerProps> = (props) => {
         sound.unloadAsync()
       }
     }
-  }, [])
+  }, [url])
 
   const handlePlayPause = async () => {
     if (sound) {
@@ -56,14 +72,13 @@ export const AudioPlayer: React.FC<AudioPlayerProps> = (props) => {
     }
   }
 
-  const handleSliderValueChange = async (value: number[]) => {
-    if (sound) {
-      if (duration > 0) {
-        const positionMillis = value[0] * duration
-        await sound.setPositionAsync(positionMillis)
-        setProgress(value[0])
-        setRemainingTime(duration - positionMillis)
-      }
+  const handleSliderValueChange = async (value: number) => {
+    if (sound && duration > 0) {
+      const positionMillis = value * duration
+      await sound.setPositionAsync(positionMillis)
+      setProgress(value)
+      console.log(progress)
+      setRemainingTime(duration - positionMillis)
     }
   }
 
@@ -86,14 +101,10 @@ export const AudioPlayer: React.FC<AudioPlayerProps> = (props) => {
             <Text>{error}</Text>
           ) : (
             <View>
-              {playing ? (
-                <Pressable onPress={handlePlayPause}>
-                  <Pause />
-                </Pressable>
+              {isLoading ? (
+                <Spinner />
               ) : (
-                <Pressable onPress={handlePlayPause}>
-                  <Play />
-                </Pressable>
+                <Pressable onPress={handlePlayPause}>{playing ? <Pause /> : <Play />}</Pressable>
               )}
             </View>
           )}
@@ -106,8 +117,7 @@ export const AudioPlayer: React.FC<AudioPlayerProps> = (props) => {
           max={1}
           step={0.00001}
           value={[progress]}
-          onValueChange={handleSliderValueChange}
-          disabled={duration === 0}
+          onValueChange={(value) => handleSliderValueChange(value[0])}
         >
           <Slider.Track>
             <Slider.TrackActive />
