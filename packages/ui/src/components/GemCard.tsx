@@ -21,14 +21,7 @@ export const GemCard: React.FC<GemCardProps> = ({ title, duration, author, date 
             </Text>
           </XStack>
         </YStack>
-        <Text
-          pt="$1"
-          pr="$1"
-          marginLeft="auto"
-          marginBottom="auto"
-          color="$gray10"
-          justify-conent="end"
-        >
+        <Text pt="$1" pr="$1" marginLeft="auto" marginBottom="auto" color="$gray10" jc="flex-end">
           {date}
         </Text>
       </XStack>
