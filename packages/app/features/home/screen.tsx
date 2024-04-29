@@ -1,6 +1,7 @@
 import { ScrollView, XStack, YStack, GemCard, Text } from '@my/ui'
 import { api } from 'app/utils/api'
 import { useQuery } from '@tanstack/react-query'
+import { formatDuration } from 'app/utils/formatDuration'
 import { useSupabase } from 'app/utils/supabase/useSupabase'
 import { useUser } from 'app/utils/useUser'
 import React from 'react'
@@ -74,7 +75,12 @@ const GemCards = () => {
     <YStack p="$2" gap="$2">
       {userGems.map((gem) => (
         <Link key={gem.id} href={`/gem/${gem.id}`}>
-          <GemCard title={gem.title} author={gem.author} duration={gem.duration} date={gem.date} />
+          <GemCard
+            title={gem.title}
+            author={gem.author}
+            duration={formatDuration(gem.duration)}
+            date={gem.date}
+          />
         </Link>
       ))}
     </YStack>

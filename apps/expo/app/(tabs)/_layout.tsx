@@ -17,13 +17,13 @@ import {
 import { BottomTabNavigationOptions } from '@react-navigation/bottom-tabs'
 import { LinearGradient } from '@tamagui/linear-gradient'
 import { Home, X, Circle as CircleIcon, StopCircle, CheckCircle } from '@tamagui/lucide-icons'
+import { formatDuration } from 'app/utils/formatDuration'
 import { useUser } from 'app/utils/useUser'
 import { Audio } from 'expo-av'
-import { activateKeepAwakeAsync, deactivateKeepAwake } from 'expo-keep-awake'
 import { Recording } from 'expo-av/build/Audio'
+import { activateKeepAwakeAsync, deactivateKeepAwake } from 'expo-keep-awake'
 import { Stack, Tabs } from 'expo-router'
 import { useState } from 'react'
-import { red } from 'react-native-reanimated/lib/typescript/reanimated2/Colors'
 import { SolitoImage } from 'solito/image'
 
 export default function Layout() {
@@ -87,6 +87,7 @@ const RecordButton = ({ size }: TabBarIconProps) => {
   const [duration, setDuration] = useState(0)
   const [recordingDuration, setRecordingDuration] = useState(0)
   const [recordingUri, setRecordingUri] = useState<string | undefined>(undefined)
+  const [finalDuration, setFinalDuration] = useState(0)
 
   const supabase = useSupabase()
   const user = useUser()
@@ -133,6 +134,7 @@ const RecordButton = ({ size }: TabBarIconProps) => {
       const durationMillis = status.durationMillis
       setRecordingDuration(durationMillis)
       setDuration(durationMillis)
+      setFinalDuration(durationMillis) // Save the final duration
       console.log('Recording duration:', durationMillis)
 
       await recording.stopAndUnloadAsync()
@@ -147,17 +149,6 @@ const RecordButton = ({ size }: TabBarIconProps) => {
     } catch (error) {
       console.error('Failed to get recording status:', error)
     }
-  }
-
-  const formatDuration = (durationMillis: number) => {
-    if (!durationMillis || durationMillis === 0) {
-      return '00:00'
-    }
-
-    const totalSeconds = Math.floor(durationMillis / 1000)
-    const minutes = Math.floor(totalSeconds / 60)
-    const seconds = totalSeconds % 60
-    return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`
   }
 
   async function saveRecording(durationMillis: number, title: string, author: string) {
@@ -206,7 +197,7 @@ const RecordButton = ({ size }: TabBarIconProps) => {
         // Insert a new row into the 'gems' table with the file URL and other metadata
         const { data: gemData, error: insertError } = await supabase.from('gems').insert({
           audio_url: fileUrl,
-          duration: recordingDuration,
+          duration: finalDuration,
           profile_id: user.profile?.id,
           // Include other relevant metadata fields
         })
