@@ -268,8 +268,6 @@ const RecordButton = ({ size }: TabBarIconProps) => {
           <Sheet.ScrollView>
             {isRecording ? (
               <YStack ai="center" jc="center" f={1} space="$4" p="$4">
-                <H2>Title</H2>
-                <Text>Author</Text>
                 <Text>{formatDuration(duration)}</Text>
                 <StopCircle size="$4" onPress={stopRecording} />
               </YStack>

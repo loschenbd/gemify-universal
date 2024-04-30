@@ -2,16 +2,110 @@ import { YStack, H3, Text, View, Circle, ScrollView, AudioPlayer, Button, XStack
 import { Gem, ArrowLeftCircle, Trash2 } from '@tamagui/lucide-icons'
 import { useSupabase } from 'app/utils/supabase/useSupabase'
 import { useGem } from 'app/utils/useGem'
+import { Audio } from 'expo-av'
+import { useState, useEffect } from 'react'
 import { Pressable } from 'react-native'
 import { createParam } from 'solito'
 import { useRouter } from 'solito/router'
 import { AlertDialog } from 'tamagui'
 
 const { useParam } = createParam<{ id: string }>()
+
 export const IdScreen = () => {
   const supabase = useSupabase()
 
   const { back } = useRouter()
+  const [id] = useParam('id')
+  const gemId = id ? parseInt(id, 10) : undefined
+
+  const [sound, setSound] = useState<Audio.Sound | null>(null)
+  const [isSoundLoading, setIsSoundLoading] = useState(false)
+  const [playing, setPlaying] = useState(false)
+  const [progress, setProgress] = useState(0)
+  const [remainingTime, setRemainingTime] = useState(0)
+  const [soundError, setSoundError] = useState<string | null>(null)
+
+  const { data: gem, isLoading: isGemLoading, error: gemError } = useGem(gemId)
+
+  useEffect(() => {
+    const loadSound = async () => {
+      setIsSoundLoading(true)
+      try {
+        console.log('Loading audio:', gem.audio_url)
+        const { data: signedUrl, error: signedUrlError } = await supabase.storage
+          .from('gem-audio')
+          .createSignedUrl(gem.audio_url, 600)
+
+        if (signedUrlError) {
+          console.error('Error getting signed URL:', signedUrlError)
+          setSoundError('Failed to load audio')
+          setIsSoundLoading(false)
+          return
+        }
+
+        console.log('Signed URL:', signedUrl)
+
+        const { sound, status } = await Audio.Sound.createAsync({ uri: signedUrl.signedUrl })
+        setSound(sound)
+        console.log('Sound loaded:', status)
+
+        sound.setOnPlaybackStatusUpdate((status) => {
+          console.log('Playback status:', status.positionMillis)
+          setPlaying(status.isPlaying)
+          setProgress(status.positionMillis / (status.durationMillis || 1))
+          setRemainingTime(status.durationMillis - status.positionMillis)
+        })
+
+        setIsSoundLoading(false)
+      } catch (error) {
+        console.error('Error loading audio:', error)
+        setSoundError('Failed to load audio')
+        setIsSoundLoading(false)
+      }
+    }
+
+    if (gem && gem.audio_url) {
+      loadSound()
+    }
+
+    return () => {
+      if (sound) {
+        sound.unloadAsync()
+      }
+    }
+  }, [gem])
+
+  const playPause = async () => {
+    if (sound) {
+      if (playing) {
+        await sound.pauseAsync()
+      } else {
+        await sound.playAsync()
+      }
+    }
+  }
+
+  const handleSliderValueChange = async (value: number) => {
+    if (sound && gem) {
+      const positionMillis = value * gem.duration
+      await sound.setPositionAsync(positionMillis)
+      setProgress(value)
+      setRemainingTime(gem.duration - positionMillis)
+    }
+  }
+
+  if (isGemLoading) {
+    return <Text>Loading gem data...</Text>
+  }
+
+  if (gemError) {
+    return <Text>Error: {gemError.message}</Text>
+  }
+
+  if (!gem) {
+    return <Text>Gem not found</Text>
+  }
+
   const onGoBack = () => {
     back()
   }
@@ -24,29 +118,10 @@ export const IdScreen = () => {
 
       if (error) {
         console.error('Error deleting gem:', error)
-        // Handle the error, show an error message, etc.
       } else {
-        // Gem deleted successfully
-        // Navigate back to the previous screen or any other desired action
         back()
       }
     }
-  }
-  const [id] = useParam('id')
-  const gemId = id ? parseInt(id, 10) : undefined
-
-  const { data: gem, isLoading, error } = useGem(gemId)
-
-  if (isLoading) {
-    return <Text>Loading...</Text>
-  }
-
-  if (error) {
-    return <Text>Error: {error.message}</Text>
-  }
-
-  if (!gem) {
-    return <Text>Gem not found</Text>
   }
 
   return (
@@ -107,15 +182,25 @@ export const IdScreen = () => {
             </AlertDialog.Portal>
           </AlertDialog>
         </XStack>
-        <YStack alignItems="center">
-          <View justify-content="center" alignItems="center" borderRadius="$20">
-            <Circle backgroundColor="$gray5" size="$5">
+        <YStack ai="center">
+          <View jc="center" ai="center" br="$20">
+            <Circle bg="$gray5" size="$5">
               <Gem size="$3" />
             </Circle>
           </View>
           <H3 p="$2">{gem.title}</H3>
           <Text pb="$3">{gem.author}</Text>
-          <AudioPlayer url={gem.audio_url} durationMillis={gem.duration} />
+          <AudioPlayer
+            url={gem.audio_url}
+            durationMillis={gem.duration}
+            isSoundLoading={isSoundLoading}
+            playing={playing}
+            progress={progress}
+            remainingTime={remainingTime}
+            error={soundError}
+            playPause={playPause}
+            handleSliderValueChange={handleSliderValueChange}
+          />
         </YStack>
         <YStack justify-content="center">
           {/* Main Points */}
