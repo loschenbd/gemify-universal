@@ -1,11 +1,11 @@
 import { YStack, H3, Text, View, Circle, ScrollView, AudioPlayer, Button, XStack } from '@my/ui'
-import { AlertDialog } from 'tamagui'
 import { Gem, ArrowLeftCircle, Trash2 } from '@tamagui/lucide-icons'
 import { useSupabase } from 'app/utils/supabase/useSupabase'
 import { useGem } from 'app/utils/useGem'
-import { Pressable, Alert } from 'react-native'
+import { Pressable } from 'react-native'
 import { createParam } from 'solito'
 import { useRouter } from 'solito/router'
+import { AlertDialog } from 'tamagui'
 
 const { useParam } = createParam<{ id: string }>()
 export const IdScreen = () => {
@@ -115,7 +115,7 @@ export const IdScreen = () => {
           </View>
           <H3 p="$2">{gem.title}</H3>
           <Text pb="$3">{gem.author}</Text>
-          <AudioPlayer url={gem.audio_url} />
+          <AudioPlayer url={gem.audio_url} durationMillis={gem.duration} />
         </YStack>
         <YStack justify-content="center">
           {/* Main Points */}

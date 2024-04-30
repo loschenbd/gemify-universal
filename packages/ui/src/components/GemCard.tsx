@@ -13,7 +13,7 @@ export const GemCard: React.FC<GemCardProps> = ({ title, duration, author, date 
           </Circle>
         </View>
         <YStack pl="$1.5">
-          <H3>{title}</H3>
+          <H3 size="$4">{title}</H3>
           <XStack>
             <Text color="$gray10">{author}</Text>
             <Text color="$gray10" paddingLeft="$2">

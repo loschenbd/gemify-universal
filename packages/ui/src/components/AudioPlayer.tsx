@@ -1,20 +1,22 @@
-import { Text, View, XStack, Slider, Spinner } from 'tamagui'
 import { Pause, Play } from '@tamagui/lucide-icons'
+import { formatDuration } from 'app/utils/formatDuration'
 import { useSupabase } from 'app/utils/supabase/useSupabase'
 import { Audio } from 'expo-av'
 import { useEffect, useState } from 'react'
 import { Pressable } from 'react-native'
+import { Text, View, XStack, Slider, Spinner } from 'tamagui'
 
 export type AudioPlayerProps = {
   url: string
+  durationMillis: number
 }
 
-export const AudioPlayer: React.FC<AudioPlayerProps> = ({ url }) => {
+export const AudioPlayer: React.FC<AudioPlayerProps> = ({ url, durationMillis }) => {
   const [sound, setSound] = useState<Audio.Sound | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [playing, setPlaying] = useState(false)
   const [progress, setProgress] = useState(0)
-  const [duration, setDuration] = useState(0)
+  const [duration, setDuration] = useState(durationMillis)
   const [remainingTime, setRemainingTime] = useState(0)
   const [error, setError] = useState<string | null>(null)
 
@@ -80,17 +82,6 @@ export const AudioPlayer: React.FC<AudioPlayerProps> = ({ url }) => {
       console.log(progress)
       setRemainingTime(duration - positionMillis)
     }
-  }
-
-  const formatDuration = (durationMillis: number) => {
-    if (!durationMillis || durationMillis === 0) {
-      return '00:00'
-    }
-
-    const totalSeconds = Math.floor(durationMillis / 1000)
-    const minutes = Math.floor(totalSeconds / 60)
-    const seconds = totalSeconds % 60
-    return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`
   }
 
   return (
