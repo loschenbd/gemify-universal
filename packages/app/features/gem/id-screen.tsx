@@ -46,6 +46,7 @@ export const IdScreen = () => {
         console.log('Signed URL:', signedUrl)
 
         const { sound, status } = await Audio.Sound.createAsync({ uri: signedUrl.signedUrl })
+        sound.setAudioMode
         setSound(sound)
         console.log('Sound loaded:', status)
 
@@ -202,7 +203,7 @@ export const IdScreen = () => {
             handleSliderValueChange={handleSliderValueChange}
           />
         </YStack>
-        <YStack justify-content="center">
+        <YStack $platform-web={{ w: 500 }}>
           {/* Main Points */}
           {gem.main_points && (
             <View p="$4">
@@ -295,11 +296,13 @@ export const IdScreen = () => {
             <View p="$4">
               <H3 p="$2">Transcript</H3>
               <Text py="$1" px="$3">
-                {gem.related_topics.map((transcript, index) => (
-                  <Text py="$1" px="$3" key={index}>
-                    {transcript}
-                  </Text>
-                ))}
+                <YStack space="$1">
+                  {gem.transcript.map((paragraph, index) => (
+                    <Text py="$1" px="$3" key={index}>
+                      {paragraph}
+                    </Text>
+                  ))}
+                </YStack>
               </Text>
             </View>
           )}
