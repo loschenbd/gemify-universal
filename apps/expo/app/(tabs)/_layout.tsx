@@ -88,6 +88,7 @@ const RecordButton = ({ size }: TabBarIconProps) => {
   const [recordingDuration, setRecordingDuration] = useState(0)
   const [recordingUri, setRecordingUri] = useState<string | undefined>(undefined)
   const [finalDuration, setFinalDuration] = useState(0)
+  const [author, setAuthor] = useState('')
 
   const supabase = useSupabase()
   const user = useUser()
@@ -197,9 +198,9 @@ const RecordButton = ({ size }: TabBarIconProps) => {
         // Insert a new row into the 'gems' table with the file URL and other metadata
         const { data: gemData, error: insertError } = await supabase.from('gems').insert({
           audio_url: fileUrl,
-          duration: finalDuration,
+          duration: durationMillis,
           profile_id: user.profile?.id,
-          // Include other relevant metadata fields
+          author: author, // Add the author field
         })
 
         if (insertError) {
@@ -273,15 +274,19 @@ const RecordButton = ({ size }: TabBarIconProps) => {
               </YStack>
             ) : (
               <YStack ai="center" jc="center" f={1} space="$4" p="$4">
-                <Input w={250} placeholder="Title" />
-                <Input w={250} placeholder="Author" />
-                <Text>{formatDuration(recordingDuration)}</Text>
+                <Input
+                  w={250}
+                  placeholder="Who gave you this word?"
+                  value={author}
+                  onChangeText={setAuthor}
+                />
+                <Text>{formatDuration(finalDuration)}</Text>
                 <XStack gap={20}>
                   <CheckCircle
                     size="$4"
                     onPress={async () => {
                       setOpen(false)
-                      saveRecording(recordingUri, recordingDuration)
+                      saveRecording(finalDuration, recordingUri, author)
                     }}
                   />
                   <X
