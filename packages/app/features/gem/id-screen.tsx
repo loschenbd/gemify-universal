@@ -3,11 +3,12 @@ import { Gem, ArrowLeftCircle, Trash2 } from '@tamagui/lucide-icons'
 import { useSupabase } from 'app/utils/supabase/useSupabase'
 import { useGem } from 'app/utils/useGem'
 import { Audio } from 'expo-av'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { Pressable } from 'react-native'
 import { createParam } from 'solito'
 import { useRouter } from 'solito/router'
 import { AlertDialog } from 'tamagui'
+import { useFocusEffect } from 'expo-router'
 
 const { useParam } = createParam<{ id: string }>()
 
@@ -75,6 +76,16 @@ export const IdScreen = () => {
       }
     }
   }, [gem])
+
+  useFocusEffect(
+    useCallback(() => {
+      return () => {
+        if (sound && playing) {
+          sound.pauseAsync()
+        }
+      }
+    }, [sound, playing])
+  )
 
   const playPause = async () => {
     if (sound) {

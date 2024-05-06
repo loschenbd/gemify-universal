@@ -56,7 +56,7 @@ const GemCards = () => {
   return (
     <YStack p="$2" gap="$2">
       {userGems.map((gem) => (
-        <Link key={gem.id} href={`/gem/${gem.id}`}>
+        <Link key={gem.id} replace href={`/gem/${gem.id}`}>
           <GemCard
             title={gem.title}
             author={gem.author}
