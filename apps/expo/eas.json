@@ -52,6 +52,10 @@
       },
       "autoIncrement": true
     },
+    "staging:external": {
+      "extends": "staging",
+      "distribution": "store"
+    },
     "production": {
       "env": {
         "APP_ENV": "production",
