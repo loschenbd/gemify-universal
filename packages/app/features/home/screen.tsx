@@ -1,12 +1,9 @@
 import { ScrollView, XStack, YStack, GemCard, Text } from '@my/ui'
-import { api } from 'app/utils/api'
 import { useQuery } from '@tanstack/react-query'
 import { formatDuration } from 'app/utils/formatDuration'
 import { useSupabase } from 'app/utils/supabase/useSupabase'
 import { useUser } from 'app/utils/useUser'
 import React from 'react'
-import { Platform } from 'react-native'
-import { useLink, Link } from 'solito/link'
 
 export function HomeScreen() {
   return (

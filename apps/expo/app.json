@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "gemify-universal",
+    "name": "Gemify",
     "slug": "gemify-universal",
     "jsEngine": "hermes",
     "scheme": "myapp",
@@ -23,7 +23,7 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.smartlemon.gemify",
-      "buildNumber": "15"
+      "buildNumber": "16"
     },
     "android": {
       "softwareKeyboardLayoutMode": "pan",
@@ -45,8 +45,8 @@
       [
         "@sentry/react-native/expo",
         {
-          "organization": "sentry org slug, or use the `SENTRY_ORG` environment variable",
-          "project": "sentry project name, or use the `SENTRY_PROJECT` environment variable"
+          "organization": "smartlemon",
+          "project": "gemify-mobile"
         }
       ],
       [
