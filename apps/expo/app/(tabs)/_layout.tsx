@@ -13,6 +13,7 @@ import {
   View,
   Button,
   Input,
+  Waveform,
 } from '@my/ui'
 import { BottomTabNavigationOptions } from '@react-navigation/bottom-tabs'
 import { LinearGradient } from '@tamagui/linear-gradient'
@@ -85,6 +86,7 @@ const RecordButton = ({ size }: TabBarIconProps) => {
   const [recording, setRecording] = useState<Recording>()
   const [permissionResponse, requestPermission] = Audio.usePermissions()
   const [duration, setDuration] = useState(0)
+  const [meteringData, setMeteringData] = useState<number[]>([])
   const [recordingDuration, setRecordingDuration] = useState(0)
   const [recordingUri, setRecordingUri] = useState<string | undefined>(undefined)
   const [finalDuration, setFinalDuration] = useState(0)
@@ -108,16 +110,21 @@ const RecordButton = ({ size }: TabBarIconProps) => {
       })
 
       console.log('Starting recording..')
-      const recording = new Audio.Recording()
-      await recording.prepareToRecordAsync(Audio.RecordingOptionsPresets.HIGH_QUALITY)
-      recording.setOnRecordingStatusUpdate((status) => {
+      const newRecording = new Audio.Recording()
+      await newRecording.prepareToRecordAsync(Audio.RecordingOptionsPresets.HIGH_QUALITY)
+      newRecording.setOnRecordingStatusUpdate((status) => {
         setDuration(status.durationMillis)
-        if (!status.isRecording) {
+        if (status.isRecording) {
+          setMeteringData((prevData) => [...prevData, status.metering])
+        } else {
           setRecordingDuration(status.durationMillis)
         }
       })
-      await recording.startAsync()
-      setRecording(recording)
+
+      newRecording.setProgressUpdateInterval(150)
+
+      await newRecording.startAsync()
+      setRecording(newRecording)
       setIsRecording(true)
       console.log('Recording started')
     } catch (err) {
@@ -145,6 +152,7 @@ const RecordButton = ({ size }: TabBarIconProps) => {
       const uri = recording.getURI()
       setRecordingUri(uri)
       setIsRecording(false)
+      setMeteringData([])
       deactivateKeepAwake()
       console.log('Recording stopped and stored at', uri)
     } catch (error) {
@@ -235,9 +243,11 @@ const RecordButton = ({ size }: TabBarIconProps) => {
         />
         <LinearGradient
           onPress={() => {
-            setOpen(true)
-            startRecording()
-            setDuration(duration)
+            if (!isRecording) {
+              setOpen(true)
+              startRecording()
+              setDuration(duration)
+            }
           }}
           colors={['$gray6', '$gray7']}
           start={[1, 1]}
@@ -270,10 +280,11 @@ const RecordButton = ({ size }: TabBarIconProps) => {
             {isRecording ? (
               <YStack ai="center" jc="center" f={1} space="$4" p="$4">
                 <Text>{formatDuration(duration)}</Text>
+                <Waveform data={meteringData} />
                 <StopCircle size="$4" onPress={stopRecording} />
               </YStack>
             ) : (
-              <YStack ai="center" jc="center" f={1} space="$4" p="$4">
+              <YStack ai="center" jc="center" m="auto" f={1} space="$4" p="$4">
                 <Input
                   w={250}
                   placeholder="Who gave you this word?"
