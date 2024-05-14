@@ -4,6 +4,7 @@ import { formatDuration } from 'app/utils/formatDuration'
 import { useSupabase } from 'app/utils/supabase/useSupabase'
 import { useUser } from 'app/utils/useUser'
 import React from 'react'
+import { useLink, Link } from 'solito/link'
 
 export function HomeScreen() {
   return (
