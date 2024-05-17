@@ -1,4 +1,15 @@
-import { ScrollView, XStack, YStack, GemCard, Text } from '@my/ui'
+import {
+  ScrollView,
+  XStack,
+  YStack,
+  GemCard,
+  Text,
+  View,
+  Skeleton,
+  AnimatePresence,
+  AnimatedView,
+} from '@my/ui'
+
 import { useQuery } from '@tanstack/react-query'
 import { formatDuration } from 'app/utils/formatDuration'
 import { useSupabase } from 'app/utils/supabase/useSupabase'
@@ -79,12 +90,17 @@ function useUserGems() {
 
   return { data: gems }
 }
-
 const GemCards = () => {
   const { data: userGems, isLoading, error } = useUserGems()
 
   if (isLoading) {
-    return <Text>Loading...</Text>
+    return (
+      <YStack p="$2" gap="$2">
+        {Array.from({ length: 3 }).map((_, index) => (
+          <Skeleton key={index} height={100} width="100%" borderRadius="$4" />
+        ))}
+      </YStack>
+    )
   }
 
   if (error) {
@@ -98,31 +114,35 @@ const GemCards = () => {
   })
 
   return (
-    <YStack p="$2" gap="$2">
-      {sortedGems.map((gem) => {
-        if (!gem.title) {
-          return (
-            <GemCard
-              key={gem.id}
-              title="Polishing Gem"
-              author={gem.author}
-              duration={formatDuration(gem.duration)}
-              date={gem.date}
-            />
-          )
-        }
-
-        return (
-          <Link key={gem.id} replace href={`/gem/${gem.id}`}>
-            <GemCard
-              title={gem.title}
-              author={gem.author}
-              duration={formatDuration(gem.duration)}
-              date={gem.date}
-            />
-          </Link>
-        )
-      })}
-    </YStack>
+    <AnimatePresence>
+      <YStack p="$2" gap="$2">
+        {sortedGems.map((gem) => (
+          <YStack
+            key={gem.id}
+            animation="bouncy"
+            enterStyle={{ opacity: 0, scale: 0.8 }}
+            exitStyle={{ opacity: 0, scale: 0.8 }}
+          >
+            {!gem.title ? (
+              <GemCard
+                title="Polishing Gem"
+                author={gem.author}
+                duration={formatDuration(gem.duration)}
+                date={gem.date}
+              />
+            ) : (
+              <Link replace href={`/gem/${gem.id}`}>
+                <GemCard
+                  title={gem.title}
+                  author={gem.author}
+                  duration={formatDuration(gem.duration)}
+                  date={gem.date}
+                />
+              </Link>
+            )}
+          </YStack>
+        ))}
+      </YStack>
+    </AnimatePresence>
   )
 }

@@ -30,7 +30,7 @@ export const IdScreen = () => {
 
   useEffect(() => {
     let isMounted = true
-    let previousStatus: Audio.PlaybackStatus | null = null
+    let previousStatus: Audio.AVPlaybackStatus
 
     const loadSound = async () => {
       setIsSoundLoading(true)
@@ -52,7 +52,7 @@ export const IdScreen = () => {
         const { sound, status } = await Audio.Sound.createAsync({ uri: signedUrl.signedUrl })
         await Audio.setAudioModeAsync({
           allowsRecordingIOS: false,
-          staysActiveInBackground: true,
+          staysActiveInBackground: false,
           playsInSilentModeIOS: true,
         })
 

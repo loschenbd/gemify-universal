@@ -10,38 +10,32 @@ export type GemCardProps = {
 
 export const GemCard: React.FC<GemCardProps> = ({ title, author, duration, date }) => {
   return (
-    <Card p="$2" unstyled={!title}>
-      <XStack alignItems="center">
-        {title && (
-          <View justifyContent="center" alignItems="center" borderRadius="$20" padding="$2">
-            <Circle backgroundColor="$gray4" size="$4">
-              <Gem size="$2" />
-            </Circle>
-          </View>
-        )}
+    <Card
+      p="$2"
+      unstyled={false}
+      backgroundColor={title === 'Polishing Gem' ? '$gray4' : undefined}
+      opacity={title === 'Polishing Gem' ? 0.5 : 1}
+    >
+      <XStack ai="center">
+        <View jc="center" ai="center" br="$20" padding="$2">
+          <Circle backgroundColor="$gray4" size="$4">
+            <Gem size="$2" />
+          </Circle>
+        </View>
         <YStack pl="$1.5">
-          {title ? (
-            <H3>{title}</H3>
-          ) : (
-            <H3 fontStyle="italic" color="$gray10">
-              Polishing Gem
-            </H3>
+          <H3>{title}</H3>
+          {title !== 'Polishing Gem' && (
+            <XStack>
+              <Text color="$gray10">{author}</Text>
+              {title && (
+                <Text color="$gray10" paddingLeft="$2">
+                  {duration}
+                </Text>
+              )}
+            </XStack>
           )}
-          <XStack>
-            <Text color="$gray10">{author}</Text>
-            <Text color="$gray10" paddingLeft="$2">
-              {duration}
-            </Text>
-          </XStack>
         </YStack>
-        <Text
-          pt="$1"
-          pr="$1"
-          marginLeft="auto"
-          marginBottom="auto"
-          color="$gray10"
-          justify-conent="end"
-        >
+        <Text pt="$1" pr="$1" ml="auto" mb="auto" color="$gray10" jc="flex-end">
           {date}
         </Text>
       </XStack>

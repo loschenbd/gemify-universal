@@ -9,6 +9,12 @@ export const animations = createAnimations({
     type: 'timing',
     duration: 200,
   },
+  loopOpacity: {
+    type: 'timing',
+    duration: 500,
+    loop: true,
+    delay: 500,
+  },
   bouncy: {
     type: 'spring',
     damping: 10,
