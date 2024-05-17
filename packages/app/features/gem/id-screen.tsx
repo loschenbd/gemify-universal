@@ -297,7 +297,8 @@ export const IdScreen = () => {
               {gem.related_topics.map((topic, index) => (
                 <XStack py="$1" px="$3" key={index}>
                   <Text>•</Text>
-                  <Text pl="$1.5">{topic}</Text>
+                  <Text pl=yarn build
+"$1.5">{topic}</Text>
                 </XStack>
               ))}
             </View>

@@ -26,6 +26,7 @@ import { activateKeepAwakeAsync, deactivateKeepAwake } from 'expo-keep-awake'
 import { Stack, Tabs } from 'expo-router'
 import { useState } from 'react'
 import { SolitoImage } from 'solito/image'
+import { Upload } from 'tus-js-client'
 
 export default function Layout() {
   return (
@@ -174,52 +175,63 @@ const RecordButton = ({ size }: TabBarIconProps) => {
       const response = await fetch(recordingUri)
       const fileData = await response.blob()
 
-      const reader = new FileReader()
-      reader.onloadend = async () => {
-        const arrayBuffer = reader.result as ArrayBuffer
+      const {
+        data: { session },
+      } = await supabase.auth.getSession()
 
-        const { data, error: uploadError } = await supabase.storage
-          .from('gem-audio')
-          .upload(`${folderName}/${fileName}`, arrayBuffer, {
-            contentType: 'audio/mpeg',
+      const upload = new Upload(fileData, {
+        endpoint: `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/upload/resumable`,
+        retryDelays: [0, 3000, 5000, 10000, 20000],
+        headers: {
+          authorization: `Bearer ${session.access_token}`,
+          'x-upsert': 'true',
+        },
+        uploadDataDuringCreation: true,
+        removeFingerprintOnSuccess: true,
+        metadata: {
+          bucketName: 'gem-audio',
+          objectName: `${folderName}/${fileName}`,
+          contentType: 'audio/mpeg',
+          cacheControl: 3600,
+        },
+        chunkSize: 6 * 1024 * 1024,
+        onError(error) {
+          console.log('Failed because: ' + error)
+        },
+        onProgress: (bytesUploaded, bytesTotal) => {
+          const percentage = ((bytesUploaded / bytesTotal) * 100).toFixed(2)
+          console.log(bytesUploaded, bytesTotal, percentage + '%')
+        },
+        onSuccess: async () => {
+          console.log('Audio uploaded successfully')
+
+          const fileUrl = `${folderName}/${fileName}`
+          console.log(fileUrl)
+          console.log(durationMillis)
+
+          const { data: gemData, error: insertError } = await supabase.from('gems').insert({
+            audio_url: fileUrl,
+            duration: durationMillis,
+            profile_id: user.profile?.id,
+            author,
           })
 
-        if (uploadError) {
-          console.error('Error uploading audio:', uploadError)
-          return
+          if (insertError) {
+            console.error('Error inserting gem record:', insertError)
+            return
+          }
+
+          console.log('Gem record inserted successfully:', gemData)
+        },
+      })
+
+      return upload.findPreviousUploads().then((previousUploads) => {
+        if (previousUploads.length) {
+          upload.resumeFromPreviousUpload(previousUploads[0])
         }
 
-        console.log('Audio uploaded successfully:', data)
-
-        const { data: signedUrl, error: signedUrlError } = await supabase.storage
-          .from('gem-audio')
-          .createSignedUrl(`${folderName}/${fileName}`, 600)
-
-        if (signedUrlError) {
-          console.error('Error getting public URL:', signedUrlError)
-          return
-        }
-
-        const fileUrl = `${folderName}/${fileName}`
-        console.log(fileUrl)
-        console.log(durationMillis)
-        // Insert a new row into the 'gems' table with the file URL and other metadata
-        const { data: gemData, error: insertError } = await supabase.from('gems').insert({
-          audio_url: fileUrl,
-          duration: durationMillis,
-          profile_id: user.profile?.id,
-          author: author, // Add the author field
-        })
-
-        if (insertError) {
-          console.error('Error inserting gem record:', insertError)
-          return
-        }
-
-        console.log('Gem record inserted successfully:', gemData)
-      }
-
-      reader.readAsArrayBuffer(fileData)
+        upload.start()
+      })
     } catch (error) {
       console.error('Error reading or uploading audio:', error)
     }
