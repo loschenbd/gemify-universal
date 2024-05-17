@@ -92,6 +92,11 @@ function useUserGems() {
 }
 const GemCards = () => {
   const { data: userGems, isLoading, error } = useUserGems()
+  const [, setTriggerRender] = useState(0)
+
+  useEffect(() => {
+    setTriggerRender((prevTrigger) => prevTrigger + 1)
+  }, [userGems])
 
   if (isLoading) {
     return (

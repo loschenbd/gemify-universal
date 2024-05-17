@@ -13,7 +13,7 @@ export const GemCard: React.FC<GemCardProps> = ({ title, author, duration, date 
     <Card
       p="$2"
       unstyled={false}
-      backgroundColor={title === 'Polishing Gem' ? '$gray4' : undefined}
+      backgroundColor={title === 'Polishing Gem' ? 'transparent' : undefined}
       opacity={title === 'Polishing Gem' ? 0.5 : 1}
     >
       <XStack ai="center">
@@ -22,8 +22,8 @@ export const GemCard: React.FC<GemCardProps> = ({ title, author, duration, date 
             <Gem size="$2" />
           </Circle>
         </View>
-        <YStack pl="$1.5">
-          <H3>{title}</H3>
+        <YStack pl="$1.5" flex={1}>
+          <H3 ellipse>{title}</H3>
           {title !== 'Polishing Gem' && (
             <XStack>
               <Text color="$gray10">{author}</Text>
