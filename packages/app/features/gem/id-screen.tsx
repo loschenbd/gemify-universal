@@ -29,6 +29,9 @@ export const IdScreen = () => {
   const { data: gem, isLoading: isGemLoading, error: gemError } = useGem(gemId)
 
   useEffect(() => {
+    let isMounted = true
+    let previousStatus: Audio.PlaybackStatus | null = null
+
     const loadSound = async () => {
       setIsSoundLoading(true)
       try {
@@ -47,22 +50,34 @@ export const IdScreen = () => {
         console.log('Signed URL:', signedUrl)
 
         const { sound, status } = await Audio.Sound.createAsync({ uri: signedUrl.signedUrl })
-        sound.setAudioMode
-        setSound(sound)
-        console.log('Sound loaded:', status)
-
-        sound.setOnPlaybackStatusUpdate((status) => {
-          console.log('Playback status:', status.positionMillis)
-          setPlaying(status.isPlaying)
-          setProgress(status.positionMillis / (status.durationMillis || 1))
-          setRemainingTime(status.durationMillis - status.positionMillis)
+        await Audio.setAudioModeAsync({
+          allowsRecordingIOS: false,
+          staysActiveInBackground: true,
+          playsInSilentModeIOS: true,
         })
 
-        setIsSoundLoading(false)
+        if (isMounted) {
+          setSound(sound)
+          console.log('Sound loaded:', status)
+
+          sound.setOnPlaybackStatusUpdate((status) => {
+            if (isMounted && status !== previousStatus) {
+              console.log('Playback status:', status.positionMillis)
+              setPlaying(status.isPlaying)
+              setProgress(status.positionMillis / (status.durationMillis || 1))
+              setRemainingTime(status.durationMillis - status.positionMillis)
+              previousStatus = status
+            }
+          })
+
+          setIsSoundLoading(false)
+        }
       } catch (error) {
         console.error('Error loading audio:', error)
-        setSoundError('Failed to load audio')
-        setIsSoundLoading(false)
+        if (isMounted) {
+          setSoundError('Failed to load audio')
+          setIsSoundLoading(false)
+        }
       }
     }
 
@@ -71,6 +86,7 @@ export const IdScreen = () => {
     }
 
     return () => {
+      isMounted = false
       if (sound) {
         sound.unloadAsync()
       }
