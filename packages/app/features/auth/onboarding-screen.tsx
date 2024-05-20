@@ -1,5 +1,5 @@
 import { Onboarding, OnboardingStepInfo, StepContent } from '@my/ui'
-import { ArrowUp, Rocket, Sparkles } from '@tamagui/lucide-icons'
+import { Gem, BookOpenText, Mic } from '@tamagui/lucide-icons'
 import React from 'react'
 import { useRouter } from 'solito/router'
 
@@ -8,9 +8,9 @@ const steps: OnboardingStepInfo[] = [
     theme: 'orange',
     Content: () => (
       <StepContent
-        title="Kickstart"
-        icon={Sparkles}
-        description="Auth, profile, settings, adaptive layouts and many more ready for you to build on top of"
+        title="Record Your Words"
+        icon={Mic}
+        description="Record effortlessly from your phone."
       />
     ),
   },
@@ -18,9 +18,9 @@ const steps: OnboardingStepInfo[] = [
     theme: 'green',
     Content: () => (
       <StepContent
-        title="Updates"
-        icon={ArrowUp}
-        description="As we make the starter better, we'll keep sending PRs with our GitHub app so your app keeps improving"
+        title="Get Full Transcripts"
+        icon={BookOpenText}
+        description="Listen or read through the full word any time."
       />
     ),
   },
@@ -28,9 +28,9 @@ const steps: OnboardingStepInfo[] = [
     theme: 'blue',
     Content: () => (
       <StepContent
-        title="Deploy"
-        icon={Rocket}
-        description="The Takeout starter is the best way to go from zero to deploy and target all platforms at the same time."
+        title=" Receive Additional Insights"
+        icon={Gem}
+        description="Get scriptural insights, actionable ideas, prayer and journal Prompts, and more."
       />
     ),
   },

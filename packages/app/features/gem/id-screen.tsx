@@ -3,19 +3,18 @@ import { Gem, ArrowLeftCircle, Trash2 } from '@tamagui/lucide-icons'
 import { useSupabase } from 'app/utils/supabase/useSupabase'
 import { useGem } from 'app/utils/useGem'
 import { Audio } from 'expo-av'
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect } from 'react'
 import { Pressable } from 'react-native'
 import { createParam } from 'solito'
-import { useRouter } from 'solito/router'
+import { Link } from 'solito/Link'
 import { AlertDialog } from 'tamagui'
-import { useFocusEffect } from 'expo-router'
+import { useRefreshOnFocus } from 'app/utils/react-query/useRefreshOnFocus'
 
 const { useParam } = createParam<{ id: string }>()
 
 export const IdScreen = () => {
   const supabase = useSupabase()
 
-  const { back } = useRouter()
   const [id] = useParam('id')
   const gemId = id ? parseInt(id, 10) : undefined
 
@@ -93,15 +92,11 @@ export const IdScreen = () => {
     }
   }, [gem])
 
-  useFocusEffect(
-    useCallback(() => {
-      return () => {
-        if (sound && playing) {
-          sound.pauseAsync()
-        }
-      }
-    }, [sound, playing])
-  )
+  useRefreshOnFocus(() => {
+    if (sound && playing) {
+      sound.pauseAsync()
+    }
+  })
 
   const playPause = async () => {
     if (sound) {
@@ -133,11 +128,6 @@ export const IdScreen = () => {
   if (!gem) {
     return <Text>Gem not found</Text>
   }
-
-  const onGoBack = () => {
-    back()
-  }
-
   const handleDelete = async () => {
     if (gemId) {
       console.log('Gem deleted:', gemId)
@@ -156,9 +146,9 @@ export const IdScreen = () => {
     <>
       <ScrollView>
         <XStack px="$4" ai="center" jc="space-between">
-          <Pressable onPress={onGoBack}>
+          <Link href="/">
             <ArrowLeftCircle size="$3" color="$gray20" />
-          </Pressable>
+          </Link>
           <AlertDialog native>
             <AlertDialog.Trigger asChild>
               <Trash2 jc="flex-end" size="$1.5" color="$gray10" />
