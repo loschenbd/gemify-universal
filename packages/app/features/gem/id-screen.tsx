@@ -6,7 +6,7 @@ import { Audio } from 'expo-av'
 import { useState, useEffect } from 'react'
 import { Pressable } from 'react-native'
 import { createParam } from 'solito'
-import { Link } from 'solito/Link'
+import { Link } from 'solito/link'
 import { AlertDialog } from 'tamagui'
 import { useRefreshOnFocus } from 'app/utils/react-query/useRefreshOnFocus'
 
