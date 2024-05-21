@@ -8,7 +8,6 @@ import { Pressable, Platform } from 'react-native'
 import { createParam } from 'solito'
 import { useRouter } from 'solito/router'
 import { AlertDialog } from 'tamagui'
-import { useFocusEffect } from '@react-navigation/native'
 
 const { useParam } = createParam<{ id: string }>()
 
@@ -87,11 +86,20 @@ export const IdScreen = () => {
 
     return () => {
       isMounted = false
+
       if (sound) {
         sound.unloadAsync()
       }
     }
   }, [gem])
+
+  useEffect(() => {
+    return () => {
+      if (sound) {
+        sound.unloadAsync()
+      }
+    }
+  }, [sound])
 
   const playPause = async () => {
     if (sound) {

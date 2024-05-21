@@ -136,7 +136,7 @@ const GemCards = () => {
                 date={gem.date}
               />
             ) : (
-              <Link replace href={`/gem/${gem.id}`}>
+              <Link push href={`/gem/${gem.id}`}>
                 <GemCard
                   title={gem.title}
                   author={gem.author}

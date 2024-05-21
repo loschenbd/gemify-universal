@@ -28,7 +28,7 @@ export const AudioPlayer: React.FC<AudioPlayerProps> = ({
 }) => {
   return (
     <>
-      <XStack p="$4" br="$12" bg="$gray5" alignItems="center" space="$2">
+      <XStack p="$4" br="$12" bg="$gray5" ai="center" gap="$2">
         <View>
           {error ? (
             <Text>{error}</Text>
@@ -45,7 +45,7 @@ export const AudioPlayer: React.FC<AudioPlayerProps> = ({
         <Slider
           p="$1"
           size="$1"
-          width={200}
+          w={200}
           defaultValue={[0]}
           max={1}
           step={0.00001}
@@ -57,7 +57,7 @@ export const AudioPlayer: React.FC<AudioPlayerProps> = ({
           </Slider.Track>
           <Slider.Thumb index={0} circular elevate />
         </Slider>
-        <Text p="$1">{formatDuration(remainingTime)}</Text>
+        <Text p="$1">{formatDuration(Math.max(remainingTime, 0))}</Text>
       </XStack>
     </>
   )
