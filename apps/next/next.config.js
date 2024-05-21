@@ -86,6 +86,7 @@ module.exports = () => {
 
     transpilePackages: [
       '@react-native/assets',
+      '@react-native/assets-registry',
       'solito',
       'react-native-web',
       'expo-linking',
