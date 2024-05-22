@@ -4347,10 +4347,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-native/assets-registry@npm:0.73.1, @react-native/assets-registry@npm:~0.73.1":
+"@react-native/assets-registry@npm:0.73.1":
   version: 0.73.1
   resolution: "@react-native/assets-registry@npm:0.73.1"
   checksum: 10/e84dc35e4d496069eae7fcb2d812aa8c8e0f304a8dddb4cbe8e3d642a0266255de24fde57528193fb439309aaf24782ba7a0746f2c42a4e4f6bc240b4d589a52
+  languageName: node
+  linkType: hard
+
+"@react-native/assets-registry@patch:@react-native/assets-registry@npm%3A0.73.1#~/.yarn/patches/@react-native-assets-registry-npm-0.73.1-6ddee188d1.patch":
+  version: 0.73.1
+  resolution: "@react-native/assets-registry@patch:@react-native/assets-registry@npm%3A0.73.1#~/.yarn/patches/@react-native-assets-registry-npm-0.73.1-6ddee188d1.patch::version=0.73.1&hash=618d4d"
+  checksum: 10/ee4fde4878aaa7cee817b804bedc7351e5bde6cb2e714106fbc55526e1e7c69eee68897cb87e2d3ec014650203856df5e62ff43364d2d7a29a5ec4caa5dc11b5
   languageName: node
   linkType: hard
 
