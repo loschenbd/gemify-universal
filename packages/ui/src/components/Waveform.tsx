@@ -20,27 +20,13 @@ export const Waveform: React.FC<WaveformProps> = ({ data }) => {
   }
 
   return (
-    <YStack
-      h={maxMeterHeight * 2}
-      jc="center"
-      ai="flex-end"
-      height={maxMeterHeight}
-      backgroundColor="$gray1"
-    >
+    <YStack h={maxMeterHeight * 2} jc="center" ai="flex-end" bg="$gray1">
       <XStack ai="center" gap={5}>
         {Array.from({ length: meterCount }).map((_, index) => {
           const meterValue = data[data.length - meterCount + index] || -60
           const meterHeight = scaleMeterValue(meterValue)
 
-          return (
-            <YStack
-              key={index}
-              width={meterWidth}
-              height={meterHeight}
-              backgroundColor="$gray12"
-              borderRadius="$2"
-            />
-          )
+          return <YStack key={index} w={meterWidth} h={meterHeight} bg="$gray12" br="$2" />
         })}
       </XStack>
     </YStack>

@@ -1,7 +1,6 @@
 import {
   H2,
   Paragraph,
-  RecordingPopover,
   SubmitButton,
   Theme,
   YStack,
@@ -20,7 +19,7 @@ import { z } from 'zod'
 export const CreateScreen = () => {
   return (
     <>
-      <RecordModal />
+      {/* <RecordModal /> */}
       {/* <SchemaForm
         onSubmit={console.log}
         schema={z.object({

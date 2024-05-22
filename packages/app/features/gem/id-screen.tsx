@@ -2,9 +2,9 @@ import { YStack, H3, Text, View, Circle, ScrollView, AudioPlayer, Button, XStack
 import { Gem, ArrowLeftCircle, Trash2 } from '@tamagui/lucide-icons'
 import { useSupabase } from 'app/utils/supabase/useSupabase'
 import { useGem } from 'app/utils/useGem'
-import { Audio } from 'expo-av'
-import { useState, useEffect, useCallback } from 'react'
-import { Pressable, Platform } from 'react-native'
+import { Audio, AVPlaybackStatus } from 'expo-av'
+import { useState, useEffect } from 'react'
+import { Pressable } from 'react-native'
 import { createParam } from 'solito'
 import { useRouter } from 'solito/router'
 import { AlertDialog } from 'tamagui'
@@ -29,7 +29,6 @@ export const IdScreen = () => {
 
   useEffect(() => {
     let isMounted = true
-    let previousStatus: Audio.AVPlaybackStatus
 
     const loadSound = async () => {
       setIsSoundLoading(true)
@@ -59,13 +58,16 @@ export const IdScreen = () => {
           setSound(sound)
           console.log('Sound loaded:', status)
 
-          sound.setOnPlaybackStatusUpdate((status) => {
-            if (isMounted && status !== previousStatus) {
-              console.log('Playback status:', status.positionMillis)
-              setPlaying(status.isPlaying)
-              setProgress(status.positionMillis / (status.durationMillis || 1))
-              setRemainingTime(status.durationMillis - status.positionMillis)
-              previousStatus = status
+          sound.setOnPlaybackStatusUpdate((status: AVPlaybackStatus) => {
+            if (isMounted) {
+              console.log('Playback status:', status.isLoaded ? status.positionMillis : undefined)
+              setPlaying(status.isLoaded ? status.isPlaying : false)
+              setProgress(
+                status.isLoaded ? status.positionMillis / (status.durationMillis || 1) : 0
+              )
+              setRemainingTime(
+                status.isLoaded ? status.durationMillis || 1 - status.positionMillis : 0
+              )
             }
           })
 
@@ -125,7 +127,7 @@ export const IdScreen = () => {
   }
 
   if (gemError) {
-    return <Text>Error: {gemError.message}</Text>
+    return <Text>Error: {gemError instanceof Error ? gemError.message : 'Unknown error'}</Text>
   }
 
   if (!gem) {
@@ -155,20 +157,19 @@ export const IdScreen = () => {
       <ScrollView>
         <XStack px="$4" ai="center" jc="space-between">
           <Pressable onPress={onGoBack}>
-            <ArrowLeftCircle size="$3" color="$gray20" />
+            <ArrowLeftCircle size="$3" col="$gray10" />
           </Pressable>
           <AlertDialog native>
             <AlertDialog.Trigger asChild>
-              <Trash2 jc="flex-end" size="$1.5" color="$gray10" />
+              <Trash2 jc="flex-end" size="$1.5" col="$gray10" />
             </AlertDialog.Trigger>
 
             <AlertDialog.Portal>
               <AlertDialog.Overlay
                 key="overlay"
                 animation="quick"
-                opacity={0.5}
-                enterStyle={{ opacity: 0 }}
-                exitStyle={{ opacity: 0 }}
+                enterStyle={{ o: 1 }}
+                exitStyle={{ o: 0 }}
               />
               <AlertDialog.Content
                 bordered
@@ -177,16 +178,16 @@ export const IdScreen = () => {
                 animation={[
                   'quick',
                   {
-                    opacity: {
+                    o: {
                       overshootClamping: true,
                     },
                   },
                 ]}
-                enterStyle={{ x: 0, y: -20, opacity: 0, scale: 0.9 }}
-                exitStyle={{ x: 0, y: 10, opacity: 0, scale: 0.95 }}
+                enterStyle={{ x: 0, y: -20, o: 0, scale: 0.9 }}
+                exitStyle={{ x: 0, y: 10, o: 0, scale: 0.95 }}
                 x={0}
                 scale={1}
-                opacity={1}
+                o={1}
                 y={0}
               >
                 <YStack space>
@@ -209,7 +210,7 @@ export const IdScreen = () => {
           </AlertDialog>
         </XStack>
         <YStack ai="center">
-          <View jc="center" ai="center" br="$20">
+          <View jc="center" ai="center" br="$10">
             <Circle bg="$gray5" size="$5">
               <Gem size="$3" />
             </Circle>

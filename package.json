@@ -71,6 +71,7 @@
   },
   "packageManager": "yarn@4.1.0",
   "dependencies": {
-    "expo-av": "^13.10.5"
+    "expo-av": "^14.0.5",
+    "tus-js-client": "^4.1.0"
   }
 }

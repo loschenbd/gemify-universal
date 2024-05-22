@@ -1,14 +1,4 @@
-import {
-  ScrollView,
-  XStack,
-  YStack,
-  GemCard,
-  Text,
-  View,
-  Skeleton,
-  AnimatePresence,
-  AnimatedView,
-} from '@my/ui'
+import { ScrollView, XStack, YStack, GemCard, Text, AnimatePresence } from '@my/ui'
 
 import { useQuery } from '@tanstack/react-query'
 import { formatDuration } from 'app/utils/formatDuration'
@@ -16,8 +6,19 @@ import { useSupabase } from 'app/utils/supabase/useSupabase'
 import { useUser } from 'app/utils/useUser'
 import React, { useEffect, useState } from 'react'
 import { useLink, Link } from 'solito/link'
-import { Upload } from 'tus-js-client'
 
+interface Gem {
+  id: number
+  title: string
+  author: string
+  date: string
+  name: string
+  description: string
+  audio_url: string
+  created_at: string
+  profile_id: number
+  duration: number
+}
 export function HomeScreen() {
   return (
     <XStack>
@@ -32,7 +33,7 @@ export function HomeScreen() {
 function useUserGems() {
   const { user } = useUser()
   const supabase = useSupabase()
-  const [gems, setGems] = useState([])
+  const [gems, setGems] = useState<Gem[]>([])
 
   useEffect(() => {
     if (!user?.id) return
@@ -64,21 +65,7 @@ function useUserGems() {
           filter: `profile_id=eq.${user.id}`,
         },
         (payload) => {
-          if (payload.eventType === 'INSERT') {
-            setGems((prevGems) => [payload.new, ...prevGems])
-          } else if (payload.eventType === 'UPDATE') {
-            setGems((prevGems) => {
-              const updatedGemIndex = prevGems.findIndex((gem) => gem.id === payload.new.id)
-              if (updatedGemIndex !== -1) {
-                const updatedGems = [...prevGems]
-                updatedGems[updatedGemIndex] = payload.new
-                return updatedGems
-              }
-              return prevGems
-            })
-          } else if (payload.eventType === 'DELETE') {
-            setGems((prevGems) => prevGems.filter((gem) => gem.id !== payload.old.id))
-          }
+          setGems((prevGems) => [payload.new as Gem, ...prevGems])
         }
       )
       .subscribe()
@@ -91,7 +78,11 @@ function useUserGems() {
   return { data: gems }
 }
 const GemCards = () => {
-  const { data: userGems, isLoading, error } = useUserGems()
+  const {
+    data: userGems,
+    isLoading,
+    error,
+  } = useUserGems() as { data: Gem[]; isLoading: boolean; error: Error | null }
   const [, setTriggerRender] = useState(0)
 
   useEffect(() => {
@@ -99,13 +90,7 @@ const GemCards = () => {
   }, [userGems])
 
   if (isLoading) {
-    return (
-      <YStack p="$2" gap="$2">
-        {Array.from({ length: 3 }).map((_, index) => (
-          <Skeleton key={index} height={100} width="100%" borderRadius="$4" />
-        ))}
-      </YStack>
-    )
+    return <Text>...Loading</Text>
   }
 
   if (error) {
@@ -125,8 +110,8 @@ const GemCards = () => {
           <YStack
             key={gem.id}
             animation="bouncy"
-            enterStyle={{ opacity: 0, scale: 0.8 }}
-            exitStyle={{ opacity: 0, scale: 0.8 }}
+            enterStyle={{ o: 0, scale: 0.8 }}
+            exitStyle={{ o: 0, scale: 0.8 }}
           >
             {!gem.title ? (
               <GemCard
@@ -136,7 +121,7 @@ const GemCards = () => {
                 date={gem.date}
               />
             ) : (
-              <Link push href={`/gem/${gem.id}`}>
+              <Link href={`/gem/${gem.id}`}>
                 <GemCard
                   title={gem.title}
                   author={gem.author}
