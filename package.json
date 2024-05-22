@@ -49,7 +49,9 @@
     "react-native-svg": "14.1.0",
     "react-native-web": "~0.19.10",
     "@babel/core": "^7.20.2",
-    "babel-loader": "^8.3.0"
+    "babel-loader": "^8.3.0",
+    "@react-native/assets-registry@npm:~0.73.1": "patch:@react-native/assets-registry@npm%3A0.73.1#~/.yarn/patches/@react-native-assets-registry-npm-0.73.1-6ddee188d1.patch",
+    "@react-native/assets-registry@npm:0.73.1": "patch:@react-native/assets-registry@npm%3A0.73.1#~/.yarn/patches/@react-native-assets-registry-npm-0.73.1-6ddee188d1.patch"
   },
   "devDependencies": {
     "@babel/runtime": "^7.18.9",
