@@ -25,7 +25,6 @@ import { Recording } from 'expo-av/build/Audio'
 import { activateKeepAwakeAsync, deactivateKeepAwake } from 'expo-keep-awake'
 import { Stack, Tabs } from 'expo-router'
 import { useState } from 'react'
-import { KeyboardAvoidingView } from 'react-native'
 import { SolitoImage } from 'solito/image'
 import { Upload } from 'tus-js-client'
 
@@ -286,45 +285,43 @@ const RecordButton = ({ size }: TabBarIconProps) => {
           <CircleIcon col="$color" size={size + 20} />
         </YStack>
       </Theme>
-      <Sheet moveOnKeyboardChange modal open={open} snapPoints={[35]} dismissOnOverlayPress={false}>
+      <Sheet modal open={open} snapPoints={[35]} dismissOnOverlayPress={false}>
         <Sheet.Overlay />
         <Sheet.Frame>
-          <KeyboardAvoidingView behavior="height" style={{ flex: 1 }}>
-            <Sheet.ScrollView>
-              {isRecording ? (
-                <YStack ai="center" jc="center" f={1} space="$4" p="$4">
-                  <Text>{formatDuration(duration)}</Text>
-                  <Waveform data={meteringData} />
-                  <StopCircle size="$4" onPress={stopRecording} />
-                </YStack>
-              ) : (
-                <YStack ai="center" jc="center" m="auto" f={1} space="$4" p="$4">
-                  <Input
-                    w={250}
-                    placeholder="Who gave you this word?"
-                    value={author}
-                    onChangeText={setAuthor}
+          <Sheet.ScrollView>
+            {isRecording ? (
+              <YStack ai="center" jc="center" f={1} space="$4" p="$4">
+                <Text>{formatDuration(duration)}</Text>
+                <Waveform data={meteringData} />
+                <StopCircle size="$4" onPress={stopRecording} />
+              </YStack>
+            ) : (
+              <YStack ai="center" jc="center" m="auto" f={1} space="$4" p="$4">
+                <Input
+                  w={250}
+                  placeholder="Who gave you this word?"
+                  value={author}
+                  onChangeText={setAuthor}
+                />
+                <Text>{formatDuration(finalDuration)}</Text>
+                <XStack gap={20}>
+                  <CheckCircle
+                    size="$4"
+                    onPress={async () => {
+                      setOpen(false)
+                      saveRecording(finalDuration, recordingUri, author)
+                    }}
                   />
-                  <Text>{formatDuration(finalDuration)}</Text>
-                  <XStack gap={20}>
-                    <CheckCircle
-                      size="$4"
-                      onPress={async () => {
-                        setOpen(false)
-                        saveRecording(finalDuration, recordingUri || '', author)
-                      }}
-                    />
-                    <X
-                      size="$4"
-                      onPress={() => {
-                        setOpen(false)
-                      }}
-                    />
-                  </XStack>
-                </YStack>
-              )}
-            </Sheet.ScrollView>
-          </KeyboardAvoidingView>
+                  <X
+                    size="$4"
+                    onPress={() => {
+                      setOpen(false)
+                    }}
+                  />
+                </XStack>
+              </YStack>
+            )}
+          </Sheet.ScrollView>
         </Sheet.Frame>
       </Sheet>
     </>

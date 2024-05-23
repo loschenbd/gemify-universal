@@ -18,6 +18,7 @@ interface Gem {
   profile_id: number
   duration: number
 }
+
 export function HomeScreen() {
   return (
     <XStack>
@@ -29,6 +30,7 @@ export function HomeScreen() {
     </XStack>
   )
 }
+
 function useUserGems() {
   const { user } = useUser()
   const supabase = useSupabase()
@@ -57,6 +59,37 @@ function useUserGems() {
     }
   )
 
+  const addGem = async (newGem: Gem) => {
+    // Optimistically update the query data
+    queryClient.setQueryData(['userGems', user?.id], (prevGems: Gem[] | undefined) => [
+      newGem,
+      ...(prevGems || []),
+    ])
+
+    // Send the new gem to the server
+    await supabase.from('gems').insert(newGem)
+  }
+
+  const updateGem = async (updatedGem: Gem) => {
+    // Optimistically update the query data
+    queryClient.setQueryData(['userGems', user?.id], (prevGems: Gem[] | undefined) =>
+      prevGems?.map((gem) => (gem.id === updatedGem.id ? updatedGem : gem))
+    )
+
+    // Send the updated gem to the server
+    await supabase.from('gems').update(updatedGem).eq('id', updatedGem.id)
+  }
+
+  const deleteGem = async (gemId: number) => {
+    // Optimistically update the query data
+    queryClient.setQueryData(['userGems', user?.id], (prevGems: Gem[] | undefined) =>
+      prevGems?.filter((gem) => gem.id !== gemId)
+    )
+
+    // Send the delete request to the server
+    await supabase.from('gems').delete().eq('id', gemId)
+  }
+
   useEffect(() => {
     if (!user?.id) return
 
@@ -76,9 +109,19 @@ function useUserGems() {
             queryClient.setQueryData(['userGems', user?.id], (prevGems: Gem[] | undefined) =>
               prevGems?.filter((gem) => gem.id !== payload.old.id)
             )
-          } else {
-            // Refetch the data when a new gem is added or updated
-            query.refetch()
+          } else if (payload.eventType === 'INSERT') {
+            // Add the new gem to the query data
+            queryClient.setQueryData(['userGems', user?.id], (prevGems: Gem[] | undefined) => [
+              payload.new as Gem,
+              ...(prevGems || []),
+            ])
+          } else if (payload.eventType === 'UPDATE') {
+            // Update the gem in the query data
+            queryClient.setQueryData(
+              ['userGems', user?.id],
+              (prevGems: Gem[] | undefined) =>
+                prevGems?.map((gem) => (gem.id === payload.new.id ? payload.new : gem)) as Gem[]
+            )
           }
         }
       )
@@ -87,13 +130,13 @@ function useUserGems() {
     return () => {
       supabase.removeChannel(channel)
     }
-  }, [user?.id, query, queryClient])
+  }, [user?.id, queryClient])
 
-  return query
+  return { ...query, addGem, updateGem, deleteGem }
 }
 
 const GemCards: React.FC = () => {
-  const { data: userGems = [], isLoading, error } = useUserGems()
+  const { data: userGems = [], isLoading, error, addGem, updateGem, deleteGem } = useUserGems()
 
   if (isLoading) {
     return <Text>...Loading</Text>
