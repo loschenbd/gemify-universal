@@ -1,10 +1,11 @@
-import { ScrollView, XStack, YStack, GemCard, Text, AnimatePresence } from '@my/ui'
+import { ScrollView, XStack, YStack, GemCard, H2, Text, AnimatePresence } from '@my/ui'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { formatDuration } from 'app/utils/formatDuration'
 import { useSupabase } from 'app/utils/supabase/useSupabase'
 import { useUser } from 'app/utils/useUser'
 import React, { useEffect } from 'react'
 import { Link } from 'solito/link'
+import { ArrowDown } from '@tamagui/lucide-icons'
 
 interface Gem {
   id: number
@@ -105,18 +106,15 @@ function useUserGems() {
         },
         (payload) => {
           if (payload.eventType === 'DELETE') {
-            // Remove the deleted gem from the query data
             queryClient.setQueryData(['userGems', user?.id], (prevGems: Gem[] | undefined) =>
               prevGems?.filter((gem) => gem.id !== payload.old.id)
             )
           } else if (payload.eventType === 'INSERT') {
-            // Add the new gem to the query data
             queryClient.setQueryData(['userGems', user?.id], (prevGems: Gem[] | undefined) => [
               payload.new as Gem,
               ...(prevGems || []),
             ])
           } else if (payload.eventType === 'UPDATE') {
-            // Update the gem in the query data
             queryClient.setQueryData(
               ['userGems', user?.id],
               (prevGems: Gem[] | undefined) =>
@@ -151,6 +149,26 @@ const GemCards: React.FC = () => {
     if (a.title && !b.title) return 1
     return 0
   })
+
+  if (sortedGems.length === 0) {
+    return (
+      <YStack ai="center" jc="center" f={1} gap="$2" py="$3">
+        <AnimatePresence>
+          <H2 ai="center">Make your first Gem.</H2>
+          <Text>Tap the recording button below.</Text>
+          <ArrowDown
+            enterStyle={{
+              scale: 1.5,
+              y: -10,
+              o: 0,
+            }}
+            size="$4"
+            animation="bouncy"
+          />
+        </AnimatePresence>
+      </YStack>
+    )
+  }
 
   return (
     <AnimatePresence>

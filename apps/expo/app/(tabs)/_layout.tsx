@@ -285,7 +285,7 @@ const RecordButton = ({ size }: TabBarIconProps) => {
           <CircleIcon col="$color" size={size + 20} />
         </YStack>
       </Theme>
-      <Sheet modal open={open} snapPoints={[35]} dismissOnOverlayPress={false}>
+      <Sheet moveOnKeyboardChange modal open={open} snapPoints={[35]} dismissOnOverlayPress={false}>
         <Sheet.Overlay />
         <Sheet.Frame>
           <Sheet.ScrollView>

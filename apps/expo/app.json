@@ -23,7 +23,7 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.smartlemon.gemify",
-      "buildNumber": "24"
+      "buildNumber": "26"
     },
     "android": {
       "softwareKeyboardLayoutMode": "pan",
