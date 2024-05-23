@@ -1,11 +1,10 @@
 import { ScrollView, XStack, YStack, GemCard, Text, AnimatePresence } from '@my/ui'
-
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { formatDuration } from 'app/utils/formatDuration'
 import { useSupabase } from 'app/utils/supabase/useSupabase'
 import { useUser } from 'app/utils/useUser'
-import React, { useEffect, useState } from 'react'
-import { useLink, Link } from 'solito/link'
+import React, { useEffect } from 'react'
+import { Link } from 'solito/link'
 
 interface Gem {
   id: number
@@ -33,12 +32,13 @@ export function HomeScreen() {
 function useUserGems() {
   const { user } = useUser()
   const supabase = useSupabase()
-  const [gems, setGems] = useState<Gem[]>([])
+  const queryClient = useQueryClient()
 
-  useEffect(() => {
-    if (!user?.id) return
+  const query = useQuery(
+    ['userGems', user?.id],
+    async () => {
+      if (!user?.id) return []
 
-    const fetchGems = async () => {
       const { data, error } = await supabase
         .from('gems')
         .select('*')
@@ -47,12 +47,18 @@ function useUserGems() {
 
       if (error) {
         console.error('Error fetching gems:', error.message)
-      } else {
-        setGems(data)
+        throw error
       }
-    }
 
-    fetchGems()
+      return data as Gem[]
+    },
+    {
+      enabled: !!user?.id,
+    }
+  )
+
+  useEffect(() => {
+    if (!user?.id) return
 
     const channel = supabase
       .channel('gems')
@@ -65,7 +71,15 @@ function useUserGems() {
           filter: `profile_id=eq.${user.id}`,
         },
         (payload) => {
-          setGems((prevGems) => [payload.new as Gem, ...prevGems])
+          if (payload.eventType === 'DELETE') {
+            // Remove the deleted gem from the query data
+            queryClient.setQueryData(['userGems', user?.id], (prevGems: Gem[] | undefined) =>
+              prevGems?.filter((gem) => gem.id !== payload.old.id)
+            )
+          } else {
+            // Refetch the data when a new gem is added or updated
+            query.refetch()
+          }
         }
       )
       .subscribe()
@@ -73,28 +87,20 @@ function useUserGems() {
     return () => {
       supabase.removeChannel(channel)
     }
-  }, [user?.id])
+  }, [user?.id, query, queryClient])
 
-  return { data: gems }
+  return query
 }
-const GemCards = () => {
-  const {
-    data: userGems,
-    isLoading,
-    error,
-  } = useUserGems() as { data: Gem[]; isLoading: boolean; error: Error | null }
-  const [, setTriggerRender] = useState(0)
 
-  useEffect(() => {
-    setTriggerRender((prevTrigger) => prevTrigger + 1)
-  }, [userGems])
+const GemCards: React.FC = () => {
+  const { data: userGems = [], isLoading, error } = useUserGems()
 
   if (isLoading) {
     return <Text>...Loading</Text>
   }
 
   if (error) {
-    return <Text>Error: {error.message}</Text>
+    return <Text>Error: {(error as Error).message}</Text>
   }
 
   const sortedGems = userGems.sort((a, b) => {

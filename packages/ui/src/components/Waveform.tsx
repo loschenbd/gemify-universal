@@ -1,4 +1,4 @@
-import { YStack, XStack, Theme } from 'tamagui'
+import { YStack, XStack } from 'tamagui'
 
 export type WaveformProps = {
   data: number[]
@@ -20,7 +20,7 @@ export const Waveform: React.FC<WaveformProps> = ({ data }) => {
   }
 
   return (
-    <YStack h={maxMeterHeight * 2} jc="center" ai="flex-end" bg="$gray1">
+    <YStack h={maxMeterHeight * 1.5} jc="center" ai="flex-end" bg="$gray1">
       <XStack ai="center" gap={5}>
         {Array.from({ length: meterCount }).map((_, index) => {
           const meterValue = data[data.length - meterCount + index] || -60
