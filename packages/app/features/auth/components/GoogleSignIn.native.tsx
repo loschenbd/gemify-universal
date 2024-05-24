@@ -36,7 +36,7 @@ export function GoogleSignIn() {
   */
     try {
       // whatever route you want to deeplink to; make sure to configure in Supabase dashboard
-      const redirectUri = 'myapp://'
+      const redirectUri = 'com.smartlemon.gemify://login-callback'
       const provider = 'google'
       const response = await WebBrowser.openAuthSessionAsync(
         `${process.env.EXPO_PUBLIC_SUPABASE_URL}/auth/v1/authorize?${new URLSearchParams({

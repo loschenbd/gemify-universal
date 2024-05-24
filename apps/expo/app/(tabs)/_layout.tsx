@@ -1,6 +1,7 @@
 import { useSupabase } from '@my/app/utils/supabase/useSupabase'
 import {
   Avatar,
+  H2,
   Circle,
   ColorTokens,
   Sheet,
@@ -9,6 +10,8 @@ import {
   YStack,
   XStack,
   validToken,
+  View,
+  Button,
   Input,
   Waveform,
 } from '@my/ui'
@@ -123,7 +126,7 @@ const RecordButton = ({ size }: TabBarIconProps) => {
 
       await newRecording.startAsync()
       setRecording(newRecording)
-      setIsRecording(true)
+
       console.log('Recording started')
     } catch (err) {
       console.error('Failed to start recording', err)
@@ -282,7 +285,7 @@ const RecordButton = ({ size }: TabBarIconProps) => {
           <CircleIcon col="$color" size={size + 20} />
         </YStack>
       </Theme>
-      <Sheet moveOnKeyboardChange modal open={open} snapPoints={[35]} dismissOnOverlayPress={false}>
+      <Sheet modal moveOnKeyboardChange open={open} snapPoints={[35]} dismissOnOverlayPress={false}>
         <Sheet.Overlay />
         <Sheet.Frame>
           <Sheet.ScrollView>
