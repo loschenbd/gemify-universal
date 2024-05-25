@@ -1,8 +1,8 @@
 import { YStack, H3, Text, View, Circle, ScrollView, AudioPlayer, Button, XStack } from '@my/ui'
-import { Gem, ArrowLeftCircle, Trash2 } from '@tamagui/lucide-icons'
+import { Gem as GemIcon, ArrowLeftCircle, Trash2 } from '@tamagui/lucide-icons'
 import { useQueryClient } from '@tanstack/react-query'
 import { useSupabase } from 'app/utils/supabase/useSupabase'
-import { useGem } from 'app/utils/useGem'
+import { useGem, Gem } from 'app/utils/useGem'
 import { useUser } from 'app/utils/useUser'
 import { Audio, AVPlaybackStatus } from 'expo-av'
 import { useState, useEffect } from 'react'
@@ -148,7 +148,7 @@ export const IdScreen = () => {
 
       // Optimistically update the UI by removing the deleted gem
       queryClient.setQueryData(['userGems', user?.id], (prevGems: Gem[] | undefined) =>
-        prevGems?.filter((gem) => gem.id !== gemId)
+        prevGems ? prevGems.filter((gem) => gem.id !== String(gemId)) : []
       )
 
       const { error } = await supabase.from('gems').delete().eq('id', gemId)
@@ -157,8 +157,8 @@ export const IdScreen = () => {
         console.error('Error deleting gem:', error)
         // If the deletion fails, revert the optimistic update
         queryClient.setQueryData(['userGems', user?.id], (prevGems: Gem[] | undefined) => [
-          gem,
           ...(prevGems || []),
+          gem,
         ])
       } else {
         back()
@@ -226,7 +226,7 @@ export const IdScreen = () => {
         <YStack ai="center">
           <View jc="center" ai="center" br="$10">
             <Circle bg="$gray5" size="$5">
-              <Gem size="$3" />
+              <GemIcon size="$3" />
             </Circle>
           </View>
           <H3 p="$2">{gem.title}</H3>
