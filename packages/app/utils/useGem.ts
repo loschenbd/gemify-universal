@@ -32,4 +32,5 @@ function useGem(gemId?: number) {
   return { data, isLoading, error }
 }
 
-export { useGem, Gem }
+export { useGem }
+export type { Gem }
