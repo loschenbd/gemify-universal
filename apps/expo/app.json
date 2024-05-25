@@ -23,7 +23,7 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.smartlemon.gemify",
-      "buildNumber": "27",
+      "buildNumber": "28",
       "usesAppleSignIn": true
     },
     "android": {

@@ -52,7 +52,7 @@ export const HomeLayout = ({ children, fullPage = false, padded = false }: HomeL
               <YStack gap="$5" w="100%" ai="flex-end">
                 <NavTabs orientation="vertical" f={1} w="100%" size="$3" />
                 <Separator w="100%" />
-                <CtaButton w="100%" />
+                {/* <CtaButton w="100%" /> */}
                 <Separator w="100%" />
                 <WithUserDetail ai="center" gap="$4">
                   <ProfileButton />
@@ -61,7 +61,7 @@ export const HomeLayout = ({ children, fullPage = false, padded = false }: HomeL
             </MobileNavbar>
           </YStack>
           <XStack ai="center" gap="$4" py="$3">
-            <CtaButton />
+            {/* <CtaButton /> */}
             <ProfileButton />
           </XStack>
         </XStack>
@@ -165,21 +165,21 @@ export const MobileNavbar = ({ children }: { children: React.ReactNode }) => {
   )
 }
 
-const CtaButton = (props: ButtonProps) => (
-  <Theme inverse>
-    <Button
-      {...useLink({ href: '/create' })}
-      size="$3"
-      space="$1.5"
-      my="$-1"
-      icon={UploadCloud}
-      br="$10"
-      {...props}
-    >
-      Upload
-    </Button>
-  </Theme>
-)
+// const CtaButton = (props: ButtonProps) => (
+//   <Theme inverse>
+//     <Button
+//       {...useLink({ href: '/create' })}
+//       size="$3"
+//       space="$1.5"
+//       my="$-1"
+//       icon={UploadCloud}
+//       br="$10"
+//       {...props}
+//     >
+//       Upload
+//     </Button>
+//   </Theme>
+// )
 
 const ProfileButton = () => (
   <Link href="/profile">

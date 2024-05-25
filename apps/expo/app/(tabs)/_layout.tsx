@@ -97,6 +97,7 @@ const RecordButton = ({ size }: TabBarIconProps) => {
   const user = useUser()
   async function startRecording() {
     activateKeepAwakeAsync()
+    setIsRecording(true)
     if (!permissionResponse) {
       return
     }
