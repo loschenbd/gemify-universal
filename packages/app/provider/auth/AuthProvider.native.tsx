@@ -8,63 +8,57 @@ import { Platform } from 'react-native'
 import { AuthProviderProps } from './AuthProvider'
 import { AuthStateChangeHandler } from './AuthStateChangeHandler'
 
-export const SessionContext = createContext<SessionContextHelper>({
+interface SessionContextType {
+  session: Session | null
+  error: AuthError | null
+  isLoading: boolean
+  supabaseClient: typeof supabase
+}
+
+export const SessionContext = createContext<SessionContextType>({
   session: null,
   error: null,
   isLoading: false,
   supabaseClient: supabase,
 })
 
-export const AuthProvider = ({ children, initialSession }: AuthProviderProps) => {
-  const [session, setSession] = useState<Session | null>(initialSession || null)
+export function AuthProvider({ children, initialSession }: AuthProviderProps) {
+  const [session, setSession] = useState<Session | null>(initialSession ?? null)
+  const [isLoading, setIsLoading] = useState<boolean>(true)
   const [error, setError] = useState<AuthError | null>(null)
-  const [isLoading, setIsLoading] = useState(false)
-  useProtectedRoute(session?.user ?? null)
+
   useEffect(() => {
-    setIsLoading(true)
-    supabase.auth
-      .getSession()
-      .then(({ data: { session: newSession } }) => {
-        setSession(newSession)
-      })
-      .catch((error) => setError(new AuthError(error.message)))
-      .finally(() => setIsLoading(false))
-  }, [])
-  useEffect(() => {
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, newSession) => {
-      setSession(newSession)
+    const { data: authListener } = supabase.auth.onAuthStateChange((event, session) => {
+      if (event === 'SIGNED_IN') {
+        setSession(session)
+        setIsLoading(false)
+        setError(null)
+      } else if (event === 'SIGNED_OUT') {
+        setSession(null)
+        setIsLoading(false)
+        setError(null)
+      } else if (event === 'TOKEN_REFRESHED') {
+        setSession(session)
+      } else if (event === 'USER_UPDATED') {
+        setSession(session)
+      }
     })
+
     return () => {
-      subscription.unsubscribe()
+      authListener?.subscription.unsubscribe()
     }
   }, [])
 
+  useProtectedRoute(session?.user ?? null)
+
   return (
     <SessionContext.Provider
-      value={
-        session
-          ? {
-              session,
-              isLoading: false,
-              error: null,
-              supabaseClient: supabase,
-            }
-          : error
-          ? {
-              error,
-              isLoading: false,
-              session: null,
-              supabaseClient: supabase,
-            }
-          : {
-              error: null,
-              isLoading,
-              session: null,
-              supabaseClient: supabase,
-            }
-      }
+      value={{
+        session: session ?? null,
+        isLoading,
+        error: error ?? null,
+        supabaseClient: supabase,
+      }}
     >
       <AuthStateChangeHandler />
       {children}
@@ -78,26 +72,14 @@ export function useProtectedRoute(user: User | null) {
   useEffect(() => {
     const inAuthGroup = segments[0] === '(auth)'
 
-    if (
-      // If the user is not signed in and the initial segment is not anything in the auth group.
-      !user &&
-      !inAuthGroup
-    ) {
-      // Redirect to the sign-in page.
+    if (!user && !inAuthGroup) {
       replaceRoute('/onboarding')
     } else if (user && inAuthGroup) {
-      // Redirect away from the sign-in page.
       replaceRoute('/')
     }
   }, [user, segments])
 }
 
-/**
- * temporary fix
- *
- * see https://github.com/expo/router/issues/740
- * see https://github.com/expo/router/issues/745
- *  */
 const replaceRoute = (href: string) => {
   if (Platform.OS === 'ios') {
     setTimeout(() => {

@@ -17,14 +17,15 @@
       "fallbackToCacheTimeout": 0,
       "url": "https://u.expo.dev/your-project-id"
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.smartlemon.gemify",
       "buildNumber": "30",
-      "usesAppleSignIn": true
+      "usesAppleSignIn": true,
+      "infoPlist": {
+        "UIBackgroundModes": ["location", "fetch"]
+      }
     },
     "android": {
       "softwareKeyboardLayoutMode": "pan",
@@ -33,10 +34,7 @@
         "backgroundColor": "#FFFFFF"
       },
       "package": "com.acme.myapp",
-      "permissions": [
-        "android.permission.RECORD_AUDIO",
-        "android.permission.MODIFY_AUDIO_SETTINGS"
-      ]
+      "permissions": ["android.permission.RECORD_AUDIO", "android.permission.MODIFY_AUDIO_SETTINGS"]
     },
     "web": {
       "favicon": "./assets/favicon.png",

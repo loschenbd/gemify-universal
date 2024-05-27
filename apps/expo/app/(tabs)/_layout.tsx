@@ -1,7 +1,6 @@
 import { useSupabase } from '@my/app/utils/supabase/useSupabase'
 import {
   Avatar,
-  H2,
   Circle,
   ColorTokens,
   Sheet,
@@ -10,8 +9,6 @@ import {
   YStack,
   XStack,
   validToken,
-  View,
-  Button,
   Input,
   Waveform,
 } from '@my/ui'

@@ -14877,6 +14877,7 @@ __metadata:
     expo: "npm:~50.0.5"
     expo-apple-authentication: "npm:~6.3.0"
     expo-av: "npm:^14.0.5"
+    expo-background-fetch: "npm:^12.0.1"
     expo-build-properties: "npm:~0.11.1"
     expo-constants: "npm:~15.4.5"
     expo-crypto: "npm:~12.8.0"
@@ -14894,6 +14895,7 @@ __metadata:
     expo-splash-screen: "npm:~0.26.4"
     expo-status-bar: "npm:~1.11.1"
     expo-system-ui: "npm:~2.9.3"
+    expo-task-manager: "npm:^11.8.1"
     expo-updates: "npm:~0.24.9"
     expo-web-browser: "npm:~12.8.2"
     metro-minify-terser: "npm:^0.74.1"
@@ -14952,6 +14954,17 @@ __metadata:
   peerDependencies:
     expo: "*"
   checksum: 10/a3588df307a1cfb014d112833c6429e8c889f5e27b0a3eedce6488803922e10ac926c5eb3346e3cd6989be7279c330c7f584b727c47ca7e3c0aba03b87ef0cd4
+  languageName: node
+  linkType: hard
+
+"expo-background-fetch@npm:^12.0.1":
+  version: 12.0.1
+  resolution: "expo-background-fetch@npm:12.0.1"
+  dependencies:
+    expo-task-manager: "npm:~11.8.0"
+  peerDependencies:
+    expo: "*"
+  checksum: 10/763980b7d4a1af75ba15bad0e156b5f45bfe8b0c95b165f51d675147acabc7545f9fe9ae6e8c07f34efa764b3b2751e069613103a6b1ee13bcfe948bc30b59ff
   languageName: node
   linkType: hard
 
@@ -15275,6 +15288,17 @@ __metadata:
   peerDependencies:
     expo: "*"
   checksum: 10/f20d5020342923cece2791403780f4af7faba6e51d02be72df2fa412eeb567dd4ef9439ef078fbe4d3c742f76b72891385e7f746db56107bd8dd89a447ffb4b2
+  languageName: node
+  linkType: hard
+
+"expo-task-manager@npm:^11.8.1, expo-task-manager@npm:~11.8.0":
+  version: 11.8.1
+  resolution: "expo-task-manager@npm:11.8.1"
+  dependencies:
+    unimodules-app-loader: "npm:~4.6.0"
+  peerDependencies:
+    expo: "*"
+  checksum: 10/0a4163e5e7d849a5b891ab8ea00032d99988cfc02c380104d7a5e88ed1a303a73fb58461eb482b791e6e752facb997e48cd515b2f43dac6269829c235c41c8b4
   languageName: node
   linkType: hard
 
@@ -25601,6 +25625,13 @@ __metadata:
   version: 2.1.0
   resolution: "unicode-property-aliases-ecmascript@npm:2.1.0"
   checksum: 10/243524431893649b62cc674d877bd64ef292d6071dd2fd01ab4d5ad26efbc104ffcd064f93f8a06b7e4ec54c172bf03f6417921a0d8c3a9994161fe1f88f815b
+  languageName: node
+  linkType: hard
+
+"unimodules-app-loader@npm:~4.6.0":
+  version: 4.6.0
+  resolution: "unimodules-app-loader@npm:4.6.0"
+  checksum: 10/0ccf419cb5a0821b049ec8ea4611662e97ca6d3ae89b5e0ee53d1d4aa050f4c732e5acbca6e4bb0443365436fef1c6038c03a7443cfbbe3d08eece7c2135d522
   languageName: node
   linkType: hard
 
