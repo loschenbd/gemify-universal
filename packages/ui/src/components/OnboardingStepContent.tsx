@@ -42,7 +42,6 @@ export const StepContent = ({
         scale={1}
         size="$10"
         col="$color10"
-        selectable={false}
         ta="center"
         $md={{
           size: '$10',
@@ -66,7 +65,6 @@ export const StepContent = ({
         lh="$8"
         ta="center"
         col="$color9"
-        selectable={false}
         $md={{
           mt: '$3',
           col: '$color9',

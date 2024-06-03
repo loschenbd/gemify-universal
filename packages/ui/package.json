@@ -38,6 +38,7 @@
     "@tamagui/themes": "^1.91.4",
     "@tamagui/toast": "^1.91.4",
     "@ts-react/form": "1.6.4",
+    "expo-av": "13.10.5",
     "moti": "^0.25.3",
     "react-hook-form": "^7.46.1",
     "tamagui": "^1.91.4",

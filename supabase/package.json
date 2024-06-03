@@ -23,5 +23,8 @@
   "devDependencies": {
     "dotenv-cli": "^6.0.0",
     "supabase": "^1.99.0"
+  },
+  "dependencies": {
+    "expo-av": "13.10.5"
   }
 }

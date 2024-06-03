@@ -25,6 +25,11 @@ export const SignInScreen = () => {
   const updateParams = useUpdateParams()
   useRedirectAfterSignIn()
   const { isLoadingSession } = useUser()
+
+  useEffect(() => {
+    console.log('isLoadingSession:', isLoadingSession)
+  }, [isLoadingSession])
+
   useEffect(() => {
     // remove the persisted email from the url, mostly to not leak user's email in case they share it
     if (params?.email) {
@@ -34,6 +39,7 @@ export const SignInScreen = () => {
   const form = useForm<z.infer<typeof SignInSchema>>()
 
   async function signInWithEmail({ email, password }: z.infer<typeof SignInSchema>) {
+    console.log('Sign in with email started')
     const { error } = await supabase.auth.signInWithPassword({
       email,
       password,
@@ -51,6 +57,7 @@ export const SignInScreen = () => {
     } else {
       router.replace('/')
     }
+    console.log('Sign in with email completed')
   }
 
   return (
