@@ -6,12 +6,12 @@ import { SplashScreen, Stack } from 'expo-router'
 import { useCallback, useEffect, useState } from 'react'
 import { LogBox, View } from 'react-native'
 
-SplashScreen.preventAutoHideAsync()
+// SplashScreen.preventAutoHideAsync()
 
 LogBox.ignoreLogs(['Cannot update a component', 'You are setting the style'])
 
 export default function HomeLayout() {
-  const [fontLoaded] = useFonts({
+  const [fontLoaded, fontError] = useFonts({
     UrbanistThin: require('@tamagui-google-fonts/urbanist/fonts/static/Urbanist-Thin.ttf'),
     UrbanistExtraLight: require('@tamagui-google-fonts/urbanist/fonts/static/Urbanist-ExtraLight.ttf'),
     UrbanistLight: require('@tamagui-google-fonts/urbanist/fonts/static/Urbanist-Light.ttf'),
@@ -31,6 +31,14 @@ export default function HomeLayout() {
     UrbanistExtraBoldItalic: require('@tamagui-google-fonts/urbanist/fonts/static/Urbanist-ExtraBoldItalic.ttf'),
     UrbanistBlackItalic: require('@tamagui-google-fonts/urbanist/fonts/static/Urbanist-BlackItalic.ttf'),
   })
+
+  useEffect(() => {
+    if (fontError) {
+      console.error('Error loading fonts:', fontError)
+    } else {
+      console.log('Fonts loaded successfully')
+    }
+  }, [fontError])
 
   const [themeLoaded, setThemeLoaded] = useState(false)
   const [sessionLoadAttempted, setSessionLoadAttempted] = useState(false)

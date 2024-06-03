@@ -1,1 +1,1 @@
-// export * from './PostHogProvider'
+export * from './PostHogProvider'

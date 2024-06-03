@@ -1,7 +1,9 @@
+//! debug-verbose
 import { Session } from '@supabase/supabase-js'
 import React from 'react'
 
 import { AuthProvider } from './auth'
+import { PostHogProvider } from './posthog'
 import { QueryClientProvider } from './react-query'
 import { SafeAreaProvider } from './safe-area'
 import { TamaguiProvider } from './tamagui'
@@ -37,6 +39,7 @@ const compose = (providers: React.FC<{ children: React.ReactNode }>[]) =>
   })
 
 const Providers = compose([
+  PostHogProvider,
   UniversalThemeProvider,
   SafeAreaProvider,
   TamaguiProvider,

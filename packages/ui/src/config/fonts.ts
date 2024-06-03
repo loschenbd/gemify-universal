@@ -1,4 +1,3 @@
-import { createInterFont } from '@tamagui/font-inter'
 import { createUrbanistFont } from '@tamagui-google-fonts/urbanist'
 
 export const myFont = createUrbanistFont(
@@ -44,8 +43,8 @@ export const myFont = createUrbanistFont(
   },
   {
     // customize the size and line height scaling to your own needs
-    // sizeSize: (size) => Math.round(size * 1.1),
-    // sizeLineHeight: (size) => size + 5,
+    sizeSize: (size) => Math.round(size * 1.1),
+    sizeLineHeight: (size) => size + 5,
   }
 )
 
