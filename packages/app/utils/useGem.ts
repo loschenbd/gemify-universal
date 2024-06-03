@@ -1,15 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 import { useSupabase } from 'app/utils/supabase/useSupabase'
 
-interface Gem {
-  id: string
-  // Add other properties of a Gem here
-  // For example:
-  // name: string;
-  // description: string;
-  // ...
-}
-
 function useGem(gemId?: number) {
   const supabase = useSupabase()
 
@@ -33,4 +24,3 @@ function useGem(gemId?: number) {
 }
 
 export { useGem }
-export type { Gem }
