@@ -102,7 +102,16 @@ const RecordButton = ({ size }: TabBarIconProps) => {
       if (permissionResponse.status !== 'granted') {
         console.log('Requesting permission..')
         await requestPermission()
+
+        // Wait for the permission status to update
+        const updatedPermissionResponse = await Audio.getPermissionsAsync()
+        if (updatedPermissionResponse.status !== 'granted') {
+          console.error('Permission not granted')
+          setIsRecording(false)
+          return
+        }
       }
+
       await Audio.setAudioModeAsync({
         allowsRecordingIOS: true,
         playsInSilentModeIOS: true,
@@ -129,6 +138,7 @@ const RecordButton = ({ size }: TabBarIconProps) => {
       console.log('Recording started')
     } catch (err) {
       console.error('Failed to start recording', err)
+      setIsRecording(false)
     }
   }
 
