@@ -144,24 +144,44 @@ export const IdScreen = () => {
 
   const handleDelete = async () => {
     if (gemId) {
-      console.log('Gem deleted:', gemId)
+      console.log('Deleting gem:', gemId)
 
       // Optimistically update the UI by removing the deleted gem
       queryClient.setQueryData(['userGems', user?.id], (prevGems: Gem[] | undefined) =>
         prevGems?.filter((gem) => gem.id !== gemId)
       )
 
-      const { error } = await supabase.from('gems').delete().eq('id', gemId)
+      try {
+        // Delete the gem record from the database
+        const { error: deleteError } = await supabase.from('gems').delete().eq('id', gemId)
 
-      if (error) {
+        if (deleteError) {
+          throw new Error('Error deleting gem record')
+        }
+
+        console.log('Gem record deleted successfully')
+
+        // Delete the audio file from storage
+        const { error: deleteFileError } = await supabase.storage
+          .from('gem-audio')
+          .remove([gem.audio_url])
+
+        if (deleteFileError) {
+          throw new Error('Error deleting audio file')
+        }
+
+        console.log('Audio file deleted successfully')
+
+        back()
+        console.log('Navigation back triggered')
+      } catch (error) {
         console.error('Error deleting gem:', error)
         // If the deletion fails, revert the optimistic update
         queryClient.setQueryData(['userGems', user?.id], (prevGems: Gem[] | undefined) => [
           gem,
           ...(prevGems || []),
         ])
-      } else {
-        back()
+        console.log('Optimistic update reverted')
       }
     }
   }
