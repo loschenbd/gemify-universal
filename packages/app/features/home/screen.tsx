@@ -6,6 +6,8 @@ import { useUser } from 'app/utils/useUser'
 import React, { useEffect } from 'react'
 import { Link } from 'solito/link'
 import { ArrowDown } from '@tamagui/lucide-icons'
+import { usePostHog } from 'posthog-react-native';
+
 
 interface Gem {
   id: number
@@ -21,6 +23,14 @@ interface Gem {
 }
 
 export function HomeScreen() {
+    const { user } = useUser();
+  const posthog = usePostHog();
+
+  useEffect(() => {
+    if (user?.email) {
+      posthog.identify(user.email);
+    }
+  }, [user?.email, posthog]);
   return (
     <XStack>
       <ScrollView f={3} fb={0}>
