@@ -106,6 +106,7 @@ const RecordButton = ({ size }: TabBarIconProps) => {
       await Audio.setAudioModeAsync({
         allowsRecordingIOS: true,
         playsInSilentModeIOS: true,
+        staysActiveInBackground: true,
       })
 
       console.log('Starting recording..')
