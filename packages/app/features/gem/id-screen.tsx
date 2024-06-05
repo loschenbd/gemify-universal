@@ -1,4 +1,15 @@
-import { YStack, H3, Text, View, Circle, ScrollView, AudioPlayer, Button, XStack } from '@my/ui'
+import {
+  YStack,
+  H3,
+  Text,
+  Paragraph,
+  View,
+  Circle,
+  ScrollView,
+  AudioPlayer,
+  Button,
+  XStack,
+} from '@my/ui'
 import { Gem, ArrowLeftCircle, Trash2 } from '@tamagui/lucide-icons'
 import { useQueryClient } from '@tanstack/react-query'
 import { useSupabase } from 'app/utils/supabase/useSupabase'
@@ -270,8 +281,8 @@ export const IdScreen = () => {
               <H3 p="$2">Main Points</H3>
               {gem.main_points.map((point, index) => (
                 <XStack py="$1" px="$3" key={index}>
-                  <Text>•</Text>
-                  <Text pl="$1.5">{point}</Text>
+                  <Paragraph>•</Paragraph>
+                  <Paragraph pl="$1.5">{point}</Paragraph>
                 </XStack>
               ))}
             </View>
@@ -281,9 +292,9 @@ export const IdScreen = () => {
           {gem.summary && (
             <View p="$4">
               <H3 p="$2">Summary</H3>
-              <Text py="$1" px="$3">
+              <Paragraph py="$1" px="$3">
                 {gem.summary}
-              </Text>
+              </Paragraph>
             </View>
           )}
 
@@ -293,8 +304,8 @@ export const IdScreen = () => {
               <H3 p="$2">Stories, Examples, Citations</H3>
               {gem.stories.map((item, index) => (
                 <XStack py="$1" px="$3" key={index}>
-                  <Text>•</Text>
-                  <Text pl="$1.5">{item}</Text>
+                  <Paragraph>•</Paragraph>
+                  <Paragraph pl="$1.5">{item}</Paragraph>
                 </XStack>
               ))}
             </View>
@@ -306,8 +317,8 @@ export const IdScreen = () => {
               <H3 p="$2">Follow-up Questions</H3>
               {gem.follow_up.map((question, index) => (
                 <XStack py="$1" px="$3" key={index}>
-                  <Text>•</Text>
-                  <Text pl="$1.5">{question}</Text>
+                  <Paragraph>•</Paragraph>
+                  <Paragraph pl="$1.5">{question}</Paragraph>
                 </XStack>
               ))}
             </View>
@@ -319,8 +330,8 @@ export const IdScreen = () => {
               <H3 p="$2">Potential Action Items</H3>
               {gem.action_items.map((action, index) => (
                 <XStack py="$1" px="$3" key={index}>
-                  <Text>•</Text>
-                  <Text pl="$1.5">{action}</Text>
+                  <Paragraph>•</Paragraph>
+                  <Paragraph pl="$1.5">{action}</Paragraph>
                 </XStack>
               ))}
             </View>
@@ -332,8 +343,8 @@ export const IdScreen = () => {
               <H3 p="$2">Supporting Scriptures</H3>
               {gem.bible_verses.map((verse, index) => (
                 <XStack py="$1" px="$3" key={index}>
-                  <Text>•</Text>
-                  <Text pl="$1.5">{verse}</Text>
+                  <Paragraph>•</Paragraph>
+                  <Paragraph pl="$1.5">{verse}</Paragraph>
                 </XStack>
               ))}
             </View>
@@ -345,8 +356,8 @@ export const IdScreen = () => {
               <H3 p="$2">Related Topics</H3>
               {gem.related_topics.map((topic, index) => (
                 <XStack py="$1" px="$3" key={index}>
-                  <Text>•</Text>
-                  <Text pl="$1.5">{topic}</Text>
+                  <Paragraph>•</Paragraph>
+                  <Paragraph pl="$1.5">{topic}</Paragraph>
                 </XStack>
               ))}
             </View>
@@ -358,9 +369,9 @@ export const IdScreen = () => {
               <Text py="$1" px="$3">
                 <YStack space="$1">
                   {gem.transcript.map((paragraph, index) => (
-                    <Text py="$1" px="$3" key={index}>
+                    <Paragraph py="$1" px="$3" key={index}>
                       {paragraph}
-                    </Text>
+                    </Paragraph>
                   ))}
                 </YStack>
               </Text>

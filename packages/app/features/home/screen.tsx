@@ -1,4 +1,4 @@
-import { ScrollView, XStack, YStack, GemCard, H2, Text, AnimatePresence } from '@my/ui'
+import { ScrollView, XStack, YStack, GemCard, H2, Text, AnimatePresence, isWeb } from '@my/ui'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { formatDuration } from 'app/utils/formatDuration'
 import { useSupabase } from 'app/utils/supabase/useSupabase'
@@ -6,8 +6,6 @@ import { useUser } from 'app/utils/useUser'
 import React, { useEffect } from 'react'
 import { Link } from 'solito/link'
 import { ArrowDown } from '@tamagui/lucide-icons'
-import { usePostHog } from 'posthog-react-native';
-
 
 interface Gem {
   id: number
@@ -21,16 +19,18 @@ interface Gem {
   profile_id: number
   duration: number
 }
-
+const usePostHog = isWeb
+  ? require('posthog-js').usePostHog
+  : require('posthog-react-native').usePostHog
 export function HomeScreen() {
-    const { user } = useUser();
-  const posthog = usePostHog();
+  const posthog = usePostHog?.()
+  const { user } = useUser()
 
   useEffect(() => {
-    if (user?.email) {
-      posthog.identify(user.email);
+    if (user?.email && posthog) {
+      posthog.identify(user.email)
     }
-  }, [user?.email, posthog]);
+  }, [user?.email, posthog])
   return (
     <XStack>
       <ScrollView f={3} fb={0}>
