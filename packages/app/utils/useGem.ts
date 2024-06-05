@@ -1,21 +1,8 @@
 import { useQuery } from '@tanstack/react-query'
 import { useSupabase } from 'app/utils/supabase/useSupabase'
+import { Database } from '@my/supabase/types'
 
-export interface GemType {
-  id: number
-  title: string
-  author: string
-  audio_url: string
-  duration: number
-  main_points?: string[]
-  summary?: string
-  stories?: string[]
-  follow_up?: string[]
-  action_items?: string[]
-  bible_verses?: string[]
-  related_topics?: string[]
-  transcript?: string[]
-}
+type Gem = Database['public']['Tables']['gems']['Row']
 
 function useGem(gemId?: number) {
   const supabase = useSupabase()
@@ -32,7 +19,7 @@ function useGem(gemId?: number) {
         throw new Error(error.message)
       }
 
-      return data
+      return data as Gem
     },
   })
 
@@ -40,3 +27,7 @@ function useGem(gemId?: number) {
 }
 
 export { useGem }
+
+
+
+

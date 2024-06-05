@@ -48,7 +48,7 @@ export const IdScreen = () => {
     const loadSound = async () => {
       setIsSoundLoading(true)
       try {
-        console.log('Loading audio:', gem.audio_url)
+        console.log('Loading audio:', gem?.audio_url)
         const { data: signedUrl, error: signedUrlError } = await supabase.storage
           .from('gem-audio')
           .createSignedUrl(gem.audio_url, 600)
@@ -81,7 +81,7 @@ export const IdScreen = () => {
                 status.isLoaded ? status.positionMillis / (status.durationMillis || 1) : 0
               )
               setRemainingTime(
-                status.isLoaded ? status.durationMillis || 1 - status.positionMillis : 0
+                status.isLoaded ? (status.durationMillis || 0) - status.positionMillis : 0
               )
             }
           })
