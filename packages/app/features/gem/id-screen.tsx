@@ -1,3 +1,4 @@
+import { Database } from '@my/supabase/types'
 import {
   YStack,
   H3,
@@ -11,7 +12,7 @@ import {
   XStack,
   Skeleton,
 } from '@my/ui'
-import { Gem, ArrowLeftCircle, Trash2 } from '@tamagui/lucide-icons'
+import { Gem as GemIcon, ArrowLeftCircle, Trash2 } from '@tamagui/lucide-icons'
 import { useQueryClient } from '@tanstack/react-query'
 import { useSupabase } from 'app/utils/supabase/useSupabase'
 import { useGem } from 'app/utils/useGem'
@@ -22,6 +23,8 @@ import { Pressable } from 'react-native'
 import { createParam } from 'solito'
 import { useRouter } from 'solito/router'
 import { AlertDialog } from 'tamagui'
+
+type Gem = Database['public']['Tables']['gems']['Row']
 
 const { useParam } = createParam<{ id: string }>()
 
@@ -50,44 +53,46 @@ export const IdScreen = () => {
       setIsSoundLoading(true)
       try {
         console.log('Loading audio:', gem?.audio_url)
-        const { data: signedUrl, error: signedUrlError } = await supabase.storage
-          .from('gem-audio')
-          .createSignedUrl(gem.audio_url, 600)
+        if (gem?.audio_url) {
+          const { data: signedUrl, error: signedUrlError } = await supabase.storage
+            .from('gem-audio')
+            .createSignedUrl(gem?.audio_url, 600)
 
-        if (signedUrlError) {
-          console.error('Error getting signed URL:', signedUrlError)
-          setSoundError('Failed to load audio')
-          setIsSoundLoading(false)
-          return
-        }
+          if (signedUrlError) {
+            console.error('Error getting signed URL:', signedUrlError)
+            setSoundError('Failed to load audio')
+            setIsSoundLoading(false)
+            return
+          }
 
-        console.log('Signed URL:', signedUrl)
+          console.log('Signed URL:', signedUrl)
 
-        const { sound, status } = await Audio.Sound.createAsync({ uri: signedUrl.signedUrl })
-        await Audio.setAudioModeAsync({
-          allowsRecordingIOS: false,
-          staysActiveInBackground: false,
-          playsInSilentModeIOS: true,
-        })
-
-        if (isMounted) {
-          setSound(sound)
-          console.log('Sound loaded:', status)
-
-          sound.setOnPlaybackStatusUpdate((status: AVPlaybackStatus) => {
-            if (isMounted) {
-              console.log('Playback status:', status.isLoaded ? status.positionMillis : undefined)
-              setPlaying(status.isLoaded ? status.isPlaying : false)
-              setProgress(
-                status.isLoaded ? status.positionMillis / (status.durationMillis || 1) : 0
-              )
-              setRemainingTime(
-                status.isLoaded ? (status.durationMillis || 0) - status.positionMillis : 0
-              )
-            }
+          const { sound, status } = await Audio.Sound.createAsync({ uri: signedUrl.signedUrl })
+          await Audio.setAudioModeAsync({
+            allowsRecordingIOS: false,
+            staysActiveInBackground: false,
+            playsInSilentModeIOS: true,
           })
 
-          setIsSoundLoading(false)
+          if (isMounted) {
+            setSound(sound)
+            console.log('Sound loaded:', status)
+
+            sound.setOnPlaybackStatusUpdate((status: AVPlaybackStatus) => {
+              if (isMounted) {
+                console.log('Playback status:', status.isLoaded ? status.positionMillis : undefined)
+                setPlaying(status.isLoaded ? status.isPlaying : false)
+                setProgress(
+                  status.isLoaded ? status.positionMillis / (status.durationMillis || 1) : 0
+                )
+                setRemainingTime(
+                  status.isLoaded ? (status.durationMillis || 0) - status.positionMillis : 0
+                )
+              }
+            })
+
+            setIsSoundLoading(false)
+          }
         }
       } catch (error) {
         console.error('Error loading audio:', error)
@@ -131,10 +136,11 @@ export const IdScreen = () => {
 
   const handleSliderValueChange = async (value: number) => {
     if (sound && gem) {
-      const positionMillis = value * gem.duration
+      const positionMillis = gem.duration ? value * gem.duration : 0
+
       await sound.setPositionAsync(positionMillis)
       setProgress(value)
-      setRemainingTime(gem.duration - positionMillis)
+      setRemainingTime(gem.duration ? gem.duration - positionMillis : 0)
     }
   }
 
@@ -180,12 +186,13 @@ export const IdScreen = () => {
         console.log('Gem record deleted successfully')
 
         // Delete the audio file from storage
-        const { error: deleteFileError } = await supabase.storage
-          .from('gem-audio')
-          .remove([gem.audio_url])
+        if (gem && gem.audio_url) {
+          const { error } = await supabase.storage.from('audio').remove([gem.audio_url])
 
-        if (deleteFileError) {
-          throw new Error('Error deleting audio file')
+          if (error) {
+            console.error('Error removing audio:', error)
+            throw error
+          }
         }
 
         console.log('Audio file deleted successfully')
@@ -264,22 +271,24 @@ export const IdScreen = () => {
         <YStack ai="center">
           <View jc="center" ai="center" br="$10">
             <Circle bg="$gray5" size="$5">
-              <Gem size="$3" />
+              <GemIcon size="$3" />
             </Circle>
           </View>
           <H3 p="$2">{gem.title}</H3>
           <Text pb="$3">{gem.author}</Text>
-          <AudioPlayer
-            url={gem.audio_url}
-            durationMillis={gem.duration}
-            isSoundLoading={isSoundLoading}
-            playing={playing}
-            progress={progress}
-            remainingTime={remainingTime}
-            error={soundError}
-            playPause={playPause}
-            handleSliderValueChange={handleSliderValueChange}
-          />
+          {gem.audio_url && (
+            <AudioPlayer
+              url={gem.audio_url}
+              durationMillis={gem.duration ?? 0}
+              isSoundLoading={isSoundLoading}
+              playing={playing}
+              progress={progress}
+              remainingTime={remainingTime}
+              error={soundError}
+              playPause={playPause}
+              handleSliderValueChange={handleSliderValueChange}
+            />
+          )}
         </YStack>
         <YStack $platform-web={{ w: 500 }}>
           {/* Main Points */}
