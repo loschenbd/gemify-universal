@@ -21,16 +21,28 @@ import { Audio } from 'expo-av'
 import { Recording } from 'expo-av/build/Audio'
 import { activateKeepAwakeAsync, deactivateKeepAwake } from 'expo-keep-awake'
 import { Stack, Tabs } from 'expo-router'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { SolitoImage } from 'solito/image'
 import { Upload } from 'tus-js-client'
 
 export default function Layout() {
+  useEffect(() => {
+    async function requestMicrophonePermission() {
+      const { status } = await Audio.requestPermissionsAsync()
+      if (status !== 'granted') {
+        alert('Sorry, we need microphone permissions to record audio.')
+      }
+    }
+
+    requestMicrophonePermission()
+  }, [])
+
   return (
     <>
       <Stack.Screen
         options={{
           headerShown: false,
+          title: 'Profile',
         }}
       />
       <Tabs screenOptions={{ headerShown: false, tabBarShowLabel: false }}>

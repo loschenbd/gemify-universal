@@ -8,3 +8,6 @@ export default function Screen() {
     </SafeAreaView>
   )
 }
+Screen.navigationOptions = {
+  title: 'Home',
+}

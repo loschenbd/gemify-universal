@@ -22,6 +22,7 @@ export function ProfileScreen() {
   const about = profile?.about
 
   const insets = useSafeAreaInsets()
+  console.log(avatarUrl)
   return (
     <ScrollView>
       <YStack
@@ -67,22 +68,20 @@ export function ProfileScreen() {
         <Settings>
           <Settings.Items>
             <Settings.Group>
-              {/* dummy item - doesn't lead anywhere */}
-              <Settings.Item icon={Box} accentTheme="green">
+              {/* <Settings.Item icon={Box} accentTheme="green">
                 My Items
               </Settings.Item>
-              {/* dummy item - doesn't lead anywhere */}
+
               <Settings.Item icon={Users} accentTheme="orange">
                 Refer Your Friends
               </Settings.Item>
-              {/* dummy item - doesn't lead anywhere */}
+
               <Settings.Item icon={Milestone} accentTheme="blue">
                 Address Info
               </Settings.Item>
-              {/* dummy item - doesn't lead anywhere */}
               <Settings.Item icon={ShoppingCart} accentTheme="blue">
                 Purchase History
-              </Settings.Item>
+              </Settings.Item> */}
               <Settings.Item {...useLink({ href: '/settings' })} icon={Cog}>
                 Settings
               </Settings.Item>
