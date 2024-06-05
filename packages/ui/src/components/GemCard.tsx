@@ -1,5 +1,5 @@
 import { Gem } from '@tamagui/lucide-icons'
-import { Card, Circle, H3, H4, Text, View, XStack, YStack } from 'tamagui'
+import { Card, Circle, H3, H4, Text, View, XStack, YStack, isWeb } from 'tamagui'
 import { ReactNode } from 'react'
 
 export type GemCardProps = {
@@ -38,9 +38,11 @@ export const GemCard: React.FC<GemCardProps> = ({ title, author, duration, date 
             </XStack>
           )}
         </YStack>
-        <Text pt="$1" pr="$1" ml="auto" mb="auto" col="$gray10" jc="flex-end">
-          {date}
-        </Text>
+        {isWeb && (
+          <Text pt="$1" pr="$1" ml="auto" mb="auto" col="$gray10" jc="flex-end">
+            {date}
+          </Text>
+        )}
       </XStack>
     </Card>
   )

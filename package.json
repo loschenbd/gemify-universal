@@ -71,6 +71,7 @@
   },
   "packageManager": "yarn@4.1.1",
   "dependencies": {
+    "date-fns": "^3.6.0",
     "expo-av": "13.10.5",
     "expo-router": "~3.4.10",
     "posthog-js": "^1.136.5",

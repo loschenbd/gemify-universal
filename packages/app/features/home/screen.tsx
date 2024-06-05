@@ -1,3 +1,4 @@
+import { Database } from '@my/supabase/types'
 import {
   ScrollView,
   XStack,
@@ -9,26 +10,21 @@ import {
   isWeb,
   Skeleton,
 } from '@my/ui'
+import { ArrowDown } from '@tamagui/lucide-icons'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { formatDuration } from 'app/utils/formatDuration'
 import { useSupabase } from 'app/utils/supabase/useSupabase'
 import { useUser } from 'app/utils/useUser'
+import { format } from 'date-fns'
 import React, { useEffect } from 'react'
 import { Link } from 'solito/link'
-import { ArrowDown } from '@tamagui/lucide-icons'
 
-interface Gem {
-  id: number
-  title: string
-  author: string
-  date: string
-  name: string
-  description: string
-  audio_url: string
-  created_at: string
-  profile_id: number
-  duration: number
+type Gem = Database['public']['Tables']['gems']['Row']
+
+type GemCardsProps = {
+  gems?: Gem[]
 }
+
 const usePostHog = isWeb
   ? require('posthog-js').usePostHog
   : require('posthog-react-native').usePostHog
@@ -163,7 +159,7 @@ function useUserGems() {
   return { ...query, addGem, updateGem, deleteGem }
 }
 
-const GemCards: React.FC = () => {
+const GemCards: React.FC<GemCardsProps> = ({ gems }) => {
   const { data: userGems = [], isLoading, error, addGem, updateGem, deleteGem } = useUserGems()
 
   if (isLoading) {
@@ -213,17 +209,17 @@ const GemCards: React.FC = () => {
             {!gem.title ? (
               <GemCard
                 title="Polishing Gem"
-                author={gem.author}
-                duration={formatDuration(gem.duration)}
-                date={gem.date}
+                author={gem.author ?? undefined}
+                duration={formatDuration(gem.duration ?? 0)}
+                date={format(new Date(gem.created_at), 'MM/dd/yyyy')}
               />
             ) : (
               <Link href={`/gem/${gem.id}`}>
                 <GemCard
                   title={gem.title}
-                  author={gem.author}
-                  duration={formatDuration(gem.duration)}
-                  date={gem.date}
+                  author={gem.author ?? undefined}
+                  duration={formatDuration(gem.duration ?? 0)}
+                  date={format(new Date(gem.created_at), 'MM/dd/yyyy')}
                 />
               </Link>
             )}
