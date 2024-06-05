@@ -1,6 +1,6 @@
+import { Database } from '@my/supabase/types'
 import { useQuery } from '@tanstack/react-query'
 import { useSupabase } from 'app/utils/supabase/useSupabase'
-import { Database } from '@my/supabase/types'
 
 type Gem = Database['public']['Tables']['gems']['Row']
 
@@ -27,7 +27,3 @@ function useGem(gemId?: number) {
 }
 
 export { useGem }
-
-
-
-

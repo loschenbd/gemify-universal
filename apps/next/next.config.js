@@ -74,6 +74,12 @@ module.exports = () => {
         {
           hostname: '192.168.0.23',
         },
+        {
+          hostname: '192.168.0.77',
+        },
+        {
+          hostname: 'staging.gemify.app',
+        },
       ],
     },
 

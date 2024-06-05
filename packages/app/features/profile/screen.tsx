@@ -22,7 +22,6 @@ export function ProfileScreen() {
   const about = profile?.about
 
   const insets = useSafeAreaInsets()
-  console.log(avatarUrl)
   return (
     <ScrollView>
       <YStack
