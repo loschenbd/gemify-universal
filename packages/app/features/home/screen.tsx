@@ -1,4 +1,14 @@
-import { ScrollView, XStack, YStack, GemCard, H2, Text, AnimatePresence, isWeb } from '@my/ui'
+import {
+  ScrollView,
+  XStack,
+  YStack,
+  GemCard,
+  H2,
+  Text,
+  AnimatePresence,
+  isWeb,
+  Skeleton,
+} from '@my/ui'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { formatDuration } from 'app/utils/formatDuration'
 import { useSupabase } from 'app/utils/supabase/useSupabase'
@@ -23,6 +33,8 @@ const usePostHog = isWeb
   ? require('posthog-js').usePostHog
   : require('posthog-react-native').usePostHog
 export function HomeScreen() {
+  const { data: gems, isLoading } = useUserGems()
+
   const posthog = usePostHog?.()
   const { user } = useUser()
 
@@ -35,7 +47,15 @@ export function HomeScreen() {
     <XStack>
       <ScrollView f={3} fb={0}>
         <YStack gap="$3" pt="$5" pb="$8">
-          <GemCards />
+          {isLoading ? (
+            <AnimatePresence>
+              {[...Array(3)].map((_, i) => (
+                <Skeleton key={i} />
+              ))}
+            </AnimatePresence>
+          ) : (
+            <GemCards gems={gems} />
+          )}
         </YStack>
       </ScrollView>
     </XStack>

@@ -27,7 +27,7 @@
     "preserveConstEnums": true,
     // DONT DO THIS so jsdoc will remain
     "removeComments": false,
-    "strict": false,
+    "strict": true,
     "skipLibCheck": true,
     "typeRoots": ["node_modules/@types", "environment.d.ts"],
     "sourceMap": false,

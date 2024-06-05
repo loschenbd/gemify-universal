@@ -9,6 +9,7 @@ import {
   AudioPlayer,
   Button,
   XStack,
+  Skeleton,
 } from '@my/ui'
 import { Gem, ArrowLeftCircle, Trash2 } from '@tamagui/lucide-icons'
 import { useQueryClient } from '@tanstack/react-query'
@@ -138,7 +139,13 @@ export const IdScreen = () => {
   }
 
   if (isGemLoading) {
-    return <Text>Loading gem data...</Text>
+    return (
+      <ScrollView>
+        <YStack ai="center">
+          <Skeleton />
+        </YStack>
+      </ScrollView>
+    )
   }
 
   if (gemError) {
