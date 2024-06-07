@@ -6,6 +6,7 @@ import {
   GemCard,
   H2,
   Text,
+  Button,
   AnimatePresence,
   isWeb,
   Skeleton,
@@ -179,19 +180,41 @@ const GemCards: React.FC<GemCardsProps> = ({ gems }) => {
   if (sortedGems.length === 0) {
     return (
       <YStack ai="center" jc="center" f={1} gap="$2" py="$3">
-        <AnimatePresence>
-          <H2 ai="center">Make your first Gem.</H2>
-          <Text>Tap the recording button below.</Text>
-          <ArrowDown
-            enterStyle={{
-              scale: 1.5,
-              y: -10,
-              o: 0,
-            }}
-            size="$4"
-            animation="bouncy"
-          />
-        </AnimatePresence>
+        {!isWeb && (
+          <>
+            <H2 ai="center">Make your first Gem.</H2>
+            <Text>Tap the recording button below.</Text>
+            <AnimatePresence>
+              <ArrowDown
+                enterStyle={{
+                  scale: 1.5,
+                  y: -10,
+                  o: 0,
+                }}
+                size="$4"
+                animation="bouncy"
+              />
+            </AnimatePresence>
+          </>
+        )}
+        {isWeb && (
+          <AnimatePresence>
+            <H2 ai="center">Download the app</H2>
+            <Text>and record your first gem to see it displayed below.</Text>
+            <ArrowDown
+              enterStyle={{
+                scale: 1.5,
+                y: -10,
+                o: 0,
+              }}
+              size="$4"
+              animation="bouncy"
+            />
+            <Link href="https://testflight.apple.com/join/eAbjTD9i">
+              <Button>Get Access Here</Button>
+            </Link>
+          </AnimatePresence>
+        )}
       </YStack>
     )
   }
