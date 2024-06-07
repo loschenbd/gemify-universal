@@ -76,9 +76,12 @@ module.exports = () => {
         },
         {
           hostname: '192.168.0.77',
+          port: '54321',
         },
         {
-          hostname: 'staging.gemify.app',
+          protocol: 'https',
+          hostname: 'lzeujpdftfnvelzhknqe.supabase.co',
+          pathname: '/storage/v1/object/public/avatars/**',
         },
       ],
     },
