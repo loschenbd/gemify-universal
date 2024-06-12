@@ -5,7 +5,7 @@ export const PostHogProvider = ({ children }: { children: React.ReactNode }) => 
     <PostHogProviderNative
       apiKey={Constants.manifest.extra.POSTHOG_KEY}
       options={{
-        host: Constants.manifest.extra.POSTHOG_HOST,,
+        host: Constants.manifest.extra.POSTHOG_HOST,
       }}
     >
       {children}
