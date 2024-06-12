@@ -17,23 +17,15 @@
       "fallbackToCacheTimeout": 0,
       "url": "https://u.expo.dev/your-project-id"
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.smartlemon.gemify",
-      "associatedDomains": [
-        "applinks:staging.gemify.app"
-      ],
+      "associatedDomains": ["applinks:staging.gemify.app"],
       "buildNumber": "37",
       "usesAppleSignIn": true,
       "infoPlist": {
-        "UIBackgroundModes": [
-          "location",
-          "fetch",
-          "audio"
-        ]
+        "UIBackgroundModes": ["location", "fetch", "audio"]
       }
     },
     "android": {
@@ -87,6 +79,8 @@
       ]
     ],
     "extra": {
+      "POSTHOG_KEY": "phc_6Rir7ueQhqGSPSRIqdELiCTrWia998S6eBdIvKcWK6H",
+      "POSTHOG_HOST": "https://us.i.posthog.com",
       "router": {
         "origin": false
       },

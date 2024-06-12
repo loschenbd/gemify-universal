@@ -3,9 +3,9 @@ import { PostHogProvider as PostHogProviderNative } from 'posthog-react-native/l
 export const PostHogProvider = ({ children }: { children: React.ReactNode }) => {
   return (
     <PostHogProviderNative
-      apiKey={process.env.EXPO_PUBLIC_POSTHOG_KEY}
+      apiKey={Constants.manifest.extra.POSTHOG_KEY}
       options={{
-        host: process.env.EXPO_PUBLIC_POSTHOG_HOST,
+        host: Constants.manifest.extra.POSTHOG_HOST,,
       }}
     >
       {children}
