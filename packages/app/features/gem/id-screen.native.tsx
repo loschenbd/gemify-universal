@@ -242,6 +242,7 @@ export const IdScreen = ({ sharedToken }: IdScreenProps) => {
       setIsShareModalOpen(true)
     }
   }
+
   const handleDelete = async () => {
     if (gemId) {
       console.log('Deleting gem:', gemId)
@@ -285,6 +286,11 @@ export const IdScreen = ({ sharedToken }: IdScreenProps) => {
         console.log('Optimistic update reverted')
       }
     }
+  }
+
+  if (showShare === undefined) {
+    // the response is undefined if the flags are being loaded
+    return null
   }
 
   return (
