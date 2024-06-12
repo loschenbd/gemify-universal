@@ -1,0 +1,23 @@
+{
+  "applinks": {
+    "apps": [],
+    "details": [
+      {
+        "appID": "74KV536J36.com.smartlemon.gemify",
+        "paths": [
+          "/*"
+        ]
+      }
+    ]
+  },
+  "activitycontinuation": {
+    "apps": [
+      "74KV536J36.com.smartlemon.gemify"
+    ]
+  },
+  "webcredentials": {
+    "apps": [
+      "74KV536J36.com.smartlemon.gemify"
+    ]
+  }
+}

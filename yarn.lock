@@ -9313,6 +9313,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/react-native-get-random-values@npm:^1":
+  version: 1.8.2
+  resolution: "@types/react-native-get-random-values@npm:1.8.2"
+  checksum: 10/08f3f82efbb5b6d9acd8f7f55a2dac9f228886323ac3018a1bab46cd1b45f24809d194fd2a3fe02a9ec4196606325e5cfffde0b0057ae785208b658fdc83c821
+  languageName: node
+  linkType: hard
+
 "@types/react@npm:>=16, @types/react@npm:^18.0.27":
   version: 18.3.3
   resolution: "@types/react@npm:18.3.3"
@@ -10704,6 +10711,7 @@ __metadata:
     burnt: "npm:^0.12.1"
     eslint-config-custom: "npm:*"
     expo-av: "npm:13.10.5"
+    expo-clipboard: "npm:^6.0.3"
     expo-constants: "npm:~15.4.5"
     expo-device: "npm:6.0.2"
     expo-image-picker: "npm:~14.7.1"
@@ -13081,6 +13089,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"crypto@npm:^1.0.1":
+  version: 1.0.1
+  resolution: "crypto@npm:1.0.1"
+  checksum: 10/087fe3165bd94c333a49e6ed66a0193911f63eac38a24f379b3001a5fe260a59c413646e53a0f67875ba13902b2686d81dc703cb2c147a4ec727dcdc04e5645e
+  languageName: node
+  linkType: hard
+
 "css-in-js-utils@npm:^3.1.0":
   version: 3.1.0
   resolution: "css-in-js-utils@npm:3.1.0"
@@ -13701,6 +13716,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"dijkstrajs@npm:^1.0.1":
+  version: 1.0.3
+  resolution: "dijkstrajs@npm:1.0.3"
+  checksum: 10/0d8429699a6d5897ed371de494ef3c7072e8052b42abbd978e686a9b8689e70af005fa3e93e93263ee3653673ff5f89c36db830a57ae7c2e088cb9c496307507
+  languageName: node
+  linkType: hard
+
 "dir-glob@npm:^3.0.1":
   version: 3.0.1
   resolution: "dir-glob@npm:3.0.1"
@@ -14027,6 +14049,13 @@ __metadata:
   version: 3.0.0
   resolution: "emojis-list@npm:3.0.0"
   checksum: 10/114f47d6d45612621497d2b1556c8f142c35332a591780a54e863e42d281e72d6c7d7c419f2e419319d4eb7f6ebf1db82d9744905d90f275db20d06a763b5e19
+  languageName: node
+  linkType: hard
+
+"encode-utf8@npm:^1.0.3":
+  version: 1.0.3
+  resolution: "encode-utf8@npm:1.0.3"
+  checksum: 10/0204c37cda21bf19bb8f87f7ec6c89a23d43488c2ef1e5cfa40b64ee9568e63e15dc323fa7f50a491e2c6d33843a6b409f6de09afbf6cf371cb8da596cc64b44
   languageName: node
   linkType: hard
 
@@ -15371,6 +15400,7 @@ __metadata:
     "@react-native-community/netinfo": "npm:11.1.0"
     "@sentry/react-native": "npm:~5.20.0"
     "@tamagui/babel-plugin": "npm:^1.91.4"
+    "@types/react-native-get-random-values": "npm:^1"
     app: "npm:*"
     babel-plugin-module-resolver: "npm:^4.1.0"
     babel-plugin-transform-inline-environment-variables: "npm:^0.4.4"
@@ -15378,6 +15408,7 @@ __metadata:
     base64-arraybuffer: "npm:^1.0.2"
     burnt: "npm:^0.12.1"
     cross-env: "npm:^7.0.3"
+    crypto: "npm:^1.0.1"
     eslint-plugin-import: "npm:^2.28.0"
     expo: "npm:~50.0.5"
     expo-apple-authentication: "npm:~6.3.0"
@@ -15413,6 +15444,8 @@ __metadata:
     react-native-clean-project: "npm:^4.0.3"
     react-native-dotenv: "npm:^3.4.9"
     react-native-gesture-handler: "npm:~2.14.1"
+    react-native-get-random-values: "npm:^1.11.0"
+    react-native-qrcode-svg: "npm:^6.3.1"
     react-native-reanimated: "npm:~3.6.2"
     react-native-safe-area-context: "npm:4.8.2"
     react-native-screens: "npm:~3.29.0"
@@ -15494,6 +15527,15 @@ __metadata:
   peerDependencies:
     expo: "*"
   checksum: 10/c88b0ef3b6a02c7fba11d0a46c7857efb9ce6a507cea6c994137fafb75433e8d13f838982b577c3bab0c90c3fc42911c55f1966312b6724bb8171d440210cf2b
+  languageName: node
+  linkType: hard
+
+"expo-clipboard@npm:^6.0.3":
+  version: 6.0.3
+  resolution: "expo-clipboard@npm:6.0.3"
+  peerDependencies:
+    expo: "*"
+  checksum: 10/28f383d73e4719ea21715fb951550c2fe0f79f84ba4af53364eaf59bcbb081284f3dae58a0011c07e2084117fd95a643f3a1007e44edd9968f4c6d88fcae46da
   languageName: node
   linkType: hard
 
@@ -15974,6 +16016,13 @@ __metadata:
   bin:
     extract-zip: cli.js
   checksum: 10/a9a5e2b118cc1d3b780d296f056308a8fda580bb18a26e12d6137321e5d3ef1d09355195ff187e9c7039aab42a253ac1e3996c66d031c44abca5abde6fd51393
+  languageName: node
+  linkType: hard
+
+"fast-base64-decode@npm:^1.0.0":
+  version: 1.0.0
+  resolution: "fast-base64-decode@npm:1.0.0"
+  checksum: 10/4c59eb1775a7f132333f296c5082476fdcc8f58d023c42ed6d378d2e2da4c328c7a71562f271181a725dd17cdaa8f2805346cc330cdbad3b8e4b9751508bd0a3
   languageName: node
   linkType: hard
 
@@ -16793,9 +16842,11 @@ __metadata:
     eslint: "npm:^8.46.0"
     expo-av: "npm:13.10.5"
     expo-router: "npm:~3.4.10"
+    nanoid: "npm:^5.0.7"
     node-gyp: "npm:^9.3.1"
     posthog-js: "npm:^1.136.5"
     prettier: "npm:^2.7.1"
+    qrcode.react: "npm:^3.1.0"
     react: "npm:18.2.0"
     react-dom: "npm:18.2.0"
     react-native: "npm:0.73.6"
@@ -20858,6 +20909,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"nanoid@npm:^5.0.7":
+  version: 5.0.7
+  resolution: "nanoid@npm:5.0.7"
+  bin:
+    nanoid: bin/nanoid.js
+  checksum: 10/25ab0b0cf9082ae6747f0f55cec930e6c1cc5975103aa3a5fda44be5720eff57d9b25a8a9850274bfdde8def964b49bf03def71c6aa7ad1cba32787819b79f60
+  languageName: node
+  linkType: hard
+
 "napi-build-utils@npm:^1.0.1":
   version: 1.0.2
   resolution: "napi-build-utils@npm:1.0.2"
@@ -22408,6 +22468,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"pngjs@npm:^5.0.0":
+  version: 5.0.0
+  resolution: "pngjs@npm:5.0.0"
+  checksum: 10/345781644740779752505af2fea3e9043f6c7cc349b18e1fb8842796360d1624791f0c24d33c0f27b05658373f90ffaa177a849e932e5fea1f540cef3975f3c9
+  languageName: node
+  linkType: hard
+
 "pnp-webpack-plugin@npm:^1.7.0":
   version: 1.7.0
   resolution: "pnp-webpack-plugin@npm:1.7.0"
@@ -22849,7 +22916,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prop-types@npm:^15.5.10, prop-types@npm:^15.7.2, prop-types@npm:^15.8.1":
+"prop-types@npm:^15.5.10, prop-types@npm:^15.7.2, prop-types@npm:^15.8.0, prop-types@npm:^15.8.1":
   version: 15.8.1
   resolution: "prop-types@npm:15.8.1"
   dependencies:
@@ -22994,6 +23061,29 @@ __metadata:
   bin:
     qrcode-terminal: ./bin/qrcode-terminal.js
   checksum: 10/61fe2336b954584f321f2593d7e33f5b235788d829ea982f11a388d1e80e9cafb086dd28e7bd1649859cac62a6eb5818c9de14657222e3f66ba7376d0edccefd
+  languageName: node
+  linkType: hard
+
+"qrcode.react@npm:^3.1.0":
+  version: 3.1.0
+  resolution: "qrcode.react@npm:3.1.0"
+  peerDependencies:
+    react: ^16.8.0 || ^17.0.0 || ^18.0.0
+  checksum: 10/71953241f151ca5ad4013c034cb13033e1ebad56a1db77297a7ddd7fd4d5f137f37f3be51133aeef0b54dc52d6c76630429d2269bd72e6858c3209fe42310498
+  languageName: node
+  linkType: hard
+
+"qrcode@npm:^1.5.1":
+  version: 1.5.3
+  resolution: "qrcode@npm:1.5.3"
+  dependencies:
+    dijkstrajs: "npm:^1.0.1"
+    encode-utf8: "npm:^1.0.3"
+    pngjs: "npm:^5.0.0"
+    yargs: "npm:^15.3.1"
+  bin:
+    qrcode: bin/qrcode
+  checksum: 10/823642d59a81ba5f406a1e78415fee37fd53856038f49a85c4ca7aa32ba6b8505ab059a832718ac16612bed75aa2a18584faae38cf3c25e2c90fb19b8c55fe46
   languageName: node
   linkType: hard
 
@@ -23333,6 +23423,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-native-get-random-values@npm:^1.11.0":
+  version: 1.11.0
+  resolution: "react-native-get-random-values@npm:1.11.0"
+  dependencies:
+    fast-base64-decode: "npm:^1.0.0"
+  peerDependencies:
+    react-native: ">=0.56"
+  checksum: 10/eb04833ce2b66309d737f1447ab01ad32aca00a8d1cc4de7b4e751c23f4d9f8059a2643bb16e0b6f3e6b074a9e57e769bb2bf2afc50a912c5661d80a6ce4de34
+  languageName: node
+  linkType: hard
+
 "react-native-helmet-async@npm:2.0.4":
   version: 2.0.4
   resolution: "react-native-helmet-async@npm:2.0.4"
@@ -23364,6 +23465,20 @@ __metadata:
   dependencies:
     prop-types: "npm:^15.5.10"
   checksum: 10/6c42fb381c5fab4cd17a6b574cbcca256deeebd202545456eea86d05a76c430cc11192564299c8cb1be8348dd9cc2d1decd642341b517294bb1959545262f603
+  languageName: node
+  linkType: hard
+
+"react-native-qrcode-svg@npm:^6.3.1":
+  version: 6.3.1
+  resolution: "react-native-qrcode-svg@npm:6.3.1"
+  dependencies:
+    prop-types: "npm:^15.8.0"
+    qrcode: "npm:^1.5.1"
+  peerDependencies:
+    react: "*"
+    react-native: ">=0.63.4"
+    react-native-svg: ">=13.2.0"
+  checksum: 10/6e5e0ad3a7ecdd80cfea76b850307f7c88e1344a00571cb12f14625c1ac031c2ccdb1ad075848ec470b56072e5f121c7d661f32983032cf9b9f8d89d55091495
   languageName: node
   linkType: hard
 
@@ -28418,7 +28533,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"yargs@npm:^15.1.0":
+"yargs@npm:^15.1.0, yargs@npm:^15.3.1":
   version: 15.4.1
   resolution: "yargs@npm:15.4.1"
   dependencies:

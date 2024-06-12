@@ -21,6 +21,7 @@ import { Audio } from 'expo-av'
 import { Recording } from 'expo-av/build/Audio'
 import { activateKeepAwakeAsync, deactivateKeepAwake } from 'expo-keep-awake'
 import { Stack, Tabs } from 'expo-router'
+import { nanoid } from 'nanoid'
 import { useState, useEffect } from 'react'
 import { SolitoImage } from 'solito/image'
 import { Upload } from 'tus-js-client'
@@ -136,7 +137,9 @@ const RecordButton = ({ size }: TabBarIconProps) => {
       newRecording.setOnRecordingStatusUpdate((status) => {
         setDuration(status.durationMillis)
         if (status.isRecording) {
-          setMeteringData((prevData) => [...prevData, status.metering])
+          setMeteringData((prevData) =>
+            [...prevData, status.metering].filter((value) => value !== undefined)
+          )
         } else {
           setRecordingDuration(status.durationMillis)
         }
@@ -200,6 +203,8 @@ const RecordButton = ({ size }: TabBarIconProps) => {
         data: { session },
       } = await supabase.auth.getSession()
 
+      const sharing_token = nanoid() // Generate a unique sharing token using nanoid
+
       const upload = new Upload(fileData, {
         endpoint: `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/upload/resumable`,
         retryDelays: [0, 3000, 5000, 10000, 20000],
@@ -214,6 +219,7 @@ const RecordButton = ({ size }: TabBarIconProps) => {
           objectName: `${folderName}/${fileName}`,
           contentType: 'audio/mpeg',
           cacheControl: 3600,
+          sharing_token,
         },
         chunkSize: 6 * 1024 * 1024,
         onError(error) {
@@ -235,6 +241,7 @@ const RecordButton = ({ size }: TabBarIconProps) => {
             duration: durationMillis,
             profile_id: user.profile?.id,
             author,
+            sharing_token,
           })
 
           if (insertError) {

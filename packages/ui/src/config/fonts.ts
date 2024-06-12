@@ -41,6 +41,7 @@ export const myFont = createUrbanistFont(
       },
     },
   },
+
   {
     // customize the size and line height scaling to your own needs
     sizeSize: (size) => Math.round(size * 1.1),
@@ -50,6 +51,8 @@ export const myFont = createUrbanistFont(
 
 export const headingFont = createUrbanistFont(
   {
+    family: 'var(--my-font)',
+
     size: {
       6: 15,
     },
@@ -73,8 +76,10 @@ export const headingFont = createUrbanistFont(
 
 export const bodyFont = createUrbanistFont(
   {
+    family: 'var(--my-font)',
+
     face: {
-      700: { normal: 'Urbanist' },
+      400: { normal: 'Urbanist' },
     },
   },
   {

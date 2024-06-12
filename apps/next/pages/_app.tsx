@@ -39,13 +39,9 @@ function MyApp({
     <>
       <div className={font.variable}>
         <Head>
-          <title>Tamagui Universal App</title>
-          <meta name="description" content="Tamagui Universal Starter" />
+          <title>Gemify</title>
+          <meta name="Gemify" content="Steward Your Prohetic Words" />
           <link rel="icon" href="/favicon.svg" />
-          <style>
-            @import
-            url('https://fonts.googleapis.com/css2?family=Urbanist:ital,wght@0,100..900;1,100..900&display=swap')
-          </style>
         </Head>
         <NextThemeProvider
           onChangeTheme={(next) => {

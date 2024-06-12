@@ -19,6 +19,7 @@ export interface Database {
           profile_id: string | null
           public: boolean | null
           related_topics: string[] | null
+          sharing_token: string | null
           stories: string[] | null
           summary: string | null
           tags: string | null
@@ -40,6 +41,7 @@ export interface Database {
           profile_id?: string | null
           public?: boolean | null
           related_topics?: string[] | null
+          sharing_token?: string | null
           stories?: string[] | null
           summary?: string | null
           tags?: string | null
@@ -61,6 +63,7 @@ export interface Database {
           profile_id?: string | null
           public?: boolean | null
           related_topics?: string[] | null
+          sharing_token?: string | null
           stories?: string[] | null
           summary?: string | null
           tags?: string | null

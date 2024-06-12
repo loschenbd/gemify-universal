@@ -21,13 +21,14 @@ import { useUser } from 'app/utils/useUser'
 import { Audio, AVPlaybackStatus } from 'expo-av'
 import 'react-native-get-random-values'
 import { nanoid } from 'nanoid'
+import { useFeatureFlag } from 'posthog-react-native'
 import { useState, useEffect } from 'react'
 import { Pressable } from 'react-native'
 import { createParam } from 'solito'
 import { useRouter } from 'solito/router'
 import { AlertDialog } from 'tamagui'
 
-type Gem = Database['public']['Tables']['gems']['Row'] & {}
+type Gem = Database['public']['Tables']['gems']['Row']
 
 type IdScreenProps = {
   sharedToken?: string
@@ -36,15 +37,17 @@ type IdScreenProps = {
 const { useParam } = createParam<{ id: string; sharedToken?: string }>()
 
 export const IdScreen = ({ sharedToken }: IdScreenProps) => {
+  const showShare = useFeatureFlag('share-gems')
+
   const supabase = useSupabase()
   const queryClient = useQueryClient()
   const { user } = useUser()
 
   const { back } = useRouter()
-  const [id, setId] = useParam('id')
+  const [id, { sharedToken: routeSharedToken }] = useParam('id', 'sharedToken')
   const gemId = id ? parseInt(id, 10) : undefined
 
-  const [sound, setSound] = useState<Audio.Sound | undefined>(undefined)
+  const [sound, setSound] = useState<Audio.Sound | null>(null)
   const [isSoundLoading, setIsSoundLoading] = useState(false)
   const [playing, setPlaying] = useState(false)
   const [progress, setProgress] = useState(0)
@@ -52,13 +55,13 @@ export const IdScreen = ({ sharedToken }: IdScreenProps) => {
   const [soundError, setSoundError] = useState<string | null>(null)
   const [isShareModalOpen, setIsShareModalOpen] = useState(false)
 
-  const token = sharedToken
+  const token = sharedToken || routeSharedToken
 
   const {
     data: gem,
     isLoading: isGemLoading,
     error: gemError,
-  } = useQuery<Gem | null>(['gem', gemId, token], async () => {
+  } = useQuery(['gem', gemId, token], async () => {
     if (token) {
       const { data, error } = await supabase
         .from('gems')
@@ -102,19 +105,11 @@ export const IdScreen = ({ sharedToken }: IdScreenProps) => {
             return
           }
 
-          if (signedUrlError) {
-            console.error('Error getting signed URL:', signedUrlError)
-            setSoundError('Failed to load audio')
-            setIsSoundLoading(false)
-            return
-          }
-
           console.log('Signed URL:', signedUrl)
 
           const { sound, status } = await Audio.Sound.createAsync({
-            uri: signedUrl.signedUrl,
+            uri: `${signedUrl.signedUrl}`,
           })
-
           await Audio.setAudioModeAsync({
             allowsRecordingIOS: false,
             staysActiveInBackground: false,
@@ -376,7 +371,7 @@ export const IdScreen = ({ sharedToken }: IdScreenProps) => {
                   handleSliderValueChange={handleSliderValueChange}
                 />
               )}
-              {!isWeb && (
+              {!isWeb && showShare && (
                 <>
                   <Pressable onPress={handleShare}>
                     <Share ml="$4" />
@@ -489,7 +484,7 @@ export const IdScreen = ({ sharedToken }: IdScreenProps) => {
               <View p="$4">
                 <H3 p="$2">Transcript</H3>
                 <Text py="$1" px="$3">
-                  <YStack gap="$1">
+                  <YStack space="$1">
                     {gem.transcript.map((paragraph, index) => (
                       <Paragraph py="$1" px="$3" key={index}>
                         {paragraph}

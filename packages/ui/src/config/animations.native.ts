@@ -40,4 +40,23 @@ export const animations = createAnimations({
     mass: 0.9,
     stiffness: 100,
   },
+  pulse: {
+    type: 'timing',
+    duration: 1000,
+    loop: true,
+    keyframes: {
+      '0%': {
+        scale: 1,
+        opacity: 1,
+      },
+      '50%': {
+        scale: 1.2,
+        opacity: 0.8,
+      },
+      '100%': {
+        scale: 1,
+        opacity: 1,
+      },
+    },
+  },
 })

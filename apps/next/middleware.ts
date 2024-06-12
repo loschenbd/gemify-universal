@@ -23,6 +23,7 @@ export async function middleware(req: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser()
   const isAuthRoute = authRoutes.some((route) => req.nextUrl.pathname.startsWith(route))
+
   // redirect if a logged in user is accessing an auth route (e.g. /sign-in)
   if (user && isAuthRoute) {
     const redirectUrl = req.nextUrl.clone()
@@ -35,6 +36,14 @@ export async function middleware(req: NextRequest) {
   }
   // restrict the user if trying to access protected routes
   if (!user) {
+    // Allow access to the gem page for unauthenticated users with a valid sharing_token
+    if (
+      !user &&
+      req.nextUrl.pathname.startsWith('/gem/') &&
+      req.nextUrl.searchParams.has('sharedToken')
+    ) {
+      return res
+    }
     console.log('there no is user ', req.nextUrl.pathname)
     const redirectUrl = req.nextUrl.clone()
     redirectUrl.pathname = '/sign-in'

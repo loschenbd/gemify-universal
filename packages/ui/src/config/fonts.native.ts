@@ -64,7 +64,7 @@ const bodySize = {
   16: 134,
 }
 export const bodyFont = createFont({
-  family: 'System',
+  family: 'Urbanist',
   weight: {
     1: '300',
     // 2 will be 300
@@ -78,7 +78,7 @@ export const bodyFont = createFont({
     Object.entries(headingSize).map(([k, v]) => [k, getVariableValue(v) + 5])
   ),
   face: {
-    300: { normal: 'InterLight', italic: 'InterItalic' },
-    600: { normal: 'InterBold' },
+    300: { normal: 'Urbanist', italic: 'UrbanistItalic' },
+    600: { normal: 'UrbanistBold' },
   },
 })

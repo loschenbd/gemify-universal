@@ -16,6 +16,4 @@ export const Page: NextPageWithLayout = () => {
 
 // Page.getLayout = (page) => <YourLayout>{page}</YourLayout>
 
-
-
 export default Page
