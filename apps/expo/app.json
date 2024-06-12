@@ -79,8 +79,6 @@
       ]
     ],
     "extra": {
-      "POSTHOG_KEY": "phc_6Rir7ueQhqGSPSRIqdELiCTrWia998S6eBdIvKcWK6H",
-      "POSTHOG_HOST": "https://us.i.posthog.com",
       "router": {
         "origin": false
       },

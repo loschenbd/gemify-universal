@@ -377,7 +377,7 @@ export const IdScreen = ({ sharedToken }: IdScreenProps) => {
                   handleSliderValueChange={handleSliderValueChange}
                 />
               )}
-              {!isWeb && showShare && (
+              {!isWeb && (
                 <>
                   <Pressable onPress={handleShare}>
                     <Share ml="$4" />
