@@ -11,7 +11,7 @@ type ShareGemModalProps = {
 
 export const ShareGemModal = ({ isOpen, onClose, sharingToken, id }: ShareGemModalProps) => {
   // const deepLinkUrl = `gemify://gem/${id}?sharedToken=${sharingToken}`
-  const fallbackWebUrl = `${process.env.NEXT_PUBLIC_URL}/gem/${id}?sharedToken=${sharingToken}`
+  const fallbackWebUrl = `https://staging.gemify.app/gem/${id}?sharedToken=${sharingToken}`
 
   // const shareableUrl = `${deepLinkUrl}&fallback=${encodeURIComponent(fallbackWebUrl)}`
   const toast = useToastController()
