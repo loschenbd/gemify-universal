@@ -1,6 +1,6 @@
 {
   "extends": "../../tsconfig.base",
-  "include": ["src", "../app"],
+  "include": ["src", "../app", "../../apps/expo/app/daily-update/_layout.tsx"],
   "compilerOptions": {
     "noEmit": true,
     "composite": true,

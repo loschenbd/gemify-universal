@@ -1,6 +1,15 @@
 {
   "extends": "../../tsconfig.base",
-  "include": ["features", "provider", "utils", "index.ts", "types.d.ts", "../ui/src", "../api/src"],
+  "include": [
+    "features",
+    "provider",
+    "utils",
+    "index.ts",
+    "types.d.ts",
+    "../ui/src",
+    "../api/src",
+    "../../apps/expo/app/daily-update/_layout.tsx"
+  ],
   "compilerOptions": {
     "noEmit": true,
     "composite": true,

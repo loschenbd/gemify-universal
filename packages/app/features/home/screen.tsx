@@ -11,7 +11,7 @@ import {
   isWeb,
   Skeleton,
 } from '@my/ui'
-import { ArrowDown } from '@tamagui/lucide-icons'
+import { ArrowDown, Sparkles } from '@tamagui/lucide-icons'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { formatDuration } from 'app/utils/formatDuration'
 import { useSupabase } from 'app/utils/supabase/useSupabase'
@@ -221,6 +221,12 @@ const GemCards: React.FC<GemCardsProps> = ({ gems }) => {
 
   return (
     <AnimatePresence>
+      <Link href="/daily-update">
+        <XStack jc="flex-end">
+          <Sparkles size="$1" />
+          <Text pl="$1">Daily Treasure</Text>
+        </XStack>
+      </Link>
       <YStack p="$2" gap="$2">
         {sortedGems.map((gem) => (
           <YStack
