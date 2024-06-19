@@ -1,4 +1,5 @@
 import { Database } from '@my/supabase/types'
+import * as Sentry from '@sentry/react-native'
 import { createClient } from '@supabase/supabase-js'
 import * as SecureStore from 'expo-secure-store'
 
@@ -19,14 +20,50 @@ if (!process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY) {
 const supabaseUrl = replaceLocalhost(process.env.EXPO_PUBLIC_SUPABASE_URL)
 
 const ExpoSecureStoreAdapter = {
-  getItem: (key: string) => {
-    return SecureStore.getItemAsync(key)
+  getItem: async (key: string) => {
+    try {
+      const value = await SecureStore.getItemAsync(key)
+      console.log('Retrieved from SecureStore:', key, value)
+      Sentry.addBreadcrumb({
+        category: 'secureStore',
+        message: 'Retrieved item from SecureStore',
+        data: { key, value },
+      })
+      return value
+    } catch (error) {
+      console.error('Error retrieving from SecureStore:', key, error)
+      Sentry.captureException(error)
+      throw error
+    }
   },
-  setItem: (key: string, value: string) => {
-    SecureStore.setItemAsync(key, value)
+  setItem: async (key: string, value: string) => {
+    try {
+      await SecureStore.setItemAsync(key, value)
+      console.log('Stored in SecureStore:', key, value)
+      Sentry.addBreadcrumb({
+        category: 'secureStore',
+        message: 'Stored item in SecureStore',
+        data: { key },
+      })
+    } catch (error) {
+      console.error('Error storing in SecureStore:', key, error)
+      Sentry.captureException(error)
+      throw error
+    }
   },
-  removeItem: (key: string) => {
-    SecureStore.deleteItemAsync(key)
+
+  removeItem: async (key: string) => {
+    try {
+      await SecureStore.deleteItemAsync(key)
+      Sentry.addBreadcrumb({
+        category: 'auth',
+        message: 'Removed item from SecureStore',
+        data: { key },
+      })
+    } catch (error) {
+      Sentry.captureException(error)
+      throw error
+    }
   },
 }
 
