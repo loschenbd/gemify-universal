@@ -1,5 +1,16 @@
 import { Database } from '@my/supabase/types'
-import { YStack, H3, Text, Paragraph, XStack, View, ScrollView, Skeleton, H2 } from '@my/ui'
+import {
+  YStack,
+  H3,
+  Text,
+  Paragraph,
+  XStack,
+  View,
+  ScrollView,
+  Skeleton,
+  H2,
+  BackButton,
+} from '@my/ui'
 import { ArrowUpRight } from '@tamagui/lucide-icons'
 import { useQuery } from '@tanstack/react-query'
 import { useSupabase } from 'app/utils/supabase/useSupabase'
@@ -8,7 +19,7 @@ import { format } from 'date-fns'
 import { Link } from 'solito/link'
 
 type ProcessedGem = {
-  gemId: string
+  gemId: string | number
   positive_declarations: string[]
   // Add other properties if needed
 }
@@ -16,7 +27,11 @@ type ProcessedGem = {
 type DailyUpdate = Database['public']['Tables']['daily_updates']['Row']
 
 function isProcessedGem(obj: any): obj is ProcessedGem {
-  return obj && typeof obj.gemId === 'string' && Array.isArray(obj.positive_declarations)
+  return (
+    obj &&
+    (typeof obj.gemId === 'string' || typeof obj.gemId === 'number') &&
+    Array.isArray(obj.positive_declarations)
+  )
 }
 
 export const DailyUpdateScreen = () => {
@@ -79,6 +94,7 @@ export const DailyUpdateScreen = () => {
 
   return (
     <ScrollView>
+      <BackButton />
       <YStack>
         <View f={1} ai="center" p="$4">
           <H2>{currentDate}</H2>
@@ -94,24 +110,31 @@ export const DailyUpdateScreen = () => {
           <H3 p="$2">Declarations</H3>
           {dailyUpdate.processed_gems?.map((gem, gemIndex) => (
             <View key={gemIndex}>
-              {isProcessedGem(gem) &&
-                gem.positive_declarations.map((declaration, declarationIndex) => (
-                  <View py="$1" px="$3" key={declarationIndex}>
-                    <XStack>
-                      <Paragraph pr="$1.5" size="$6">
-                        •
-                      </Paragraph>
-                      <Paragraph>
-                        {declaration}
-                        <Paragraph>
-                          <Link href={`/gem/${gem.gemId}`}>
-                            <ArrowUpRight size="$1" />
-                          </Link>
+              {console.log('Gem:', gem)}
+              {isProcessedGem(gem) ? (
+                <>
+                  {console.log('Positive Declarations:', gem.positive_declarations)}
+                  {gem.positive_declarations.map((declaration, declarationIndex) => (
+                    <View py="$1" px="$3" key={declarationIndex}>
+                      <XStack>
+                        <Paragraph pr="$1.5" size="$6">
+                          •
                         </Paragraph>
-                      </Paragraph>
-                    </XStack>
-                  </View>
-                ))}
+                        <Paragraph>
+                          {declaration}
+                          <Paragraph>
+                            <Link href={`/gem/${gem.gemId}`}>
+                              <ArrowUpRight size="$1" />
+                            </Link>
+                          </Paragraph>
+                        </Paragraph>
+                      </XStack>
+                    </View>
+                  ))}
+                </>
+              ) : (
+                console.log('Not a processed gem:', gem)
+              )}
             </View>
           ))}
         </View>

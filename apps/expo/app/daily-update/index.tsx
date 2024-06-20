@@ -8,6 +8,7 @@ export default function Screen() {
       <Stack.Screen
         options={{
           title: 'Daily Update',
+          headerShown: false,
         }}
       />
       <DailyUpdateScreen />

@@ -222,7 +222,7 @@ const GemCards: React.FC<GemCardsProps> = ({ gems }) => {
   return (
     <AnimatePresence>
       <Link href="/daily-update">
-        <XStack jc="flex-end">
+        <XStack px="$4" jc="flex-end">
           <Sparkles size="$1" />
           <Text pl="$1">Daily Treasure</Text>
         </XStack>

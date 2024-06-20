@@ -13,6 +13,7 @@ import {
   Skeleton,
   ShareGemModal,
   isWeb,
+  BackButton,
 } from '@my/ui'
 import { Gem as GemIcon, ArrowLeftCircle, Trash2, Share } from '@tamagui/lucide-icons'
 import { useQueryClient, useQuery } from '@tanstack/react-query'
@@ -297,9 +298,7 @@ export const IdScreen = ({ sharedToken }: IdScreenProps) => {
       <ScrollView>
         <YStack ai="center">
           <XStack w="100%" px="$4" ai="center" jc="space-between">
-            <Pressable onPress={onGoBack}>
-              <ArrowLeftCircle size="$3" col="$gray10" />
-            </Pressable>
+            <BackButton />
             {!isWeb && (
               <AlertDialog native>
                 <AlertDialog.Trigger asChild>
