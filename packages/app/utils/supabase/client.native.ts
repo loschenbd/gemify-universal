@@ -23,7 +23,6 @@ const ExpoSecureStoreAdapter = {
   getItem: async (key: string) => {
     try {
       const value = await SecureStore.getItemAsync(key)
-      console.log('Retrieved from SecureStore:', key, value)
       Sentry.addBreadcrumb({
         category: 'secureStore',
         message: 'Retrieved item from SecureStore',
@@ -39,14 +38,12 @@ const ExpoSecureStoreAdapter = {
   setItem: async (key: string, value: string) => {
     try {
       await SecureStore.setItemAsync(key, value)
-      console.log('Stored in SecureStore:', key, value)
       Sentry.addBreadcrumb({
         category: 'secureStore',
         message: 'Stored item in SecureStore',
         data: { key },
       })
     } catch (error) {
-      console.error('Error storing in SecureStore:', key, error)
       Sentry.captureException(error)
       throw error
     }
