@@ -26,7 +26,7 @@
       "associatedDomains": [
         "applinks:staging.gemify.app"
       ],
-      "buildNumber": "42",
+      "buildNumber": "43",
       "usesAppleSignIn": true,
       "infoPlist": {
         "UIBackgroundModes": [
