@@ -1,19 +1,22 @@
-import { YStack, H3, Text, Paragraph, XStack, View, ScrollView, Skeleton, Button, H2 } from '@my/ui'
+import { Database } from '@my/supabase/types'
+import { YStack, H3, Text, Paragraph, XStack, View, ScrollView, Skeleton, H2 } from '@my/ui'
 import { ArrowUpRight } from '@tamagui/lucide-icons'
 import { useQuery } from '@tanstack/react-query'
-
 import { useSupabase } from 'app/utils/supabase/useSupabase'
 import { useUser } from 'app/utils/useUser'
 import { format } from 'date-fns'
 import { Link } from 'solito/link'
 
-type DailyUpdate = {
-  id: number
-  profile_id: string
-  processed_gems: any[]
-  devotional: string
-  prayer: string
-  date: string
+type ProcessedGem = {
+  gemId: string
+  positive_declarations: string[]
+  // Add other properties if needed
+}
+
+type DailyUpdate = Database['public']['Tables']['daily_updates']['Row']
+
+function isProcessedGem(obj: any): obj is ProcessedGem {
+  return obj && typeof obj.gemId === 'string' && Array.isArray(obj.positive_declarations)
 }
 
 export const DailyUpdateScreen = () => {
@@ -89,25 +92,26 @@ export const DailyUpdateScreen = () => {
         {/* Positive Declarations */}
         <View px="$4">
           <H3 p="$2">Declarations</H3>
-          {dailyUpdate.processed_gems.map((gem, gemIndex) => (
+          {dailyUpdate.processed_gems?.map((gem, gemIndex) => (
             <View key={gemIndex}>
-              {gem.positive_declarations.map((declaration, declarationIndex) => (
-                <View py="$1" px="$3" key={declarationIndex}>
-                  <XStack>
-                    <Paragraph pr="$1.5" size="$6">
-                      •
-                    </Paragraph>
-                    <Paragraph>
-                      {declaration}
-                      <Paragraph>
-                        <Link href={`/gem/${gem.gemId}`}>
-                          <ArrowUpRight size="$1" />
-                        </Link>
+              {isProcessedGem(gem) &&
+                gem.positive_declarations.map((declaration, declarationIndex) => (
+                  <View py="$1" px="$3" key={declarationIndex}>
+                    <XStack>
+                      <Paragraph pr="$1.5" size="$6">
+                        •
                       </Paragraph>
-                    </Paragraph>
-                  </XStack>
-                </View>
-              ))}
+                      <Paragraph>
+                        {declaration}
+                        <Paragraph>
+                          <Link href={`/gem/${gem.gemId}`}>
+                            <ArrowUpRight size="$1" />
+                          </Link>
+                        </Paragraph>
+                      </Paragraph>
+                    </XStack>
+                  </View>
+                ))}
             </View>
           ))}
         </View>

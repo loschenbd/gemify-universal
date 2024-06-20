@@ -27,7 +27,7 @@ import { createParam } from 'solito'
 import { useRouter } from 'solito/router'
 import { AlertDialog } from 'tamagui'
 
-type Gem = Database['public']['Tables']['gems']['Row'] & {}
+type Gem = Database['public']['Tables']['gems']['Row']
 
 type IdScreenProps = {
   sharedToken?: string
