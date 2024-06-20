@@ -79,9 +79,12 @@ export const DailyUpdateScreen = () => {
   if (dailyUpdateError) {
     console.error('Daily update error:', dailyUpdateError)
     return (
-      <Text>
-        Error: {dailyUpdateError instanceof Error ? dailyUpdateError.message : 'Unknown error'}
-      </Text>
+      <View gap="$4" p="$4">
+        <BackButton />
+        <Text>
+          Error: {dailyUpdateError instanceof Error ? dailyUpdateError.message : 'Unknown error'}
+        </Text>
+      </View>
     )
   }
 
@@ -89,7 +92,12 @@ export const DailyUpdateScreen = () => {
     console.warn('Daily update not found')
     console.warn('Profile ID:', user?.id)
     console.warn('Current Date:', dbCurrentDate)
-    return <Text>Daily update not found</Text>
+    return (
+      <View>
+        <BackButton />
+        <Text>Daily update not found</Text>
+      </View>
+    )
   }
 
   return (

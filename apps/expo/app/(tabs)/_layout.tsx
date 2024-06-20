@@ -13,6 +13,7 @@ import {
   Waveform,
 } from '@my/ui'
 import { BottomTabNavigationOptions } from '@react-navigation/bottom-tabs'
+import * as Sentry from '@sentry/react-native'
 import { LinearGradient } from '@tamagui/linear-gradient'
 import { Home, X, Circle as CircleIcon, StopCircle, CheckCircle } from '@tamagui/lucide-icons'
 import { formatDuration } from 'app/utils/formatDuration'
@@ -188,6 +189,11 @@ const RecordButton = ({ size }: TabBarIconProps) => {
   async function saveRecording(durationMillis: number, title: string, author: string) {
     if (!user) {
       console.error('User not authenticated')
+      Sentry.addBreadcrumb({
+        category: 'auth',
+        message: 'User not authenticated',
+        level: 'error',
+      })
       return
     }
 
@@ -202,6 +208,20 @@ const RecordButton = ({ size }: TabBarIconProps) => {
       const {
         data: { session },
       } = await supabase.auth.getSession()
+
+      if (session && session.access_token) {
+        Sentry.addBreadcrumb({
+          category: 'auth',
+          message: 'Session token retrieved successfully',
+          level: 'info',
+        })
+      } else {
+        Sentry.addBreadcrumb({
+          category: 'auth',
+          message: 'Session token not found',
+          level: 'warning',
+        })
+      }
 
       const sharing_token = nanoid() // Generate a unique sharing token using nanoid
 
@@ -224,6 +244,12 @@ const RecordButton = ({ size }: TabBarIconProps) => {
         chunkSize: 6 * 1024 * 1024,
         onError(error) {
           console.log('Failed because: ' + error)
+          Sentry.captureException(error)
+          Sentry.addBreadcrumb({
+            category: 'upload',
+            message: 'Audio upload failed',
+            level: 'error',
+          })
         },
         onProgress: (bytesUploaded, bytesTotal) => {
           const percentage = ((bytesUploaded / bytesTotal) * 100).toFixed(2)
@@ -231,6 +257,11 @@ const RecordButton = ({ size }: TabBarIconProps) => {
         },
         onSuccess: async () => {
           console.log('Audio uploaded successfully')
+          Sentry.addBreadcrumb({
+            category: 'upload',
+            message: 'Audio uploaded successfully',
+            level: 'info',
+          })
 
           const fileUrl = `${folderName}/${fileName}`
           console.log(fileUrl)
@@ -246,10 +277,21 @@ const RecordButton = ({ size }: TabBarIconProps) => {
 
           if (insertError) {
             console.error('Error inserting gem record:', insertError)
+            Sentry.captureException(insertError)
+            Sentry.addBreadcrumb({
+              category: 'database',
+              message: 'Error inserting gem record',
+              level: 'error',
+            })
             return
           }
 
           console.log('Gem record inserted successfully:', gemData)
+          Sentry.addBreadcrumb({
+            category: 'database',
+            message: 'Gem record inserted successfully',
+            level: 'info',
+          })
         },
       })
 
@@ -262,6 +304,12 @@ const RecordButton = ({ size }: TabBarIconProps) => {
       })
     } catch (error) {
       console.error('Error reading or uploading audio:', error)
+      Sentry.captureException(error)
+      Sentry.addBreadcrumb({
+        category: 'upload',
+        message: 'Error reading or uploading audio',
+        level: 'error',
+      })
     }
   }
 

@@ -19,10 +19,14 @@ if (!process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY) {
 
 const supabaseUrl = replaceLocalhost(process.env.EXPO_PUBLIC_SUPABASE_URL)
 
+const defaultOptions: SecureStore.SecureStoreOptions = {
+  keychainAccessible: SecureStore.AFTER_FIRST_UNLOCK,
+}
+
 const ExpoSecureStoreAdapter = {
   getItem: async (key: string) => {
     try {
-      const value = await SecureStore.getItemAsync(key)
+      const value = await SecureStore.getItemAsync(key, defaultOptions)
       Sentry.addBreadcrumb({
         category: 'secureStore',
         message: 'Retrieved item from SecureStore',
@@ -37,7 +41,7 @@ const ExpoSecureStoreAdapter = {
   },
   setItem: async (key: string, value: string) => {
     try {
-      await SecureStore.setItemAsync(key, value)
+      await SecureStore.setItemAsync(key, value, defaultOptions)
       Sentry.addBreadcrumb({
         category: 'secureStore',
         message: 'Stored item in SecureStore',
@@ -51,7 +55,7 @@ const ExpoSecureStoreAdapter = {
 
   removeItem: async (key: string) => {
     try {
-      await SecureStore.deleteItemAsync(key)
+      await SecureStore.deleteItemAsync(key, defaultOptions)
       Sentry.addBreadcrumb({
         category: 'auth',
         message: 'Removed item from SecureStore',
