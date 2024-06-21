@@ -15,7 +15,7 @@ import {
   isWeb,
   BackButton,
 } from '@my/ui'
-import { Gem as GemIcon, ArrowLeftCircle, Trash2, Share } from '@tamagui/lucide-icons'
+import { Gem as GemIcon, Trash2, Share } from '@tamagui/lucide-icons'
 import { useQueryClient, useQuery } from '@tanstack/react-query'
 import { useSupabase } from 'app/utils/supabase/useSupabase'
 import { useUser } from 'app/utils/useUser'
@@ -43,6 +43,7 @@ export const IdScreen = ({ sharedToken }: IdScreenProps) => {
 
   const { back } = useRouter()
   const [id, setId] = useParam('id')
+  const [urlSharedToken] = useParam('sharedToken')
   const gemId = id ? parseInt(id, 10) : undefined
 
   const [sound, setSound] = useState<Audio.Sound | undefined>(undefined)
@@ -298,7 +299,7 @@ export const IdScreen = ({ sharedToken }: IdScreenProps) => {
       <ScrollView>
         <YStack ai="center">
           <XStack w="100%" px="$4" ai="center" jc="space-between">
-            {!sharedToken && <BackButton />}
+            {!urlSharedToken && <BackButton />}
             {!isWeb && (
               <AlertDialog native>
                 <AlertDialog.Trigger asChild>
