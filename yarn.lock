@@ -4687,12 +4687,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-native-community/netinfo@npm:11.1.0":
-  version: 11.1.0
-  resolution: "@react-native-community/netinfo@npm:11.1.0"
+"@react-native-community/netinfo@npm:^11.3.2":
+  version: 11.3.2
+  resolution: "@react-native-community/netinfo@npm:11.3.2"
   peerDependencies:
     react-native: ">=0.59"
-  checksum: 10/be3041882d354c364e3ea60731b626a02a3356ee9f10510b1520af2bdf08895d09ad0ff820b7fc8e8234f6468602e968f21deb7c9a9733d0b8c6a08cd9afbb12
+  checksum: 10/5c4f754cf6ab4c065c98c9cf11c79aec04987d542b1d3ee3e6f19b96c1cb051717c44f79e405b92f0cfccbfc4d796a087fa36de14b46c6eca37526dce4dc4c4f
   languageName: node
   linkType: hard
 
@@ -8848,6 +8848,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/aes-js@npm:^3":
+  version: 3.1.4
+  resolution: "@types/aes-js@npm:3.1.4"
+  checksum: 10/49a322dd8ae49fed4175b345e2198b6b72636d1dce06c13ac846aff6959a7bc109fc6bee5b7f2fb22d9faac7c15c534bb4ac12d9383401020ababa55e0fc47f5
+  languageName: node
+  linkType: hard
+
 "@types/aria-query@npm:^5.0.1":
   version: 5.0.4
   resolution: "@types/aria-query@npm:5.0.4"
@@ -10383,6 +10390,13 @@ __metadata:
     loader-utils: "npm:^2.0.0"
     regex-parser: "npm:^2.2.11"
   checksum: 10/813004ae62b3b409208ae6994b2b95cdc833b52655706f487c5334221218add29f1b7c597a15128c7cbc2784c15d8a1bcb8e7f9a8ea0d1f156973998ea695c82
+  languageName: node
+  linkType: hard
+
+"aes-js@npm:^3.1.2":
+  version: 3.1.2
+  resolution: "aes-js@npm:3.1.2"
+  checksum: 10/b65916767034a51375a3ac5aad62af452d89a386c1ae7b607bb9145d0bb8b8823bf2f3eba85bdfa52d61c65d5aed90ba90f677b8c826bfa1a8b7ae2fa3b54d91
   languageName: node
   linkType: hard
 
@@ -15397,10 +15411,12 @@ __metadata:
     "@expo/metro-config": "npm:~0.17.1"
     "@my/ui": "npm:*"
     "@react-native-async-storage/async-storage": "npm:1.21.0"
-    "@react-native-community/netinfo": "npm:11.1.0"
+    "@react-native-community/netinfo": "npm:^11.3.2"
     "@sentry/react-native": "npm:~5.20.0"
     "@tamagui/babel-plugin": "npm:^1.91.4"
+    "@types/aes-js": "npm:^3"
     "@types/react-native-get-random-values": "npm:^1"
+    aes-js: "npm:^3.1.2"
     app: "npm:*"
     babel-plugin-module-resolver: "npm:^4.1.0"
     babel-plugin-transform-inline-environment-variables: "npm:^0.4.4"

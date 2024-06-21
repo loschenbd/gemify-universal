@@ -52,12 +52,11 @@ const ExpoSecureStoreAdapter = {
       throw error
     }
   },
-
   removeItem: async (key: string) => {
     try {
       await SecureStore.deleteItemAsync(key, defaultOptions)
       Sentry.addBreadcrumb({
-        category: 'auth',
+        category: 'secureStore',
         message: 'Removed item from SecureStore',
         data: { key },
       })

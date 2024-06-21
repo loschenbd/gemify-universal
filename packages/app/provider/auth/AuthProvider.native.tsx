@@ -1,3 +1,4 @@
+import * as Sentry from '@sentry/react-native'
 import { Session, SessionContext as SessionContextHelper } from '@supabase/auth-helpers-react'
 import { AuthError, User } from '@supabase/supabase-js'
 import { supabase } from 'app/utils/supabase/client.native'
@@ -26,16 +27,31 @@ export const AuthProvider = ({ children, initialSession }: AuthProviderProps) =>
       .getSession()
       .then(({ data: { session: newSession } }) => {
         setSession(newSession)
+        Sentry.addBreadcrumb({
+          category: 'auth',
+          message: 'Session retrieved',
+          data: { session: newSession },
+        })
       })
-      .catch((error) => setError(new AuthError(error.message)))
+      .catch((error) => {
+        setError(new AuthError(error.message))
+        Sentry.captureException(error)
+      })
       .finally(() => setIsLoading(false))
   }, [])
+
   useEffect(() => {
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, newSession) => {
       setSession(newSession)
+      Sentry.addBreadcrumb({
+        category: 'auth',
+        message: 'Auth state changed',
+        data: { event: _event, session: newSession },
+      })
     })
+
     return () => {
       subscription.unsubscribe()
     }

@@ -241,7 +241,7 @@ const RecordButton = ({ size }: TabBarIconProps) => {
           cacheControl: 3600,
           sharing_token,
         },
-        chunkSize: 6 * 1024 * 1024,
+        chunkSize: 1 * 1024 * 1024,
         onError(error) {
           console.log('Failed because: ' + error)
           Sentry.captureException(error)

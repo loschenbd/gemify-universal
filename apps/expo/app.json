@@ -17,23 +17,15 @@
       "fallbackToCacheTimeout": 0,
       "url": "https://u.expo.dev/your-project-id"
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.smartlemon.gemify",
-      "associatedDomains": [
-        "applinks:staging.gemify.app"
-      ],
+      "associatedDomains": ["applinks:staging.gemify.app"],
       "buildNumber": "43",
       "usesAppleSignIn": true,
       "infoPlist": {
-        "UIBackgroundModes": [
-          "location",
-          "fetch",
-          "audio"
-        ]
+        "UIBackgroundModes": ["location", "fetch", "audio"]
       }
     },
     "android": {
@@ -60,7 +52,9 @@
         "@sentry/react-native/expo",
         {
           "organization": "smartlemon",
-          "project": "gemify-mobile"
+          "project": "gemify-mobile",
+          "url": "https://sentry.io/",
+          "note": "process.env.SENTRY_AUTH_TOKEN"
         }
       ],
       [
