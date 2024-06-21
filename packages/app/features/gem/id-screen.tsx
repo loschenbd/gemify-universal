@@ -298,62 +298,60 @@ export const IdScreen = ({ sharedToken }: IdScreenProps) => {
     <>
       <ScrollView>
         <YStack ai="center">
-          <XStack w="100%" px="$4" ai="center" jc="space-between">
-            {user?.id === gem.profile_id && (
-              <View>
-                <BackButton />
-                <AlertDialog native>
-                  <AlertDialog.Trigger asChild>
-                    <Trash2 jc="flex-end" size="$1.5" col="$gray10" />
-                  </AlertDialog.Trigger>
+          {user?.id === gem.profile_id && (
+            <XStack w="100%" px="$4" ai="center" jc="space-between">
+              <BackButton />
+              <AlertDialog native>
+                <AlertDialog.Trigger asChild>
+                  <Trash2 jc="flex-end" size="$2" col="$gray10" />
+                </AlertDialog.Trigger>
 
-                  <AlertDialog.Portal>
-                    <AlertDialog.Overlay
-                      key="overlay"
-                      animation="quick"
-                      enterStyle={{ o: 1 }}
-                      exitStyle={{ o: 0 }}
-                    />
-                    <AlertDialog.Content
-                      bordered
-                      elevate
-                      key="content"
-                      animation={[
-                        'quick',
-                        {
-                          o: {
-                            overshootClamping: true,
-                          },
+                <AlertDialog.Portal>
+                  <AlertDialog.Overlay
+                    key="overlay"
+                    animation="quick"
+                    enterStyle={{ o: 1 }}
+                    exitStyle={{ o: 0 }}
+                  />
+                  <AlertDialog.Content
+                    bordered
+                    elevate
+                    key="content"
+                    animation={[
+                      'quick',
+                      {
+                        o: {
+                          overshootClamping: true,
                         },
-                      ]}
-                      enterStyle={{ x: 0, y: -20, o: 0, scale: 0.9 }}
-                      exitStyle={{ x: 0, y: 10, o: 0, scale: 0.95 }}
-                      x={0}
-                      scale={1}
-                      o={1}
-                      y={0}
-                    >
-                      <YStack gap>
-                        <AlertDialog.Title>Delete Gem?</AlertDialog.Title>
-                        <AlertDialog.Description>
-                          This will permanently delete your gem. Are you sure you want to continue?
-                        </AlertDialog.Description>
+                      },
+                    ]}
+                    enterStyle={{ x: 0, y: -20, o: 0, scale: 0.9 }}
+                    exitStyle={{ x: 0, y: 10, o: 0, scale: 0.95 }}
+                    x={0}
+                    scale={1}
+                    o={1}
+                    y={0}
+                  >
+                    <YStack gap>
+                      <AlertDialog.Title>Delete Gem?</AlertDialog.Title>
+                      <AlertDialog.Description>
+                        This will permanently delete your gem. Are you sure you want to continue?
+                      </AlertDialog.Description>
 
-                        <XStack gap="$3" jc="flex-end">
-                          <AlertDialog.Cancel asChild>
-                            <Button>Cancel</Button>
-                          </AlertDialog.Cancel>
-                          <AlertDialog.Action onPress={handleDelete} asChild>
-                            <Button theme="active">Delete</Button>
-                          </AlertDialog.Action>
-                        </XStack>
-                      </YStack>
-                    </AlertDialog.Content>
-                  </AlertDialog.Portal>
-                </AlertDialog>
-              </View>
-            )}
-          </XStack>
+                      <XStack gap="$3" jc="flex-end">
+                        <AlertDialog.Cancel asChild>
+                          <Button>Cancel</Button>
+                        </AlertDialog.Cancel>
+                        <AlertDialog.Action onPress={handleDelete} asChild>
+                          <Button theme="active">Delete</Button>
+                        </AlertDialog.Action>
+                      </XStack>
+                    </YStack>
+                  </AlertDialog.Content>
+                </AlertDialog.Portal>
+              </AlertDialog>
+            </XStack>
+          )}
           <YStack ai="center">
             <View jc="center" ai="center" br="$10">
               <Circle bg="$gray5" size="$5">
