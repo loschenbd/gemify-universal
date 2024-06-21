@@ -90,11 +90,14 @@ Add `--local` to build locally.
 
 ### Signup Flow
 
-Supabase PKCE flow requires email confirmation on sign up. You accept an email locally:
+Supabase PKCE flow requires email confirmation on sign up. You fill in the sign up form with email and password. Local setup will let you confirm the email by:
 
-- `http://localhost:54324`
-- Find the email account you signed up with
-- Click the confirm link
+1. Navigating to `http://localhost:54324`
+2. Filling in the email on the top right corner
+3. Clicking email
+4. Clicking 'confirm your email address' link
+
+![local development email confirmation](https://i.imgur.com/3r7TGfu.png)
 
 ## Folder layout
 
@@ -169,13 +172,19 @@ To run an expo app on your machine locally:
 
 ## Native Builds
 
-Native builds are needed if you're using custom native code in your project. More documentation can be found here in Expo's docs: [Adding Custom Native Code](https://docs.expo.dev/workflow/customizing/#adding-custom-native-code-with-development-builds)
+Native builds are needed if you're using custom native code in your project.
 
-To run a [native build](https://docs.expo.dev/develop/development-builds/introduction):
+More documentation on adding your own native code can be found here in Expo's docs: [Adding Custom Native Code](https://docs.expo.dev/workflow/customizing/#adding-custom-native-code-with-development-builds)
+
+To run a [native build](https://docs.expo.dev/develop/development-builds/introduction) of your application, which we recommend:
 
 - `npx expo install expo-dev-client`
 - in `apps/expo/package.json` update script `"start": "TAMAGUI_ENV=dev expo start --dev-client"`
 - `yarn ios` or `yarn android`
+
+## Expo Go
+
+Expo Go works in Takeout, but you may need to replace the imports from `@tamagui/animations-moti` to `@tamagui/animations-react-native`.
 
 ## Expo EAS Update
 
@@ -191,17 +200,15 @@ We use `expo-router` for the native side, so simply create `_layout.tsx` files i
 
 ![expo project id](https://github.com/tamagui/unistack/assets/2502947/8a4d3663-9eb2-4cb1-926f-0476a00ab078)
 
-## Icon Pack (Additional Purchase)
-
-Icons are populated from [icones](https://icones.js.org)
-
 ## How Authentication is Handled
 
 Authentication is handled by Supabase Auth. Email and password auth is included in the starter but you can get OAuth to work too.
 
-Check emails that are sent to you locally like the auth confirmation using InBucket at http://localhost:54324 once your Supabase is running.
+Check emails that are sent to you locally like the auth confirmation using InBucket at http://localhost:54324 once your Supabase is running `yarn supa start` from the root of the project.
 
 Getting OAuth to work on web is as easy as it gets but on native, you will need to manually get the OAuth credentials, and then feed them to the Supabase session. See [this article](https://dev.to/fedorish/google-sign-in-using-supabase-and-react-native-expo-14jf) for more info on how to handle native OAuth with Supabase.
+
+For a detailed guide about Supabase on Takeout and all available script commands see [Supabase README](/supabase/README.md)
 
 ### Protecting Pages on Web
 
@@ -236,14 +243,12 @@ Follows [how Next.js handles env variables](https://nextjs.org/docs/pages/buildi
 
 ## Installing icons and fonts
 
-If you have access to font and icon packages, simply run:
+To add an icon or font, use:
 
 ```sh
 yarn tamagui add font
 yarn tamagui add icon
 ```
-
-and choose the package you want.
 
 The package will be cloned into `packages/package-name`. After that's done, run `yarn install` and `yarn build` and follow the instructions in the package's `README.md`
 
