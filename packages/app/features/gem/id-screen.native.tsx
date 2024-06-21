@@ -301,7 +301,7 @@ export const IdScreen = ({ sharedToken }: IdScreenProps) => {
             <Pressable onPress={onGoBack}>
               <ArrowLeftCircle size="$3" col="$gray10" />
             </Pressable>
-            {!isWeb && (
+            {user?.id === gem.profile_id && (
               <AlertDialog native>
                 <AlertDialog.Trigger asChild>
                   <Trash2 jc="flex-end" size="$1.5" col="$gray10" />
