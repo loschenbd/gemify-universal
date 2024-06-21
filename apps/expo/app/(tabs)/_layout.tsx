@@ -24,6 +24,7 @@ import { activateKeepAwakeAsync, deactivateKeepAwake } from 'expo-keep-awake'
 import { Stack, Tabs } from 'expo-router'
 import { nanoid } from 'nanoid/non-secure'
 import { useState, useEffect } from 'react'
+import { Alert } from 'react-native'
 import { SolitoImage } from 'solito/image'
 import { Upload } from 'tus-js-client'
 
@@ -380,18 +381,38 @@ const RecordButton = ({ size }: TabBarIconProps) => {
                   onChangeText={setAuthor}
                 />
                 <Text>{formatDuration(finalDuration)}</Text>
-                <XStack gap={20}>
+                <XStack p="$4" w="80%" jc="space-between" gap={20}>
                   <CheckCircle
                     size="$4"
                     onPress={async () => {
                       setOpen(false)
                       saveRecording(finalDuration, recordingUri, author)
+                      setAuthor('')
                     }}
                   />
                   <X
                     size="$4"
+                    col="$red10"
                     onPress={() => {
-                      setOpen(false)
+                      Alert.alert(
+                        'Confirm Delete',
+                        'Are you sure you want to permanently delete this recording?',
+                        [
+                          {
+                            text: 'Cancel',
+                            style: 'cancel',
+                          },
+                          {
+                            text: 'Delete',
+                            style: 'destructive',
+                            onPress: () => {
+                              setOpen(false)
+                              setAuthor('')
+                            },
+                          },
+                        ],
+                        { cancelable: false }
+                      )
                     }}
                   />
                 </XStack>
