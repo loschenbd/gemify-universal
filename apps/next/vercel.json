@@ -1,3 +1,3 @@
 {
-  "installCommand": "yarn set version 4.1 && yarn install --immutable"
+  "installCommand": "yarn set version 4.1 && yarn install"
 }

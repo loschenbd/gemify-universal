@@ -20,6 +20,11 @@ const config: StorybookConfig = {
           'expo-document-picker',
           'expo-av',
           'expo-asset',
+          'react-native-reanimated',
+        ],
+        babelPlugins: [
+          '@babel/plugin-proposal-export-namespace-from',
+          'react-native-reanimated/plugin',
         ],
       },
     },
