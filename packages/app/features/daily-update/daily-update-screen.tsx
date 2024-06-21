@@ -102,7 +102,9 @@ export const DailyUpdateScreen = () => {
 
   return (
     <ScrollView>
-      <BackButton />
+      <View p="$4">
+        <BackButton />
+      </View>
       <YStack>
         <View f={1} ai="center" p="$4">
           <H2>{currentDate}</H2>

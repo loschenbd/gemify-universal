@@ -298,7 +298,7 @@ export const IdScreen = ({ sharedToken }: IdScreenProps) => {
       <ScrollView>
         <YStack ai="center">
           <XStack w="100%" px="$4" ai="center" jc="space-between">
-            <BackButton />
+            {!sharedToken && <BackButton />}
             {!isWeb && (
               <AlertDialog native>
                 <AlertDialog.Trigger asChild>
