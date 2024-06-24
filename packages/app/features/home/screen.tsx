@@ -47,7 +47,7 @@ export function HomeScreen() {
           {isLoading ? (
             <AnimatePresence>
               {[...Array(3)].map((_, i) => (
-                <Skeleton key={i} />
+                <Skeleton key={`skele-${i}`} />
               ))}
             </AnimatePresence>
           ) : (
@@ -221,7 +221,7 @@ const GemCards: React.FC<GemCardsProps> = ({ gems }) => {
 
   return (
     <AnimatePresence>
-      <Link href="/daily-update">
+      <Link key="daily-update" href="/daily-update">
         <XStack px="$4" jc="flex-end">
           <Sparkles size="$1" />
           <Text pl="$1">Daily Treasure</Text>
@@ -237,14 +237,16 @@ const GemCards: React.FC<GemCardsProps> = ({ gems }) => {
           >
             {!gem.title ? (
               <GemCard
+                key={`gem-${gem.id}-polishing`}
                 title="Polishing Gem"
                 author={gem.author ?? undefined}
                 duration={formatDuration(gem.duration ?? 0)}
                 date={format(new Date(gem.created_at), 'MM/dd/yyyy')}
               />
             ) : (
-              <Link href={`/gem/${gem.id}`}>
+              <Link key={`gem-${gem.id}-link`} href={`/gem/${gem.id}`}>
                 <GemCard
+                  key={`gem-${gem.id}-card`}
                   title={gem.title}
                   author={gem.author ?? undefined}
                   duration={formatDuration(gem.duration ?? 0)}

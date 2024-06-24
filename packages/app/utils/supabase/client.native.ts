@@ -1,7 +1,9 @@
 import { Database } from '@my/supabase/types'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 import * as Sentry from '@sentry/react-native'
 import { createClient } from '@supabase/supabase-js'
 import * as SecureStore from 'expo-secure-store'
+import 'react-native-url-polyfill/auto'
 
 import { replaceLocalhost } from '../getLocalhost.native'
 
@@ -72,7 +74,7 @@ export const supabase = createClient<Database>(
   process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY,
   {
     auth: {
-      storage: ExpoSecureStoreAdapter,
+      storage: AsyncStorage,
       autoRefreshToken: true,
       persistSession: true,
       detectSessionInUrl: false,

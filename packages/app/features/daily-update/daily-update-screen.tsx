@@ -119,11 +119,11 @@ export const DailyUpdateScreen = () => {
         <View px="$4">
           <H3 p="$2">Declarations</H3>
           {dailyUpdate.processed_gems?.map((gem, gemIndex) => (
-            <View key={gemIndex}>
+            <View key={`gem-${gemIndex}`}>
               {isProcessedGem(gem) ? (
                 <>
                   {gem.positive_declarations.map((declaration, declarationIndex) => (
-                    <View py="$1" px="$3" key={declarationIndex}>
+                    <View py="$1" px="$3" key={`decl-${declarationIndex}`}>
                       <XStack>
                         <Paragraph pr="$1.5" size="$6">
                           •

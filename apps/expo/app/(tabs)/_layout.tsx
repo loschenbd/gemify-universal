@@ -27,7 +27,7 @@ import { useState, useEffect } from 'react'
 import { Alert } from 'react-native'
 import { SolitoImage } from 'solito/image'
 import { Upload } from 'tus-js-client'
-
+import AsyncStorage from '@react-native-async-storage/async-storage'
 export default function Layout() {
   useEffect(() => {
     async function requestMicrophonePermission() {
@@ -107,7 +107,27 @@ const RecordButton = ({ size }: TabBarIconProps) => {
 
   const supabase = useSupabase()
   const user = useUser()
+
+  async function checkForInterruptedRecording() {
+    try {
+      const recordingStateJSON = await AsyncStorage.getItem('recordingState')
+      if (recordingStateJSON) {
+        const recordingState = JSON.parse(recordingStateJSON)
+        setDuration(recordingState.duration)
+        setMeteringData(recordingState.meteringData)
+        // Update other relevant state variables
+      }
+    } catch (error) {
+      console.error('Failed to retrieve recording state', error)
+    }
+  }
+
   async function startRecording() {
+    if (isRecording) {
+      console.warn('Recording is already in progress')
+      return
+    }
+
     activateKeepAwakeAsync()
     setIsRecording(true)
     if (!permissionResponse) {
@@ -127,23 +147,38 @@ const RecordButton = ({ size }: TabBarIconProps) => {
         }
       }
 
+      // Configure audio session category and mode
       await Audio.setAudioModeAsync({
         allowsRecordingIOS: true,
         playsInSilentModeIOS: true,
         staysActiveInBackground: true,
+        interruptionModeIOS: 1,
       })
 
       console.log('Starting recording..')
       const newRecording = new Audio.Recording()
       await newRecording.prepareToRecordAsync(Audio.RecordingOptionsPresets.HIGH_QUALITY)
+
+      // Save the start time of the recording
+      const startTime = Date.now()
+
       newRecording.setOnRecordingStatusUpdate((status) => {
-        setDuration(status.durationMillis)
+        const currentDuration = status.durationMillis
+        setDuration(currentDuration)
+
         if (status.isRecording) {
-          setMeteringData((prevData) =>
-            [...prevData, status.metering].filter((value) => value !== undefined)
-          )
+          setMeteringData((prevData) => {
+            const newData = [...prevData]
+            if (status.metering !== undefined) {
+              newData.push(status.metering)
+            }
+            return newData
+          })
+
+          // Save the current duration and waveform data
+          saveRecordingState(startTime, currentDuration, meteringData)
         } else {
-          setRecordingDuration(status.durationMillis)
+          setRecordingDuration(currentDuration)
         }
       })
 
@@ -157,6 +192,16 @@ const RecordButton = ({ size }: TabBarIconProps) => {
       console.error('Failed to start recording', err)
       setIsRecording(false)
     }
+  }
+
+  function saveRecordingState(startTime, duration, meteringData) {
+    // Save the recording state using AsyncStorage or any other persistent storage mechanism
+    const recordingState = {
+      startTime,
+      duration,
+      meteringData,
+    }
+    AsyncStorage.setItem('recordingState', JSON.stringify(recordingState))
   }
 
   async function stopRecording() {
@@ -335,6 +380,7 @@ const RecordButton = ({ size }: TabBarIconProps) => {
             if (!isRecording) {
               setOpen(true)
               startRecording()
+              checkForInterruptedRecording()
               setDuration(duration)
             }
           }}
