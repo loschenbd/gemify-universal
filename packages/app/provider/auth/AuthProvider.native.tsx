@@ -16,6 +16,18 @@ export const SessionContext = createContext<SessionContextHelper>({
   supabaseClient: supabase,
 })
 
+const setUserContext = (user: User | null) => {
+  if (user) {
+    Sentry.setUser({
+      id: user.id,
+      email: user.email,
+      // Add any additional user properties
+    })
+  } else {
+    Sentry.setUser(null)
+  }
+}
+
 export const AuthProvider = ({ children, initialSession }: AuthProviderProps) => {
   const [session, setSession] = useState<Session | null>(initialSession || null)
   const [error, setError] = useState<AuthError | null>(null)
@@ -27,15 +39,23 @@ export const AuthProvider = ({ children, initialSession }: AuthProviderProps) =>
       .getSession()
       .then(({ data: { session: newSession } }) => {
         setSession(newSession)
+        setUserContext(newSession?.user ?? null)
         Sentry.addBreadcrumb({
           category: 'auth',
           message: 'Session retrieved',
+          level: 'info',
           data: { session: newSession },
         })
       })
       .catch((error) => {
         setError(new AuthError(error.message))
         Sentry.captureException(error)
+        Sentry.addBreadcrumb({
+          category: 'auth',
+          message: 'Error retrieving session',
+          level: 'error',
+          data: { error: error.message },
+        })
       })
       .finally(() => setIsLoading(false))
   }, [])
@@ -45,11 +65,47 @@ export const AuthProvider = ({ children, initialSession }: AuthProviderProps) =>
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, newSession) => {
       setSession(newSession)
-      Sentry.addBreadcrumb({
-        category: 'auth',
-        message: 'Auth state changed',
-        data: { event: _event, session: newSession },
-      })
+      setUserContext(newSession?.user ?? null)
+
+      switch (_event) {
+        case 'SIGNED_IN':
+          Sentry.addBreadcrumb({
+            category: 'auth',
+            message: 'User signed in',
+            level: 'info',
+            data: { session: newSession },
+          })
+          break
+        case 'SIGNED_OUT':
+          Sentry.addBreadcrumb({
+            category: 'auth',
+            message: 'User signed out',
+            level: 'info',
+          })
+          break
+        case 'USER_UPDATED':
+          Sentry.addBreadcrumb({
+            category: 'auth',
+            message: 'User updated',
+            level: 'info',
+            data: { session: newSession },
+          })
+          break
+        case 'PASSWORD_RECOVERY':
+          Sentry.addBreadcrumb({
+            category: 'auth',
+            message: 'Password recovery initiated',
+            level: 'info',
+          })
+          break
+        default:
+          Sentry.addBreadcrumb({
+            category: 'auth',
+            message: 'Unknown auth event',
+            level: 'info',
+            data: { event: _event },
+          })
+      }
     })
 
     return () => {
