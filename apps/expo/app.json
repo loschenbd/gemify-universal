@@ -15,25 +15,17 @@
     },
     "updates": {
       "fallbackToCacheTimeout": 0,
-      "url": "https://u.expo.dev/your-project-id"
+      "url": "https://u.expo.dev/8da37ade-cec9-4b62-8e7b-5f61c31b043e"
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.smartlemon.gemify",
-      "associatedDomains": [
-        "applinks:staging.gemify.app"
-      ],
-      "buildNumber": "48",
+      "associatedDomains": ["applinks:staging.gemify.app"],
+      "buildNumber": "49",
       "usesAppleSignIn": true,
       "infoPlist": {
-        "UIBackgroundModes": [
-          "location",
-          "fetch",
-          "audio"
-        ]
+        "UIBackgroundModes": ["location", "fetch", "audio"]
       }
     },
     "android": {
