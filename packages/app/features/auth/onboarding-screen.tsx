@@ -18,9 +18,9 @@ const steps: OnboardingStepInfo[] = [
     theme: 'green',
     Content: () => (
       <StepContent
-        title="Get Full Transcripts"
+        title="Full Transcripts + Additional Insights"
         icon={BookOpenText}
-        description="Listen or read through the full word any time."
+        description="We'll create all kinds of facets for your word- main points, follow-up questions, supporting scriptures, and more!"
       />
     ),
   },
@@ -28,9 +28,9 @@ const steps: OnboardingStepInfo[] = [
     theme: 'blue',
     Content: () => (
       <StepContent
-        title=" Receive Additional Insights"
+        title=" Daily Declarations"
         icon={Gem}
-        description="Get scriptural insights, actionable ideas, prayer and journal Prompts, and more."
+        description="Get a daily devotional including declarations based on your prophetic words"
       />
     ),
   },

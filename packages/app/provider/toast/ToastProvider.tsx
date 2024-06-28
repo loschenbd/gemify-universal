@@ -9,7 +9,7 @@ export const ToastProvider = ({
   return (
     <ToastProviderOG
       swipeDirection="up"
-      swipeThreshold={20}
+      swipeThreshold={5}
       duration={6000}
       native={
         [

@@ -106,8 +106,24 @@ const SettingsThemeAction = () => {
 const SettingsItemLogoutAction = () => {
   const supabase = useSupabase()
 
+  const handleLogout = async () => {
+    try {
+      // First, sign out using Supabase (this works for both web and native)
+      await supabase.auth.signOut()
+
+      // Then, perform platform-specific logout actions
+      const { logoutHelper } = await import('./logout')
+      await logoutHelper()
+
+      // Handle post-logout navigation or UI updates
+      // You might want to use router.push('/') or similar here
+    } catch (error) {
+      console.error('Error during logout:', error)
+    }
+  }
+
   return (
-    <Settings.Item icon={LogOut} accentTheme="red" onPress={() => supabase.auth.signOut()}>
+    <Settings.Item icon={LogOut} accentTheme="red" onPress={handleLogout}>
       Log Out
     </Settings.Item>
   )

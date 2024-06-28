@@ -112,7 +112,7 @@ export const IdScreen = ({ sharedToken }: IdScreenProps) => {
           })
           await Audio.setAudioModeAsync({
             allowsRecordingIOS: false,
-            staysActiveInBackground: false,
+            staysActiveInBackground: true,
             playsInSilentModeIOS: true,
           })
 
