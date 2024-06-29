@@ -112,6 +112,10 @@ export const SignInScreen = () => {
 }
 
 const SignUpLink = () => {
+  if (isWeb) {
+    return null
+  }
+
   const email = useWatch<z.infer<typeof SignInSchema>>({ name: 'email' })
   return (
     <Link href={`/sign-up?${new URLSearchParams(email ? { email } : undefined).toString()}`}>

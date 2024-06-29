@@ -50,6 +50,11 @@ export async function middleware(req: NextRequest) {
     // redirectUrl.searchParams.set(`redirected_from`, req.nextUrl.pathname)
     return NextResponse.redirect(redirectUrl)
   }
+  if (req.nextUrl.pathname === '/sign-up') {
+    const redirectUrl = req.nextUrl.clone()
+    redirectUrl.pathname = '/sign-in'
+    return NextResponse.redirect(redirectUrl)
+  }
   // show the protected page to logged in route
   return res
 }

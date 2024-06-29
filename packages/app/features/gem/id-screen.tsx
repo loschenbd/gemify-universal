@@ -301,9 +301,11 @@ export const IdScreen = ({ sharedToken }: IdScreenProps) => {
           {user?.id === gem.profile_id && (
             <XStack w="100%" px="$4" ai="center" jc="space-between">
               <BackButton />
-              <AlertDialog native>
+              <AlertDialog>
                 <AlertDialog.Trigger asChild>
-                  <Trash2 jc="flex-end" size="$2" col="$gray10" />
+                  <View>
+                    <Trash2 jc="flex-end" size="$2" col="$gray10" />
+                  </View>
                 </AlertDialog.Trigger>
 
                 <AlertDialog.Portal>

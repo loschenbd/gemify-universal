@@ -1,4 +1,5 @@
 import { Onboarding, OnboardingStepInfo, StepContent } from '@my/ui'
+import { Platform } from 'react-native'
 import { Gem, BookOpenText, Mic } from '@tamagui/lucide-icons'
 import React from 'react'
 import { useRouter } from 'solito/router'
@@ -41,5 +42,19 @@ const steps: OnboardingStepInfo[] = [
  */
 export const OnboardingScreen = () => {
   const router = useRouter()
-  return <Onboarding autoSwipe onOnboarded={() => router.push('/sign-up')} steps={steps} />
+  return (
+    <Onboarding
+      autoSwipe
+      onOnboarded={() => {
+        if (Platform.OS === 'web') {
+          // On web, navigate to sign-in instead
+          router.push('/sign-in')
+        } else {
+          // On native, keep the sign-up navigation
+          router.push('/sign-up')
+        }
+      }}
+      steps={steps}
+    />
+  )
 }
