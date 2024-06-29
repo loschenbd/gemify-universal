@@ -85,7 +85,7 @@ export const SignInScreen = () => {
                 </SubmitButton>
               </Theme>
               <SignUpLink />
-              {isWeb && <SocialLogin />}
+              {!isWeb && <SocialLogin />}
             </>
           )
         }}
